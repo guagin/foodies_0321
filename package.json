@@ -23,6 +23,7 @@
     "@babel/preset-env": "^7.5.4",
     "@babel/preset-typescript": "^7.3.3",
     "@types/debug": "^4.1.4",
+    "@types/jest": "^25.1.4",
     "@types/jsonwebtoken": "^8.3.3",
     "@types/mongoose": "^5.5.8",
     "@types/nconf": "^0.10.0",
@@ -33,11 +34,13 @@
     "eslint": "^6.0.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "jest": "^25.1.0",
     "prettier": "^1.18.2",
     "prettier-eslint": "^9.0.0",
+    "ts-jest": "^25.2.1",
     "ts-node": "^8.3.0",
     "ts-node-dev": "^1.0.0-pre.40",
-    "typescript": "^3.5.2",
+    "typescript": "^3.8.3",
     "typescript-eslint-parser": "^22.0.0"
   },
   "dependencies": {
@@ -52,5 +55,17 @@
     "mongoose": "^5.6.4",
     "nconf": "^0.10.0",
     "reflect-metadata": "^0.1.13"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js"
   }
 }
