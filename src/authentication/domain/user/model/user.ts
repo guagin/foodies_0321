@@ -14,6 +14,7 @@ export class User extends Entity {
 
   constructor(props: UserProps, private decreptor: (value: string) => string) {
     super()
+    this.props = props
   }
 
   get name(): string {
