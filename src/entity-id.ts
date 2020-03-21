@@ -1,7 +1,8 @@
 export class EntityId {
   protected id: string
   protected createdAt: Date
-  constructor() {
+  constructor(id: string) {
+    this.id = id
     this.createdAt = new Date()
   }
 

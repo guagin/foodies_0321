@@ -1,7 +1,8 @@
-import { User } from "./user"
+import { User, UserId } from "./user"
 
 describe("user test", () => {
   const user = new User(
+    new UserId("0"),
     {
       name: "ricky",
       password: "123456",

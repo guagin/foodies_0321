@@ -12,8 +12,12 @@ export class UserProps {
 export class User extends Entity {
   protected props: UserProps
 
-  constructor(props: UserProps, private decreptor: (value: string) => string) {
-    super()
+  constructor(
+    id: UserId,
+    props: UserProps,
+    private decreptor: (value: string) => string
+  ) {
+    super(id)
     this.props = props
   }
 
