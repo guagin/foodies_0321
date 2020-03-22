@@ -21,7 +21,7 @@ const user = new User(
 const domainEventPublisher = new SynchronizedDomainEventPublisher()
 const registerService = new RegisterService(userRepo, domainEventPublisher)
 
-describe("register service", () => {
+describe("user register service", () => {
   it("should pass", async () => {
     let isReceivedEvent = false
     domainEventPublisher.register("UserRegistered", () => {

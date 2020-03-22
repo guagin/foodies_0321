@@ -1,18 +1,17 @@
 import { EntityId } from "entity-id"
 
-export abstract class Entity<PropsType> {
+export abstract class Entity {
   id: EntityId
   protected createdAt: Date
   protected version: number
-  protected props: PropsType
-  constructor(id: EntityId, props: PropsType) {
+
+  constructor(id: EntityId) {
     this.id = id
     this.createdAt = new Date()
     this.version = 0
-    this.props = props
   }
 
-  equals(anotherEntity: Entity<PropsType>): boolean {
+  equals(anotherEntity: Entity): boolean {
     return this.isIdMatched(anotherEntity.id)
   }
 
