@@ -15,6 +15,11 @@ export class InMemoryUserRepository implements UserRepository {
     return found
   }
 
+  async ofName(name: string): Promise<User | undefined> {
+    const found = this.data.find(d => d.name === name)
+    return found
+  }
+
   async save(user: User): Promise<void> {
     const foundIndex = this.data.findIndex(d => d.equals(user))
     if (foundIndex > -1) {
