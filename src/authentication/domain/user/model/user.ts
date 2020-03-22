@@ -9,16 +9,13 @@ export class UserProps {
   email: string
 }
 
-export class User extends Entity {
-  protected props: UserProps
-
+export class User extends Entity<UserProps> {
   constructor(
     id: UserId,
     props: UserProps,
     private decreptor: (value: string) => string
   ) {
-    super(id)
-    this.props = props
+    super(id, props)
   }
 
   get name(): string {

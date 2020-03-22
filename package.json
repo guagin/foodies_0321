@@ -11,7 +11,7 @@
     "build": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
     "dev": "tsnd -r dotenv/config --respawn src/app.ts",
     "lint": "yarn eslint src --ext .ts",
-    "generate": "node merge-schemas | graphql-codegen"
+    "test": "cross-env NODE_ENV=debug jest"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",

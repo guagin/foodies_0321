@@ -1,13 +1,26 @@
 import { UserRepository } from "../user-repository"
 import { User } from "../model/user"
+import { DomainEventPublisher } from "../event/domain-event-publisher"
+import { UserRegistered } from "../event/user-registered"
 
 export class RegisterService {
-  constructor(private userRepo: UserRepository) {}
+  constructor(
+    private userRepo: UserRepository,
+    private domainEvetnPublisher: DomainEventPublisher
+  ) {}
 
   async register(user: User): Promise<void> {
-    // props check.
     await this.userRepo.save(user)
-    //publish user registered event.
-    // domain event and integrity event
+
+    this.domainEvetnPublisher.publish(
+      new UserRegistered(
+        {
+          name: user.name,
+          email: user.email,
+          userId: user.id
+        },
+        "0.0.0.0"
+      )
+    )
   }
 }

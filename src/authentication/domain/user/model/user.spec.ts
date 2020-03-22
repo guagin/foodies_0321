@@ -1,4 +1,5 @@
 import { User, UserId } from "./user"
+import { debug } from "debug"
 
 describe("user test", () => {
   const user = new User(
