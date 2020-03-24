@@ -1,7 +1,7 @@
 import { UserRegisterUsecase } from "./user-register"
 import { InMemoryUserRepository } from "authentication/infrastructure/persistence/in-memory-user-repository"
 
-describe("user register test", () => {
+describe("user register use case", () => {
   it("should pass", async () => {
     const userRepository = new InMemoryUserRepository()
     const userRegisterUseCase = new UserRegisterUsecase({

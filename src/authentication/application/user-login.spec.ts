@@ -1,9 +1,10 @@
 import { InMemoryUserRepository } from "authentication/infrastructure/persistence/in-memory-user-repository"
-import { User } from "../model/user"
-import { UserLoginService } from "./user-login-service"
+import { UserLoginUseCase } from "./user-login"
+import { UserLoginService } from "authentication/domain/user/service/user-login-service"
 import jwt from "jsonwebtoken"
+import { User } from "authentication/domain/user/model/user"
 
-describe("user login service", () => {
+describe("user login use case", () => {
   const userRepository = new InMemoryUserRepository()
   // insert a user.
   const userId = userRepository.nextId()
@@ -35,28 +36,33 @@ describe("user login service", () => {
 
     await userRepository.save(user)
   })
-
   it("should pass", async () => {
-    const { success, errorMessages } = await userLoginService.login(
-      "ricky",
-      "123456"
-    )
+    const userLoginUseCase = new UserLoginUseCase({
+      userLoginService
+    })
+
+    const { success, errorMessages, token } = await userLoginUseCase.login({
+      name: "ricky",
+      password: "123456"
+    })
+
     expect(success).toBeTruthy()
     expect(errorMessages).toBeUndefined()
+    expect(token).toBeDefined()
   })
 
-  it("should failed for the password not matched", async () => {
-    const { success, errorMessages } = await userLoginService.login("ricky", "")
-    expect(success).toBeFalsy()
-    expect(errorMessages).toBeDefined()
-  })
+  it("should fail for password is empty", async () => {
+    const userLoginUseCase = new UserLoginUseCase({
+      userLoginService
+    })
 
-  it("should failed for user not found", async () => {
-    const { success, errorMessages } = await userLoginService.login(
-      "ricky123",
-      "123456"
-    )
+    const { success, errorMessages, token } = await userLoginUseCase.login({
+      name: "ricky",
+      password: ""
+    })
+
     expect(success).toBeFalsy()
     expect(errorMessages).toBeDefined()
+    expect(token).toBeUndefined()
   })
 })
