@@ -48,7 +48,7 @@ export class User extends Entity {
   constructor(
     id: UserId,
     userPropsInput: UserPropsInput,
-    private decreptor: (value: string) => string
+    private decryptor: (value: string) => string
   ) {
     super(id)
     this.props = new UserProps(userPropsInput)
@@ -63,6 +63,6 @@ export class User extends Entity {
   }
 
   isPasswordMatched(value: string): boolean {
-    return this.props.password === this.decreptor(value)
+    return this.props.password === this.decryptor(value)
   }
 }

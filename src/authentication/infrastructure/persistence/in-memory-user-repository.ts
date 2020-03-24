@@ -3,7 +3,11 @@ import { UserId, User } from "authentication/domain/user/model/user"
 
 export class InMemoryUserRepository implements UserRepository {
   private currentId = 0
-  private data: User[] = []
+  private data: User[]
+
+  constructor() {
+    this.data = []
+  }
 
   nextId(): UserId {
     this.currentId = this.currentId + 1
