@@ -6,7 +6,8 @@ describe("user register use case", () => {
     const userRepository = new InMemoryUserRepository()
     const userRegisterUseCase = new UserRegisterUsecase({
       userRepository,
-      decryptor: (value: string) => value
+      decrypt: (value: string) => value,
+      encrypt: (value: string) => value
     })
     const { success, errorMessage } = await userRegisterUseCase.register({
       name: "ricky",
@@ -25,7 +26,8 @@ describe("user register use case", () => {
     const userRepository = new InMemoryUserRepository()
     const userRegisterUseCase = new UserRegisterUsecase({
       userRepository,
-      decryptor: (value: string) => value
+      decrypt: (value: string) => value,
+      encrypt: (value: string) => value
     })
     const { success, errorMessage } = await userRegisterUseCase.register({
       name: "",
@@ -44,7 +46,8 @@ describe("user register use case", () => {
     const userRepository = new InMemoryUserRepository()
     const userRegisterUseCase = new UserRegisterUsecase({
       userRepository,
-      decryptor: (value: string) => value
+      decrypt: (value: string) => value,
+      encrypt: (value: string) => value
     })
 
     const { success, errorMessage } = await userRegisterUseCase.register({
@@ -64,7 +67,8 @@ describe("user register use case", () => {
     const userRepository = new InMemoryUserRepository()
     const userRegisterUseCase = new UserRegisterUsecase({
       userRepository,
-      decryptor: (value: string) => value
+      decrypt: (value: string) => value,
+      encrypt: (value: string) => value
     })
     const { success, errorMessage } = await userRegisterUseCase.register({
       name: "ricky",

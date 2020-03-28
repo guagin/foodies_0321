@@ -3,12 +3,17 @@ import { User } from "authentication/domain/user/model/user"
 
 export class UserRegisterUsecase {
   private userRepository: UserRepository
-  private decryptor: (value: string) => string
+  private decrypt: (value: string) => string
+  private encrypt: (value: string) => string
+
   constructor(input: {
     userRepository: UserRepository
-    decryptor: (value: string) => string
+    decrypt: (value: string) => string
+    encrypt: (value: string) => string
   }) {
     this.userRepository = input.userRepository
+    this.decrypt = input.decrypt
+    this.encrypt = input.encrypt
   }
 
   async register(input: {
@@ -25,7 +30,8 @@ export class UserRegisterUsecase {
           password: input.password,
           email: input.email
         },
-        this.decryptor
+        this.decrypt,
+        this.encrypt
       )
 
       await this.userRepository.save(user)

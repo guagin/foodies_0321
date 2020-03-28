@@ -48,10 +48,15 @@ export class User extends Entity {
   constructor(
     id: UserId,
     userPropsInput: UserPropsInput,
-    private decryptor: (value: string) => string
+    private decryptor: (value: string) => string,
+    private encrypt: (value: string) => string
   ) {
     super(id)
-    this.props = new UserProps(userPropsInput)
+    const { password, ...rest } = userPropsInput
+    this.props = new UserProps({
+      password: encrypt(password),
+      ...rest
+    })
   }
 
   get name(): string {

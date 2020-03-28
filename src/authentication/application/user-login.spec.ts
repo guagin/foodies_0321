@@ -8,20 +8,16 @@ describe("user login use case", () => {
   const userRepository = new InMemoryUserRepository()
   // insert a user.
   const userId = userRepository.nextId()
-
-  const userLoginService = new UserLoginService({
-    userRepo: userRepository,
-    encrypt: (value: string) => value,
-    generateToken: (user: User) => {
-      return jwt.sign(
-        {
-          id: user.id,
-          name: user.name
-        },
-        "imRicky"
-      )
-    }
-  })
+  const generateToken = (user: User) => {
+    return jwt.sign(
+      {
+        id: user.id,
+        name: user.name
+      },
+      "imRicky"
+    )
+  }
+  const encrypt = (value: string) => value
 
   beforeAll(async () => {
     const user = new User(
@@ -31,6 +27,7 @@ describe("user login use case", () => {
         password: "123456",
         email: "guagin0972@gmail.com"
       },
+      (value: string) => value,
       (value: string) => value
     )
 
@@ -38,7 +35,9 @@ describe("user login use case", () => {
   })
   it("should pass", async () => {
     const userLoginUseCase = new UserLoginUseCase({
-      userLoginService
+      encrypt,
+      generateToken,
+      userRepository
     })
 
     const { success, errorMessages, token } = await userLoginUseCase.login({
@@ -53,7 +52,9 @@ describe("user login use case", () => {
 
   it("should fail for password is empty", async () => {
     const userLoginUseCase = new UserLoginUseCase({
-      userLoginService
+      encrypt,
+      generateToken,
+      userRepository
     })
 
     const { success, errorMessages, token } = await userLoginUseCase.login({

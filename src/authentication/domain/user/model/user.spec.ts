@@ -10,6 +10,7 @@ describe("user test", () => {
         password: "123456",
         email: "guagin0972@gmail.com"
       },
+      (value: string) => value,
       (value: string) => value
     )
     const authenticated = user.isPasswordMatched("123456")
@@ -26,6 +27,7 @@ describe("user test", () => {
           password: "123456",
           email: "guagin0972@gmail.com"
         },
+        (value: string) => value,
         (value: string) => value
       )
     }).toThrowError()
@@ -40,6 +42,7 @@ describe("user test", () => {
           password: "",
           email: "guagin0972@gmail.com"
         },
+        (value: string) => value,
         (value: string) => value
       )
     }).toThrowError()
@@ -54,6 +57,7 @@ describe("user test", () => {
           password: "123456",
           email: ""
         },
+        (value: string) => value,
         (value: string) => value
       )
     }).toThrowError()

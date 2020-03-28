@@ -30,6 +30,7 @@ describe("user login service", () => {
         password: "123456",
         email: "guagin0972@gmail.com"
       },
+      (value: string) => value,
       (value: string) => value
     )
 
