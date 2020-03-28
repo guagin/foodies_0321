@@ -1,15 +1,16 @@
 import { Order, OrderId, OrderStatus } from "./order"
+import { Product } from "./product"
 
 describe("create order", () => {
   it("should pass", () => {
     const order = new Order(new OrderId("12345"), {
       createdBy: "6030",
       orderedProducts: [
-        {
+        new Product({
           id: "p0",
-          amount: 0,
+          amount: 1,
           note: ""
-        }
+        })
       ],
       status: OrderStatus.pended
     })
@@ -22,11 +23,11 @@ describe("create order", () => {
       const order = new Order(new OrderId("12345"), {
         createdBy: "",
         orderedProducts: [
-          {
+          new Product({
             id: "p0",
-            amount: 0,
+            amount: 1,
             note: ""
-          }
+          })
         ],
         status: OrderStatus.pended
       })
@@ -39,11 +40,11 @@ describe("place order", () => {
     const order = new Order(new OrderId("12345"), {
       createdBy: "6030",
       orderedProducts: [
-        {
+        new Product({
           id: "p0",
-          amount: 0,
+          amount: 1,
           note: ""
-        }
+        })
       ],
       status: OrderStatus.pended
     })
@@ -55,11 +56,11 @@ describe("place order", () => {
       const order = new Order(new OrderId("12345"), {
         createdBy: "6030",
         orderedProducts: [
-          {
+          new Product({
             id: "p0",
-            amount: 0,
+            amount: 1,
             note: ""
-          }
+          })
         ],
         status: OrderStatus.canceled
       })
@@ -74,11 +75,11 @@ describe("cancel order", () => {
     const order = new Order(new OrderId("12345"), {
       createdBy: "6030",
       orderedProducts: [
-        {
+        new Product({
           id: "p0",
-          amount: 0,
+          amount: 1,
           note: ""
-        }
+        })
       ],
       status: OrderStatus.placed
     })
@@ -90,15 +91,56 @@ describe("cancel order", () => {
       const order = new Order(new OrderId("12345"), {
         createdBy: "6030",
         orderedProducts: [
-          {
+          new Product({
             id: "p0",
-            amount: 0,
+            amount: 1,
             note: ""
-          }
+          })
         ],
         status: OrderStatus.pended
       })
       order.cancel()
     }).toThrowError()
+  })
+})
+
+describe("increase product", () => {
+  it("should pass", () => {
+    const order = new Order(new OrderId("12345"), {
+      createdBy: "6030",
+      orderedProducts: [
+        new Product({
+          id: "p0",
+          amount: 1,
+          note: ""
+        })
+      ],
+      status: OrderStatus.pended
+    })
+
+    order.increateProductAmount("p0", 100)
+    const product = order.product.find(elem => elem.id === "p0")
+    expect(product).toBeDefined()
+    if (product) {
+      expect(product.amount).toBe(101)
+    }
+  })
+
+  it("should fail for not ordered product", async () => {
+    expect(() => {
+      const order = new Order(new OrderId("12345"), {
+        createdBy: "6030",
+        orderedProducts: [
+          new Product({
+            id: "p0",
+            amount: 1,
+            note: ""
+          })
+        ],
+        status: OrderStatus.pended
+      })
+
+      order.increateProductAmount("p1", 100)
+    }).toThrow()
   })
 })
