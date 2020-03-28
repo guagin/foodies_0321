@@ -3,16 +3,32 @@ import { UserRegisterUsecase } from "./application/user-register"
 import { UserLoginUseCase } from "./application/user-login"
 import jwt from "jsonwebtoken"
 import { User } from "./domain/user/model/user"
+import { DomainEventPublisher } from "./domain/user/event/domain-event-publisher"
+import debug from "debug"
+
+const logger = debug("app:")
 
 export class App {
   private userRepository: UserRepository
   private decrypt: (value: string) => string
   private encrypt: (value: string) => string
 
-  constructor(dependencies: { userRepository: UserRepository }) {
+  constructor(dependencies: {
+    eventPublisher: DomainEventPublisher
+    userRepository: UserRepository
+  }) {
+    this.initEventListener(dependencies.eventPublisher)
     this.userRepository = dependencies.userRepository
     this.decrypt = (value: string) => value
     this.encrypt = (value: string) => value
+  }
+
+  private initEventListener(domainEventPublisher: DomainEventPublisher): void {
+    /*
+    domainEventPublisher.register<CreatedOrder>("CreatedOrder", e => {
+      logger(JSON.stringify(logger))
+    })
+    */
   }
 
   async register(
