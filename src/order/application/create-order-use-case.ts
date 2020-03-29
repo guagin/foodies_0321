@@ -1,5 +1,6 @@
 import { OrderRepository } from "order/domain/order/order-repository"
 import { OrderId, Order, OrderStatus } from "order/domain/order/order"
+import { CreateOrderService } from "order/domain/order/service/create-order.service"
 
 export class CreateOrderUseCase {
   private orderRepository: OrderRepository
@@ -11,14 +12,11 @@ export class CreateOrderUseCase {
     userId: string
   }): Promise<{ success: boolean; errorMessage?: string; orderId?: OrderId }> {
     try {
-      const orderId = await this.orderRepository.nextId()
-
-      const order = new Order(orderId, {
-        createdBy: input.userId,
-        orderedProducts: [],
-        status: OrderStatus.pended
+      const createOrderService = new CreateOrderService({
+        orderRepository: this.orderRepository
       })
-      await this.orderRepository.save(order)
+
+      const orderId = await createOrderService.create({ userId: input.userId })
 
       return {
         orderId,
