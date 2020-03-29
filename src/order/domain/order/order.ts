@@ -32,7 +32,7 @@ export class Order extends Entity {
     super(id)
     const { createdBy } = propsInput
     if (!createdBy) {
-      throw new CreatedByNotValid("create empty.")
+      throw new CreatedByNotValid("userId empty.")
     }
     this.props = { ...propsInput }
   }
@@ -115,5 +115,9 @@ export class Order extends Entity {
       return
     }
     orderedProducts.splice(foundIndex, 1)
+  }
+
+  isOwnedBy(userId: string): boolean {
+    return this.props.createdBy === userId
   }
 }
