@@ -119,7 +119,7 @@ describe("increase product", () => {
     })
 
     order.increateProductAmount("p0", 100)
-    const product = order.product.find(elem => elem.id === "p0")
+    const product = order.products.find(elem => elem.id === "p0")
     expect(product).toBeDefined()
     if (product) {
       expect(product.amount).toBe(101)

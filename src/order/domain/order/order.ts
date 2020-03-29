@@ -37,7 +37,7 @@ export class Order extends Entity {
     this.props = { ...propsInput }
   }
 
-  get product(): Product[] {
+  get products(): Product[] {
     return this.props.orderedProducts
   }
 
@@ -70,9 +70,11 @@ export class Order extends Entity {
     const foundIndex = orderedProducts.findIndex(elem => {
       return elem.id === product.id
     })
-    if (foundIndex) {
+
+    if (foundIndex > -1) {
       return
     }
+
     const newProducts = [...orderedProducts]
     newProducts.push(product)
     this.props.orderedProducts = newProducts
@@ -111,7 +113,7 @@ export class Order extends Entity {
     const foundIndex = orderedProducts.findIndex(elem => {
       return elem.id === productId
     })
-    if (!foundIndex) {
+    if (foundIndex < 0) {
       return
     }
     orderedProducts.splice(foundIndex, 1)
