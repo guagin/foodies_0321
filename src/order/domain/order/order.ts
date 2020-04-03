@@ -104,7 +104,12 @@ export class Order extends Entity {
       return elem.id === productId
     })
 
-    if (foundProduct) {
+    if (foundProduct && foundProduct.amount === amount) {
+      this.removeProduct(productId)
+      return
+    }
+
+    if(foundProduct){
       foundProduct.decrease(amount)
       return
     }

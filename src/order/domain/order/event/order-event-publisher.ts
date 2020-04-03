@@ -3,6 +3,7 @@ import { Order } from "../order";
 import { DomainEventPublisher } from "domain-event-publisher";
 import { OrderCreated } from "event/order-created";
 import { ProductAppended } from "event/product-appended";
+import { ProductRemoved } from "event/product-removed";
 
 export class OrderEventPublisher{
     
@@ -26,6 +27,15 @@ export class OrderEventPublisher{
             products: order.products
         },
         this.applicationVeriosn)
+        this.eventPublisher.publish(event)
+    }
+
+    productRemoved(order: Order): void{
+        const event = new ProductRemoved({
+            userId: order.createdBy,
+            orderId: order.id.toValue(),
+            products: order.products
+        },this.applicationVeriosn)
         this.eventPublisher.publish(event)
     }
 }

@@ -1,16 +1,15 @@
 import { OrderRepository } from "order/domain/order/order-repository";
 import { OrderEventPublisher } from "order/domain/order/event/order-event-publisher";
 import { DomainEventPublisher } from "domain-event-publisher";
-import { Product } from "order/domain/order/product";
 import { OrderId } from "order/domain/order/order";
-import { AppendProductService } from "order/domain/order/service/append-product-service";
-import { IncreaseProductAmountService } from "order/domain/order/service/increase-product-amount-service";
+import { Product } from "order/domain/order/product";
+
 
 export class AppendProduct{
     private orderRepository: OrderRepository
     private orderEventPublisher: OrderEventPublisher
 
-    private productsToAppend: Product[]
+    private productsToAppend: {id: string, amount: number}[]
 
    constructor(depends: {
        orderRepository: OrderRepository,
@@ -20,7 +19,7 @@ export class AppendProduct{
         this.orderEventPublisher = new OrderEventPublisher(depends.eventPublisher)
     }
 
-    append(product: Product[]): AppendProduct{
+    append(product: {id: string, amount: number}[]): AppendProduct{
         this.productsToAppend = product
         return this
     }
@@ -34,12 +33,16 @@ export class AppendProduct{
                 order.increateProductAmount(productToAppend.id, productToAppend.amount)
                 return
             }
-            order.appendProduct(productToAppend)
+            order.appendProduct(
+                new Product({
+                    id: productToAppend.id,
+                    amount: productToAppend.amount,
+                    note: ""
+                })
+            )
         })
 
         await this.orderRepository.save(order)
         this.orderEventPublisher.productAppended(order)
     }
-
-    
 }
