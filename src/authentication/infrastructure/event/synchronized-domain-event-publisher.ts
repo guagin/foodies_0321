@@ -3,15 +3,15 @@ import { DomainEvent } from "authentication/domain/user/event/domain-event"
 import { DomainEventHandler } from "authentication/domain/user/event/domain-event-publisher"
 
 // sync event handler, bad for performance.
-export class SynchronizedDomainEventPublisher {
+export class SynchronizedDomainEventPublisher<T extends DomainEvent> {
   private logger = debug("DomainHandler")
   private eventHandlers: {
-    [key: string]: DomainEventHandler[]
+    [key: string]: DomainEventHandler<T>[]
   }
   constructor() {
     this.eventHandlers = {}
   }
-  register(name: string, handler: DomainEventHandler): void {
+  register(name: string, handler: DomainEventHandler<T>): void {
     if (!this.eventHandlers[name]) {
       this.eventHandlers[name] = []
       this.logger(`init ${name} handlers array.`)
@@ -20,7 +20,7 @@ export class SynchronizedDomainEventPublisher {
     this.logger(`append new handlers to ${name}`)
   }
 
-  publish(event: DomainEvent): void {
+  publish(event: T): void {
     if (!this.eventHandlers[event.name]) {
       return
     }
