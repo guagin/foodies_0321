@@ -2,12 +2,15 @@ import { OrderRepository } from "../order-repository"
 import { OrderId } from "../order"
 import { Product } from "../product"
 import { ProductNotFound } from "../error/product-not-found"
+import { OrderEventPublisher } from "../event/order-event-publisher"
 
 export class IncreaseProductAmountService {
   private orderRepository: OrderRepository
+  private orderEventPublisher: OrderEventPublisher
 
-  constructor(depneds: { orderRepository: OrderRepository }) {
-    this.orderRepository = depneds.orderRepository
+  constructor(depends: { orderRepository: OrderRepository, eventPublisher: OrderEventPublisher  }) {
+    this.orderRepository = depends.orderRepository
+    this.orderEventPublisher = depends.eventPublisher
   }
 
   // should make this to be idempotent

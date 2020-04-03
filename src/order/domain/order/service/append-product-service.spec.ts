@@ -2,13 +2,16 @@ import { InMemoryOrderRepository } from "order/intrastructure/persistence/in-mem
 import { Order, OrderStatus, OrderId } from "../order"
 import { Product } from "../product"
 import { AppendProductService } from "./append-product-service"
+import { OrderEventPublisher } from "../event/order-event-publisher"
+import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 
 describe("append product service", () => {
   it("should pass", async () => {
     const orderRepository = new InMemoryOrderRepository()
-
+    const eventPublisher = new OrderEventPublisher(new SynchronizedDomainEventPublisher())
     const appendProductService = new AppendProductService({
-      orderRepository: orderRepository
+      orderRepository: orderRepository,
+      eventPublisher
     })
 
     const orderId = await orderRepository.nextId()
@@ -37,9 +40,10 @@ describe("append product service", () => {
     let error
     try {
       const orderRepository = new InMemoryOrderRepository()
-
+      const eventPublisher = new OrderEventPublisher(new SynchronizedDomainEventPublisher())
       const appendProductService = new AppendProductService({
-        orderRepository: orderRepository
+        orderRepository: orderRepository,
+        eventPublisher
       })
 
       const product = new Product({

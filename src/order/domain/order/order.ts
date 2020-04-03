@@ -126,4 +126,9 @@ export class Order extends Entity {
   isOwnedBy(userId: string): boolean {
     return this.props.createdBy === userId
   }
+
+  isProductExists(productId: string): boolean{
+    const index = this.products.findIndex(p => p.id === productId)
+    return index > -1
+  }
 }

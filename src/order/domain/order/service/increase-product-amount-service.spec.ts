@@ -2,12 +2,14 @@ import { InMemoryOrderRepository } from "order/intrastructure/persistence/in-mem
 import { Order, OrderStatus } from "../order"
 import { Product } from "../product"
 import { IncreaseProductAmountService } from "./increase-product-amount-service"
+import { OrderEventPublisher } from "../event/order-event-publisher"
+import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 
 describe("increase product amount", () => {
   it("should pass", async () => {
     const orderRepository = new InMemoryOrderRepository()
     const orderId = await orderRepository.nextId()
-
+    const eventPublisher = new OrderEventPublisher(new SynchronizedDomainEventPublisher())
     const order = new Order(orderId, {
       createdBy: "ricky",
       orderedProducts: [
@@ -23,7 +25,8 @@ describe("increase product amount", () => {
     await orderRepository.save(order)
 
     const increaseProductAmountService = new IncreaseProductAmountService({
-      orderRepository
+      orderRepository,
+      eventPublisher
     })
 
     await increaseProductAmountService.increase(orderId, {
@@ -54,9 +57,10 @@ describe("increase product amount", () => {
       })
 
       await orderRepository.save(order)
-
+      const eventPublisher = new OrderEventPublisher(new SynchronizedDomainEventPublisher())
       const increaseProductAmountService = new IncreaseProductAmountService({
-        orderRepository
+        orderRepository,
+        eventPublisher
       })
 
       await increaseProductAmountService.increase(orderId, {
