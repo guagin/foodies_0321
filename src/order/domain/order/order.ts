@@ -41,6 +41,10 @@ export class Order extends Entity {
     return this.props.orderedProducts
   }
 
+  get createdBy(): string{
+    return this.props.createdBy
+  }
+
   place(): void {
     if (this.props.status === OrderStatus.placed) {
       return

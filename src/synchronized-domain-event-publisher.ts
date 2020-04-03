@@ -6,12 +6,12 @@ import { DomainEventHandler } from "./domain-event-publisher"
 export class SynchronizedDomainEventPublisher {
   private logger = debug("DomainHandler")
   private eventHandlers: {
-    [key: string]: DomainEventHandler[]
+    [key: string]: DomainEventHandler<DomainEvent>[]
   }
   constructor() {
     this.eventHandlers = {}
   }
-  register(name: string, handler: DomainEventHandler): void {
+  register<T extends DomainEvent>(name: string, handler: DomainEventHandler<T>): void {
     if (!this.eventHandlers[name]) {
       this.eventHandlers[name] = []
       this.logger(`init ${name} handlers array.`)

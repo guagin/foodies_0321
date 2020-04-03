@@ -2,7 +2,7 @@ import { UserId } from "../model/user"
 import { DomainEvent } from "./domain-event"
 
 interface UserRegisteredPayload {
-  userId: UserId
+  userId: UserId // turn this to string
   name: string
   email: string
 }
