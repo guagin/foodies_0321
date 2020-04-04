@@ -46,6 +46,10 @@ export class Meal extends Entity{
         return this.props.provider
     }
 
+    get status(): MealStatus{
+        return this.props.status
+    }
+
     launch(): void{
         if(this.props.status === MealStatus.launched){
             return
