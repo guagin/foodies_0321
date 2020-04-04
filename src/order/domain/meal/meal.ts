@@ -16,16 +16,34 @@ export enum MealStatus{
 interface MealProps{
     name: string
     price: number
-    describe: string
+    description: string
     pictures: string[]
     status: MealStatus
+    provider: string
 }
+
 
 export class Meal extends Entity{
     private props: MealProps
     constructor(id: MealId, props: MealProps){
         super(id)
         this.props = props 
+    }
+
+    get name(): string{
+        return this.props.name
+    }
+
+    get price(): number{
+        return this.props.price
+    }
+
+    get description(): string{
+        return this.props.description
+    }
+
+    get provider(): string{
+        return this.props.provider
     }
 
     launch(): void{

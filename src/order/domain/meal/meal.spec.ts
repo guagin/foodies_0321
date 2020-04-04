@@ -6,9 +6,10 @@ describe('meal model construct', ()=>{
         const meal = new Meal(mealId, {
             name: 'RU_WEI',
             price: 100,
-            describe: '',
+            description: '',
             pictures: [''],
-            status: MealStatus.preparing
+            status: MealStatus.preparing,
+            provider:'uber_001'  
         })
     })
 })
@@ -20,9 +21,10 @@ describe('prepare', ()=>{
         const meal = new Meal(mealId, {
             name: 'RU_WEI',
             price: 100,
-            describe: '',
+            description: '',
             pictures: [''],
-            status: MealStatus.shelved
+            status: MealStatus.shelved,
+            provider:'uber_001'  
         })
         meal.prepare()
     })
@@ -34,9 +36,10 @@ describe('prepare', ()=>{
             const meal = new Meal(mealId, {
                 name: 'RU_WEI',
                 price: 100,
-                describe: '',
+                description: '',
                 pictures: [''],
-                status: MealStatus.launched
+                status: MealStatus.launched,
+                provider:'uber_001'  
             })
             meal.prepare()
         }).toThrowError()
@@ -50,9 +53,10 @@ describe('launch', ()=>{
         const meal = new Meal(mealId, {
             name: 'RU_WEI',
             price: 100,
-            describe: '',
+            description: '',
             pictures: [''],
-            status: MealStatus.preparing
+            status: MealStatus.preparing,
+            provider:'uber_001'  
         })
         meal.launch()
     })
@@ -64,9 +68,10 @@ describe('launch', ()=>{
             const meal = new Meal(mealId, {
                 name: 'RU_WEI',
                 price: 100,
-                describe: '',
+                description: '',
                 pictures: [''],
-                status: MealStatus.shelved
+                status: MealStatus.shelved,
+                provider:'uber_001'  
             })
             meal.launch()
         }).toThrowError()
@@ -79,9 +84,10 @@ describe('shelve', ()=>{
         const meal = new Meal(mealId, {
             name: 'RU_WEI',
             price: 100,
-            describe: '',
+            description: '',
             pictures: [''],
-            status: MealStatus.launched
+            status: MealStatus.launched,
+            provider:'uber_001'  
         })
         meal.shelve()
     })
@@ -93,9 +99,10 @@ describe('shelve', ()=>{
             const meal = new Meal(mealId, {
                 name: 'RU_WEI',
                 price: 100,
-                describe: '',
+                description: '',
                 pictures: [''],
-                status: MealStatus.preparing
+                status: MealStatus.preparing,
+                provider:'uber_001'  
             })
             meal.shelve()
         }).toThrowError()
