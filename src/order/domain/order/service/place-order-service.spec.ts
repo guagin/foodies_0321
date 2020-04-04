@@ -4,11 +4,18 @@ import { Order, OrderStatus } from "order/domain/order/order"
 import { Product } from "order/domain/order/product"
 import { OrderEventPublisher } from "../event/order-event-publisher"
 import { PlaceOrderService } from "./place-order-service"
+import { OrderPlaced } from "event/order-placed"
 
 describe('place order service',()=>{
     it('should success', async ()=>{
         const orderRepository = new InMemoryOrderRepository()
         const eventPublisher = new SynchronizedDomainEventPublisher()
+
+        const eventPromise = new Promise<string>((resolve)=>{
+            eventPublisher.register<OrderPlaced>("OrderPlaced", (e)=>{
+                resolve(e.payload.orderId)
+            })
+        })
 
         const orderId = await orderRepository.nextId()
         const order = new Order(orderId,{
@@ -46,5 +53,8 @@ describe('place order service',()=>{
 
         expect(placedOrder).toBeDefined()
         expect(placedOrder.status).toBe(OrderStatus.placed)
+
+        const orderIdFromEvent = await eventPromise
+        expect(orderIdFromEvent).toBe(orderId.toValue())
     })
 })
