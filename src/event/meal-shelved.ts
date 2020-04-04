@@ -1,6 +1,6 @@
 import { DomainEvent } from "domain-event";
 
-interface MealLaunchedPayload{
+interface MealShelvedPayload{
     meal: Meal
     provider: Provider
 }
@@ -16,10 +16,10 @@ interface Provider{
     name: string
 }
 
-export class MealLaunched extends DomainEvent{
-    payload: MealLaunchedPayload
-    constructor(payload: MealLaunchedPayload, applicationVersion: string){
-        super("MealLaunched", applicationVersion)
+export class MealShelved extends DomainEvent{
+    payload: MealShelvedPayload
+    constructor(payload: MealShelvedPayload, applicationVersion: string){
+        super("MealShelved", applicationVersion)
         this.payload = payload
     }
 }
