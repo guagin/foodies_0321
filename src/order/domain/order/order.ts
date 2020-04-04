@@ -5,6 +5,7 @@ import { OrderNotPended } from "./error/order-not-pended"
 import { OrderNotPlaced } from "./error/order-not-placed"
 import { Product } from "./product"
 import { ProductNotOrdered } from "./error/product-not-ordered"
+import { ProductIsEmpty } from "./error/product-is-empty"
 
 export class OrderId extends EntityId {}
 
@@ -45,7 +46,15 @@ export class Order extends Entity {
     return this.props.createdBy
   }
 
+  get status(): OrderStatus{
+    return this.props.status
+  }
+
   place(): void {
+    if(this.props.orderedProducts.length === 0){
+      throw new ProductIsEmpty(``)
+    }
+
     if (this.props.status === OrderStatus.placed) {
       return
     }

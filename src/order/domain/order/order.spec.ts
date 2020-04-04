@@ -68,6 +68,18 @@ describe("place order", () => {
       order.place()
     }).toThrowError()
   })
+
+  it("should fail for empty products", () => {
+    expect(() => {
+      const order = new Order(new OrderId("12345"), {
+        createdBy: "6030",
+        orderedProducts: [],
+        status: OrderStatus.pended
+      })
+
+      order.place()
+    }).toThrowError()
+  })
 })
 
 describe("cancel order", () => {
