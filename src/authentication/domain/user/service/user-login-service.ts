@@ -1,44 +1,45 @@
 import { UserRepository } from "../user-repository"
 import { User } from "../model/user"
+import { UserEventPublisher } from "../event/user-event-publisher"
+import { UserNotFound } from "../error/user-not-found"
+import { PasswordNotMatched } from "../error/password-not-matched"
 
 export class UserLoginService {
-  private userRepo: UserRepository
+  private userRepository: UserRepository
   private encrypt: (value: string) => string
   private generateToken: (user: User) => string
+  private userEventPublisher: UserEventPublisher
   constructor(input: {
-    userRepo: UserRepository
+    userRepository: UserRepository
     encrypt: (value: string) => string
     generateToken: (user: User) => string,
-    
+    userEventPublisher: UserEventPublisher
   }) {
-    this.userRepo = input.userRepo
+    this.userRepository = input.userRepository
     this.encrypt = input.encrypt
     this.generateToken = input.generateToken
+    this.userEventPublisher = input.userEventPublisher
   }
 
   async login(
     name: string,
     password: string
-  ): Promise<{ success: boolean; errorMessages?: string[]; token?: string }> {
-    const user = await this.userRepo.ofName(name)
+  ): Promise<string> {
+    const user = await this.userRepository.ofName(name)
 
     if (!user) {
-      return {
-        success: false,
-        errorMessages: ["user not found"]
-      }
+      throw new UserNotFound()
     }
 
     if (!user.isPasswordMatched(this.encrypt(password))) {
-      return {
-        success: false,
-        errorMessages: ["password not matched"]
-      }
+      throw new PasswordNotMatched()
     }
 
-    return {
-      success: true,
-      token: this.generateToken(user)
-    }
+    this.userEventPublisher.userLogined({
+      id: user.id.toValue(),
+      name: user.name
+    })
+
+    return this.generateToken(user)
   }
 }

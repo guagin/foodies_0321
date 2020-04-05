@@ -2,14 +2,18 @@ import { InMemoryUserRepository } from "authentication/infrastructure/persistenc
 import { User } from "../model/user"
 import { UserLoginService } from "./user-login-service"
 import jwt from "jsonwebtoken"
+import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
+import { UserEventPublisher } from "../event/user-event-publisher"
+import { UserLogined } from "event/user-logined"
 
 describe("user login service", () => {
   const userRepository = new InMemoryUserRepository()
   // insert a user.
-  const userId = userRepository.nextId()
+
+  const eventPublisher = new SynchronizedDomainEventPublisher()
 
   const userLoginService = new UserLoginService({
-    userRepo: userRepository,
+    userRepository: userRepository,
     encrypt: (value: string) => value,
     generateToken: (user: User) => {
       return jwt.sign(
@@ -19,10 +23,12 @@ describe("user login service", () => {
         },
         "imRicky"
       )
-    }
+    },
+    userEventPublisher: new UserEventPublisher(eventPublisher)
   })
 
   beforeAll(async () => {
+    const userId = await userRepository.nextId()
     const user = new User(
       userId,
       {
@@ -38,26 +44,45 @@ describe("user login service", () => {
   })
 
   it("should pass", async () => {
-    const { success, errorMessages } = await userLoginService.login(
+    const eventPromise =new Promise<string>((resolve=>
+      {
+        eventPublisher.register<UserLogined>("UserLogined", (e)=>{
+          resolve(e.payload.id)
+        })
+      })
+    )
+    const token = await userLoginService.login(
       "ricky",
       "123456"
-    )
-    expect(success).toBeTruthy()
-    expect(errorMessages).toBeUndefined()
+    )  
+    expect(token).toBeDefined()
+    expect(await eventPromise).toBeDefined()
   })
 
   it("should failed for the password not matched", async () => {
-    const { success, errorMessages } = await userLoginService.login("ricky", "")
-    expect(success).toBeFalsy()
-    expect(errorMessages).toBeDefined()
+    let error
+
+    try{
+      const token = await userLoginService.login("ricky", "")
+    }catch(e){
+      error =e
+    }
+
+    expect(error).toBeDefined()
   })
 
   it("should failed for user not found", async () => {
-    const { success, errorMessages } = await userLoginService.login(
-      "ricky123",
-      "123456"
-    )
-    expect(success).toBeFalsy()
-    expect(errorMessages).toBeDefined()
+    let error
+    
+    try{
+      const token = await userLoginService.login(
+        "ricky123",
+        "123456"
+      )
+    }catch(e){
+      error =e
+    }
+
+    expect(error).toBeDefined()
   })
 })
