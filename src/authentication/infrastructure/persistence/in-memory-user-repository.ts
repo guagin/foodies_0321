@@ -9,7 +9,7 @@ export class InMemoryUserRepository implements UserRepository {
     this.data = []
   }
 
-  nextId(): UserId {
+  async nextId(): Promise<UserId> {
     this.currentId = this.currentId + 1
     return new UserId(`${this.currentId}`)
   }

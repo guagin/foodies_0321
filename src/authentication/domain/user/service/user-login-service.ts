@@ -8,7 +8,8 @@ export class UserLoginService {
   constructor(input: {
     userRepo: UserRepository
     encrypt: (value: string) => string
-    generateToken: (user: User) => string
+    generateToken: (user: User) => string,
+    
   }) {
     this.userRepo = input.userRepo
     this.encrypt = input.encrypt

@@ -1,8 +1,7 @@
-import { UserId } from "../model/user"
-import { DomainEvent } from "./domain-event"
+import { DomainEvent } from "domain-event"
 
 interface UserRegisteredPayload {
-  userId: UserId // turn this to string
+  userId: string
   name: string
   email: string
 }
