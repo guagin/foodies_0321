@@ -1,9 +1,12 @@
 import { InMemoryOrderRepository } from "order/intrastructure/persistence/in-memory-oder-repository"
 
-import { OrderStatus } from "order/domain/order/order"
 import { CreateOrder } from "./create-order"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { OrderCreated } from "event/order-created"
+import { InMemoryTakeOutRepository } from "order/intrastructure/persistence/in-memory-take-out-repository"
+import { TakeOut } from "order/domain/take-out/take-out"
+
+const Day = 1000 * 60 * 60 * 24
 
 describe('create order', ()=>{
     it('should pass', async ()=>{
@@ -16,12 +19,27 @@ describe('create order', ()=>{
             }
         )
         const orderRepository = new InMemoryOrderRepository()
+        
+        const takeOutRepository = new InMemoryTakeOutRepository()
+        const takeOutId = await takeOutRepository.nextId()
+        const takeOut = new TakeOut(takeOutId,{
+            createdBy: 'ricky',
+            title: "lunch",
+            description: "",
+            startedAt: new Date(),
+            endAt: new Date(Date.now() + Day),
+            enabled: true
+        })
+
+        await takeOutRepository.save(takeOut)
+
         const createOrder = new CreateOrder({
             orderRepository,
+            takeOutRepository,
             eventPublisher
         })
 
-        const orderId = await createOrder.create("ricky")
+        const orderId = await createOrder.createBy("ricky").appendTo(takeOut.id.toValue())
 
         const order = await orderRepository.ofId(orderId)
 

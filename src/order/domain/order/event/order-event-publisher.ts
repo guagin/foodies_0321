@@ -6,6 +6,7 @@ import { ProductAppended } from "event/product-appended";
 import { ProductRemoved } from "event/product-removed";
 import { OrderPlaced } from "event/order-placed";
 import { OrderCanceled } from "event/order-cancel";
+import { OrderAppended } from "event/order-appended";
 
 export class OrderEventPublisher{
     
@@ -58,6 +59,15 @@ export class OrderEventPublisher{
             products: order.products
         },
         this.applicationVeriosn)
+        this.eventPublisher.publish(event)
+    }
+
+    orderAppended(order: Order): void{
+        const event = new OrderAppended({
+            userId: order.createdBy,
+            orderId: order.id.toValue(),
+            takeOutId: order.takeOutId
+        },this.applicationVeriosn)
         this.eventPublisher.publish(event)
     }
 }

@@ -53,6 +53,10 @@ export class Order extends Entity {
     return this.props.status
   }
 
+  get takeOutId(): string{
+    return this.props.takeOutId
+  }
+
   place(): void {
     if(this.props.orderedProducts.length === 0){
       throw new ProductIsEmpty(``)
@@ -147,5 +151,12 @@ export class Order extends Entity {
   isProductExists(productId: string): boolean{
     const index = this.products.findIndex(p => p.id === productId)
     return index > -1
+  }
+
+  appendTo(takeOutId: string){
+    this.props = {
+      ...this.props,
+      takeOutId
+    }
   }
 }
