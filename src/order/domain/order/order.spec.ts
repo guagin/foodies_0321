@@ -9,10 +9,11 @@ describe("create order", () => {
         new Product({
           id: "p0",
           amount: 1,
-          note: ""
+          note: "",
         })
       ],
-      status: OrderStatus.pended
+      status: OrderStatus.pended,
+      takeOutId: ""
     })
 
     expect(order).toBeDefined()
@@ -29,7 +30,8 @@ describe("create order", () => {
             note: ""
           })
         ],
-        status: OrderStatus.pended
+        status: OrderStatus.pended,
+        takeOutId: ""
       })
     }).toThrowError()
   })
@@ -46,7 +48,8 @@ describe("place order", () => {
           note: ""
         })
       ],
-      status: OrderStatus.pended
+      status: OrderStatus.pended,
+      takeOutId: ""
     })
     order.place()
   })
@@ -62,7 +65,8 @@ describe("place order", () => {
             note: ""
           })
         ],
-        status: OrderStatus.canceled
+        status: OrderStatus.canceled,
+        takeOutId: ""
       })
 
       order.place()
@@ -74,7 +78,8 @@ describe("place order", () => {
       const order = new Order(new OrderId("12345"), {
         createdBy: "6030",
         orderedProducts: [],
-        status: OrderStatus.pended
+        status: OrderStatus.pended,
+        takeOutId: ""
       })
 
       order.place()
@@ -93,7 +98,8 @@ describe("cancel order", () => {
           note: ""
         })
       ],
-      status: OrderStatus.placed
+      status: OrderStatus.placed,
+      takeOutId: ""
     })
     order.cancel()
   })
@@ -109,7 +115,8 @@ describe("cancel order", () => {
             note: ""
           })
         ],
-        status: OrderStatus.pended
+        status: OrderStatus.pended,
+        takeOutId: ""
       })
       order.cancel()
     }).toThrowError()
@@ -127,7 +134,8 @@ describe("increase product", () => {
           note: ""
         })
       ],
-      status: OrderStatus.pended
+      status: OrderStatus.pended,
+      takeOutId: ""
     })
 
     order.increateProductAmount("p0", 100)
@@ -149,7 +157,8 @@ describe("increase product", () => {
             note: ""
           })
         ],
-        status: OrderStatus.pended
+        status: OrderStatus.pended,
+        takeOutId: ""
       })
 
       order.increateProductAmount("p1", 100)

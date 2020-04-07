@@ -13,7 +13,9 @@ interface OrderProps {
   createdBy: string
   orderedProducts: Product[]
   status: OrderStatus
+  takeOutId: string
 }
+
 export enum OrderStatus {
   pended,
   placed,
@@ -27,7 +29,8 @@ export class Order extends Entity {
     propsInput: {
       createdBy: string
       orderedProducts: Product[]
-      status: OrderStatus
+      status: OrderStatus,
+      takeOutId: string
     }
   ) {
     super(id)

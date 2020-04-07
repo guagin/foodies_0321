@@ -1,14 +1,14 @@
 import { EntityId } from "entity-id";
 import { Entity } from "entity";
-import { ActivityNotAvailable } from "./error/user-not-authorized";
 
 export class TakeOutId extends EntityId{}
 
 interface TakeOutProps{
     createdBy: string
+    title: string
+    description: string
     startedAt: Date
     endAt: Date
-    orders: string[]
     enabled: boolean
 }
 
@@ -26,8 +26,12 @@ export class TakeOut extends Entity{
         return this.props.createdBy
     }
 
-    get orders(): string[]{
-        return this.props.orders
+    get title(): string{
+        return this.props.title
+    }
+
+    get description(): string{
+        return this.props.description
     }
 
     get startedAt(): Date{
@@ -44,37 +48,6 @@ export class TakeOut extends Entity{
             this.props.startedAt.getTime() <= current.getTime() && 
             current.getTime() < this.props.endAt.getTime()        
         )
-    }
-
-    removeOrder(userId: string, orderId: string){
-
-        if(!this.isAuthorized(userId)){
-            throw new ActivityNotAvailable()
-        }
-        
-        const foundIndex = this.props.orders.findIndex(o => o === orderId)
-        if(foundIndex < 0){
-            return
-        }
-      
-        this.orders.splice(foundIndex, 1)
-    }
-
-    private isAuthorized(userId: string): boolean{
-        return this.createdBy === userId || this.isAvailable(new Date())
-    }
-
-    appendOrder(userId: string, orderId: string){
-        if(!this.isAuthorized(userId)){
-            throw new ActivityNotAvailable()
-        }
-
-        const foundIndex = this.props.orders.findIndex( o=> o === orderId)
-        if(foundIndex > -1){
-            return 
-        }
-
-        this.orders.push(orderId)
     }
 
     disable(){
