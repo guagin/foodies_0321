@@ -6,7 +6,7 @@ import { CreateTakeOutService } from "order/domain/take-out/service/create-take-
 import { TakeOutEventPublisher } from "order/domain/take-out/event/take-out-event-publisher"
 import { CreateOrderService } from "./create-order.service"
 import { OrderEventPublisher } from "../event/order-event-publisher"
-import { AppendOrderService } from "./append-order-service"
+import { AppendOrderToTakeOutService } from "./append-order-to-take-out-service"
 
 
 const oneDay = 60*60*24*1000
@@ -45,7 +45,7 @@ describe('append order service', ()=>{
             userId: "ricky"
         })
 
-        const appendOrderService = new AppendOrderService(orderRepository, takeOutRepository, new OrderEventPublisher(eventPublisher))
+        const appendOrderService = new AppendOrderToTakeOutService(orderRepository, takeOutRepository, new OrderEventPublisher(eventPublisher))
 
         await appendOrderService.append(orderId.toValue()).to(takeOutId.toValue())
 
@@ -85,7 +85,7 @@ describe('append order service', ()=>{
             userId: "ricky"
         })
 
-        const appendOrderService = new AppendOrderService(orderRepository, takeOutRepository, new OrderEventPublisher(eventPublisher))
+        const appendOrderService = new AppendOrderToTakeOutService(orderRepository, takeOutRepository, new OrderEventPublisher(eventPublisher))
 
         let error
 

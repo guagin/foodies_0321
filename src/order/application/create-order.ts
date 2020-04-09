@@ -7,7 +7,7 @@ import { OrderEventPublisher } from "order/domain/order/event/order-event-publis
 import { TakeOutRepository } from "order/domain/take-out/take-out-repository";
 import { TakeOutId } from "order/domain/take-out/take-out";
 import { TakeOutNotFound } from "order/error/take-out-not-found";
-import { AppendOrderService } from "order/domain/order/service/append-order-service";
+import { AppendOrderToTakeOutService } from "order/domain/order/service/append-order-to-take-out-service";
 
 export class CreateOrder {
 
@@ -51,7 +51,7 @@ export class CreateOrder {
 
 
         // TODO: if append fail, should remove order( compenstatory)
-        const appendOrderService = new AppendOrderService(this.orderRepository, this.takeOutRepository, this.orderEventPublisher)
+        const appendOrderService = new AppendOrderToTakeOutService(this.orderRepository, this.takeOutRepository, this.orderEventPublisher)
 
         await appendOrderService.append(orderId.toValue()).to(takeOutId)
         

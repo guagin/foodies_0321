@@ -7,7 +7,7 @@ import { TakeOutId } from "order/domain/take-out/take-out";
 import { TakeOutNotFound } from "order/error/take-out-not-found";
 import { ActivityNotAvailable } from "order/domain/take-out/error/activity-not-available";
 
-export class AppendOrderService{
+export class AppendOrderToTakeOutService{
     private orderId: string
     constructor(
         private orderRepository: OrderRepository,
@@ -15,7 +15,7 @@ export class AppendOrderService{
         private orderEventPublisher: OrderEventPublisher
     ){}
 
-    append(orderId: string): AppendOrderService{
+    append(orderId: string): AppendOrderToTakeOutService{
       this.orderId = orderId
       return this
     }
