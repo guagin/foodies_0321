@@ -1,5 +1,5 @@
 import { UserRegisterUsecase } from "./user-register"
-import { InMemoryUserRepository } from "authentication/infrastructure/persistence/in-memory-user-repository"
+import { InMemoryUserRepository } from "authentication/infrastructure/persistence/in-memory/user-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 
 describe("user register use case", () => {

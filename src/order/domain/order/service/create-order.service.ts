@@ -12,13 +12,15 @@ export class CreateOrderService {
     this.eventPublisher = input.eventPublisher
   }
 
-  async create(input: { userId: string }): Promise<OrderId> {
+  async create(input: { userId: string, takeOutId: string }): Promise<OrderId> {
+    const { userId, takeOutId } = input
     const orderId = await this.orderRepository.nextId()
 
     const order = new Order(orderId, {
-      createdBy: input.userId,
+      createdBy: userId,
       orderedProducts: [],
-      status: OrderStatus.pended
+      status: OrderStatus.pended,
+      takeOutId
     })
     await this.orderRepository.save(order)
 

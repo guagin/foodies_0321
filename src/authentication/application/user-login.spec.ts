@@ -1,4 +1,4 @@
-import { InMemoryUserRepository } from "authentication/infrastructure/persistence/in-memory-user-repository"
+import { InMemoryUserRepository } from "authentication/infrastructure/persistence/in-memory/user-repository"
 import { UserLoginUseCase } from "./user-login"
 import { UserLoginService } from "authentication/domain/user/service/user-login-service"
 import jwt from "jsonwebtoken"

@@ -5,9 +5,29 @@ import { Product } from "order/domain/order/product"
 import { OrderEventPublisher } from "../event/order-event-publisher"
 import { PlaceOrderService } from "./place-order-service"
 import { OrderPlaced } from "event/order-placed"
+import { InMemoryTakeOutRepository } from "order/intrastructure/persistence/in-memory-take-out-repository"
+import { TakeOut } from "order/domain/take-out/take-out"
+
+const Day = 1000 * 60 * 60 * 24
 
 describe('place order service',()=>{
     it('should success', async ()=>{
+        const takeOutRepository = new InMemoryTakeOutRepository()
+        const takeOutId = await takeOutRepository.nextId()
+        const takeOut = new TakeOut(
+          takeOutId,
+          {
+          createdBy: 'ricky',
+          title: "lunch",
+          description: "",
+          startedAt: new Date(),
+          endAt: new Date(Date.now() + Day),
+          enabled: true
+      })
+    
+      await takeOutRepository.save(takeOut)
+    
+
         const orderRepository = new InMemoryOrderRepository()
         const eventPublisher = new SynchronizedDomainEventPublisher()
 
@@ -37,7 +57,8 @@ describe('place order service',()=>{
                     note: ""
                 })
             ],
-            status: OrderStatus.pended
+            status: OrderStatus.pended,
+            takeOutId: takeOutId.toValue()
         })
 
         await orderRepository.save(order)

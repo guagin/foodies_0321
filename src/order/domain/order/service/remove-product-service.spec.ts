@@ -2,9 +2,29 @@ import { InMemoryOrderRepository } from "order/intrastructure/persistence/in-mem
 import { Order, OrderStatus } from "../order"
 import { Product } from "../product"
 import { RemoveProductService } from "./remove-product-service"
+import { InMemoryTakeOutRepository } from "order/intrastructure/persistence/in-memory-take-out-repository"
+import { TakeOut } from "order/domain/take-out/take-out"
+
+const Day = 1000 * 60 * 60 * 24
+
 
 describe("remove product service", () => {
   it("should pass", async () => {
+    const takeOutRepository = new InMemoryTakeOutRepository()
+    const takeOutId = await takeOutRepository.nextId()
+    const takeOut = new TakeOut(
+      takeOutId,
+      {
+      createdBy: 'ricky',
+      title: "lunch",
+      description: "",
+      startedAt: new Date(),
+      endAt: new Date(Date.now() + Day),
+      enabled: true
+  })
+
+  await takeOutRepository.save(takeOut)
+
     const orderRepository = new InMemoryOrderRepository()
 
     const removeProductService = new RemoveProductService({ orderRepository })
@@ -19,8 +39,10 @@ describe("remove product service", () => {
           note: ""
         })
       ],
-      status: OrderStatus.pended
+      status: OrderStatus.pended, 
+      takeOutId: takeOutId.toValue()
     })
+    
     await orderRepository.save(order)
 
     await removeProductService.remove(orderId, "p0")

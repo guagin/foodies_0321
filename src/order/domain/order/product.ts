@@ -1,4 +1,3 @@
-import { Entity } from "entity"
 import { AmountIsZero } from "./error/amount-is-zero"
 import { AmountIsFloat } from "./error/amount-is-float"
 import { AmountIsNegtaive } from "./error/amount-is-negative-integer"

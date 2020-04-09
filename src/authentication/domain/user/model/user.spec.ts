@@ -1,5 +1,4 @@
 import { User, UserId } from "./user"
-import { debug } from "debug"
 
 describe("user test", () => {
   it("should pass", () => {

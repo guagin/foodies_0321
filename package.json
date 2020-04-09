@@ -26,8 +26,9 @@
     "@types/debug": "^4.1.4",
     "@types/jest": "^25.1.4",
     "@types/jsonwebtoken": "^8.3.3",
-    "@types/mongoose": "^5.5.8",
+    "@types/mongoose": "^5.7.9",
     "@types/nconf": "^0.10.0",
+    "@types/uuid": "^7.0.2",
     "@typescript-eslint/eslint-plugin": "^1.12.0",
     "@typescript-eslint/parser": "^1.12.0",
     "babel-plugin-transform-function-parameter-decorators": "^1.2.0",
@@ -53,8 +54,9 @@
     "jsonwebtoken": "^8.5.1",
     "log4js": "^4.5.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.6.4",
+    "mongoose": "^5.9.7",
     "nconf": "^0.10.0",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^7.0.3"
   }
 }

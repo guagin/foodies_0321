@@ -5,9 +5,28 @@ import { Order, OrderStatus, OrderId } from "../order"
 import { Product } from "../product"
 import { CancelOrderService } from "./cancel-order-service"
 import { OrderCanceled } from "event/order-cancel"
+import { InMemoryTakeOutRepository } from "order/intrastructure/persistence/in-memory-take-out-repository"
+import { TakeOut } from "order/domain/take-out/take-out"
+
+const Day = 1000 * 60 * 60 * 24
 
 describe('cancel order service', ()=>{
     it('should pass', async ()=>{
+        const takeOutRepository = new InMemoryTakeOutRepository()
+        const takeOutId = await takeOutRepository.nextId()
+        const takeOut = new TakeOut(
+          takeOutId,
+          {
+          createdBy: 'ricky',
+          title: "lunch",
+          description: "",
+          startedAt: new Date(),
+          endAt: new Date(Date.now() + Day),
+          enabled: true
+      })
+    
+      await takeOutRepository.save(takeOut)
+
         const orderRepository = new InMemoryOrderRepository()
         const eventPublisher = new SynchronizedDomainEventPublisher()
         const orderEventPublisher = new OrderEventPublisher(eventPublisher)
@@ -29,7 +48,8 @@ describe('cancel order service', ()=>{
                 note: ""
                 })
             ],
-            status: OrderStatus.placed
+            status: OrderStatus.placed,
+            takeOutId: takeOutId.toValue()
         })
 
         await orderRepository.save(order)
