@@ -57,6 +57,7 @@ export class User extends Entity {
     private encrypt: (value: string) => string
   ) {
     super(id)
+    this.events = []
     const { password, ...rest } = userPropsInput
     this.props = new UserProps({
       password: encrypt(password),

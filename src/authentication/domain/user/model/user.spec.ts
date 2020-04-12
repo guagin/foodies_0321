@@ -1,6 +1,6 @@
 import { User, UserId } from "./user"
 
-describe("user test", () => {
+describe("create user instance ", () => {
   it("should pass", () => {
     const user = new User(
       new UserId("0"),
@@ -60,5 +60,44 @@ describe("user test", () => {
         (value: string) => value
       )
     }).toThrowError()
+  })
+})
+
+describe("change email", ()=>{
+  it('should pass', ()=>{
+    const user = new User(
+      new UserId("0"),
+      {
+        name: "ricky",
+        password: "123456",
+        email: "123"
+      },
+      (value: string) => value,
+      (value: string) => value
+    )
+
+    user.changeEmail("456")
+
+    expect(user.email).toBe('456')
+  })
+})
+
+
+describe("change password", ()=>{
+  it('should pass', ()=>{
+    const user = new User(
+      new UserId("0"),
+      {
+        name: "ricky",
+        password: "123456",
+        email: "123"
+      },
+      (value: string) => value,
+      (value: string) => value
+    )
+
+    user.changePassword("456")
+
+    expect(user.isPasswordMatched('456')).toBeTruthy()
   })
 })
