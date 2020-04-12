@@ -65,20 +65,20 @@ export class User extends Entity {
     })
   }
 
-  mutate(events: UserEvent[]): void{
+  mutate(events: UserEvent[]): void {
+    this.events = events
     events.forEach(e => {
-      switch(e.name()){
+      switch (e.name) {
         case ChangedEmail.name:
-            this.whenChangedEmail((e as ChangedEmail).email)
-          break;
+          this.whenChangedEmail((e as ChangedEmail).email)
+          break
         case ChangedPassword.name:
           this.whenChangedPassword((e as ChangedPassword).password)
-          break;
+          break
         default:
-
-          break;
-        }
-      })
+          break
+      }
+    })
   }
 
   get name(): string {
@@ -89,33 +89,41 @@ export class User extends Entity {
     return this.props.email
   }
 
+  get password(): string {
+    return this.props.password
+  }
+
+  get eventStream(): UserEvent[] {
+    return [...this.events]
+  }
+
   isPasswordMatched(value: string): boolean {
     return this.props.password === this.decryptor(value)
   }
 
-  changeEmail(value: string){
+  changeEmail(value: string) {
     const event = new ChangedEmail(value)
     this.events.push(event)
     this.whenChangedEmail(value)
   }
 
-  whenChangedEmail(email: string){
+  whenChangedEmail(email: string) {
     this.props = new UserProps({
       ...this.props,
-      email,
+      email
     })
   }
 
-  changePassword(value: string){
+  changePassword(value: string) {
     const event = new ChangedPassword(value)
     this.events.push(event)
     this.whenChangedPassword(value)
   }
 
-  whenChangedPassword(password: string){
+  whenChangedPassword(password: string) {
     this.props = new UserProps({
       ...this.props,
-      password,
+      password
     })
   }
 }

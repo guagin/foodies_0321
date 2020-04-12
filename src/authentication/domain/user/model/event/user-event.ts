@@ -1,3 +1,3 @@
-export interface UserEvent{
-    name(): string
+export class UserEvent {
+  constructor(public name: string) {}
 }

@@ -1,9 +1,7 @@
-import { UserEvent } from "./user-event";
+import { UserEvent } from "./user-event"
 
-export class ChangedEmail implements UserEvent{
-    constructor(public email: string){}
-
-    name(): string{
-        return "ChangedEmail"
-    }
+export class ChangedEmail extends UserEvent {
+  constructor(public email: string) {
+    super("ChangedEmail")
+  }
 }
