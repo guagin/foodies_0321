@@ -1,5 +1,5 @@
 import { UserRegisterUsecase } from "./user-register"
-import { InMemoryUserRepository } from "authentication/infrastructure/persistence/in-memory/user-repository"
+import { InMemoryUserRepository } from "authentication/command/persistence/in-memory/user-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 
 describe("user register use case", () => {
@@ -35,9 +35,8 @@ describe("user register use case", () => {
 
     let error
 
-    try{
-    
-      const userId = await  userRegisterUseCase.register({
+    try {
+      const userId = await userRegisterUseCase.register({
         name: "",
         password: "123456",
         email: "guagin0972@gmail.com"
@@ -46,8 +45,7 @@ describe("user register use case", () => {
       const user = await userRepository.ofName("ricky")
 
       expect(user).toBeUndefined()
-      
-    }catch(e){
+    } catch (e) {
       error = e
     }
 
@@ -66,9 +64,8 @@ describe("user register use case", () => {
 
     let error
 
-    try{
-      
-      const userId = await  userRegisterUseCase.register({
+    try {
+      const userId = await userRegisterUseCase.register({
         name: "ricky",
         password: "",
         email: "guagin0972@gmail.com"
@@ -77,7 +74,7 @@ describe("user register use case", () => {
       const user = await userRepository.ofName("ricky")
 
       expect(user).toBeUndefined()
-    }catch(e){
+    } catch (e) {
       error = e
     }
 
@@ -94,8 +91,8 @@ describe("user register use case", () => {
       encrypt: (value: string) => value
     })
     let error
-    try{
-      const userId = await  userRegisterUseCase.register({
+    try {
+      const userId = await userRegisterUseCase.register({
         name: "ricky",
         password: "123456",
         email: ""
@@ -104,7 +101,7 @@ describe("user register use case", () => {
       const user = await userRepository.ofName("ricky")
 
       expect(user).toBeUndefined()
-    }catch(e){
+    } catch (e) {
       error = e
     }
 

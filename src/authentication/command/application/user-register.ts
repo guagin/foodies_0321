@@ -1,7 +1,7 @@
-import { UserRepository } from "authentication/domain/user/user-repository"
-import { User, UserId } from "authentication/domain/user/model/user"
-import { RegisterService } from "authentication/domain/user/service/user-register-service"
-import { UserEventPublisher } from "authentication/domain/user/event/user-event-publisher"
+import { UserRepository } from "authentication/command/user/user-repository"
+import { User, UserId } from "authentication/command/user/model/user"
+import { RegisterService } from "authentication/command/user/service/user-register-service"
+import { UserEventPublisher } from "authentication/command/user/event/user-event-publisher"
 import { DomainEventPublisher } from "domain-event-publisher"
 
 export class UserRegisterUsecase {
@@ -34,7 +34,7 @@ export class UserRegisterUsecase {
       encrypt: this.encrypt
     })
 
-    const userId = await userRegisterService.register({ ...input})
+    const userId = await userRegisterService.register({ ...input })
     return userId
   }
 }

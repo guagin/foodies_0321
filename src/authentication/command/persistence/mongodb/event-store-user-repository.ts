@@ -1,5 +1,5 @@
-import { UserRepository } from "authentication/domain/user/user-repository"
-import { User, UserId } from "authentication/domain/user/model/user"
+import { UserRepository } from "authentication/command/user/user-repository"
+import { User, UserId } from "authentication/command/user/model/user"
 import { Document, Schema, Model, Connection } from "mongoose"
 import { MongoEventStore } from "./mongo-event-store"
 
@@ -157,7 +157,7 @@ export class MongoEventStoreUserRepository
 
     if (foundUserEventStrema) {
       foundUserEventStrema.events = user.eventStream
-      foundUserEventStrema.save()
+      await foundUserEventStrema.save()
     } else {
       const newUserEventStream = new this.userEventStreamModel({
         _id: user.id.toValue(),

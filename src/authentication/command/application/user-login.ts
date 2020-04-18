@@ -1,8 +1,8 @@
-import { UserLoginService } from "authentication/domain/user/service/user-login-service"
-import { UserRepository } from "authentication/domain/user/user-repository"
-import { User } from "authentication/domain/user/model/user"
+import { UserLoginService } from "authentication/command/user/service/user-login-service"
+import { UserRepository } from "authentication/command/user/user-repository"
+import { User } from "authentication/command/user/model/user"
 import { DomainEventPublisher } from "domain-event-publisher"
-import { UserEventPublisher } from "authentication/domain/user/event/user-event-publisher"
+import { UserEventPublisher } from "authentication/command/user/event/user-event-publisher"
 
 export class UserLoginUseCase {
   private userRepository: UserRepository
@@ -21,10 +21,7 @@ export class UserLoginUseCase {
     this.eventPublisher = input.eventPublisher
   }
 
-  async login(input: {
-    name: string
-    password: string
-  }): Promise<string> {
+  async login(input: { name: string; password: string }): Promise<string> {
     const userLoginService = new UserLoginService({
       userRepository: this.userRepository,
       userEventPublisher: new UserEventPublisher(this.eventPublisher),

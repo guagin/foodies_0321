@@ -1,18 +1,16 @@
 import { RegisterService } from "./user-register-service"
-import { InMemoryUserRepository } from "authentication/infrastructure/persistence/in-memory/user-repository"
+import { InMemoryUserRepository } from "authentication/command/persistence/in-memory/user-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { UserEventPublisher } from "../event/user-event-publisher"
 import { UserRegistered } from "event/user-registered"
-
-
 
 describe("user register service", () => {
   it("should pass", async () => {
     const userRepository = new InMemoryUserRepository()
     const eventPublisher = new SynchronizedDomainEventPublisher()
-    
-    const eventPromise = new Promise<string>((resolve)=>{
-      eventPublisher.register<UserRegistered>('UserRegistered', (e)=>{
+
+    const eventPromise = new Promise<string>(resolve => {
+      eventPublisher.register<UserRegistered>("UserRegistered", e => {
         resolve(e.payload.userId)
       })
     })

@@ -1,4 +1,4 @@
-import { User } from "authentication/domain/user/model/user"
+import { User } from "authentication/command/user/model/user"
 import { v4 as uuidV4 } from "uuid"
 import mongoose from "mongoose"
 import { MongoEventStoreUserRepository } from "./event-store-user-repository"
@@ -71,6 +71,7 @@ describe("event store user repository save(update usage)", () => {
 
     const updatedUser = await mongoEventStoreUserRepository.ofId(user.id)
 
+    expect(updatedUser.id.equals(user.id)).toBeTruthy()
     expect(updatedUser).toBeDefined()
     expect(updatedUser.email).toEqual("123456")
   })

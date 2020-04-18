@@ -1,14 +1,15 @@
-import { UserRepository } from "./domain/user/user-repository"
-import { UserRegisterUsecase } from "./application/user-register"
-import { UserLoginUseCase } from "./application/user-login"
+import { UserRepository } from "./command/user/user-repository"
+import { UserRegisterUsecase } from "./command/application/user-register"
+import { UserLoginUseCase } from "./command/application/user-login"
 import jwt from "jsonwebtoken"
-import { User } from "./domain/user/model/user"
-import { DomainEventPublisher } from "./domain/user/event/domain-event-publisher"
+import { User } from "./command/user/model/user"
+import { DomainEventPublisher } from "domain-event-publisher"
 import debug from "debug"
 
 const logger = debug("app:")
 
 export class App {
+  private eventPublisher: DomainEventPublisher
   private userRepository: UserRepository
   private decrypt: (value: string) => string
   private encrypt: (value: string) => string
@@ -17,6 +18,7 @@ export class App {
     eventPublisher: DomainEventPublisher
     userRepository: UserRepository
   }) {
+    this.eventPublisher = dependencies.eventPublisher
     this.initEventListener(dependencies.eventPublisher)
     this.userRepository = dependencies.userRepository
     this.decrypt = (value: string) => value
@@ -35,26 +37,27 @@ export class App {
     name: string,
     password: string,
     email: string
-  ): Promise<{ success: boolean; errorMessage?: string }> {
+  ): Promise<string> {
     const userRegisterUseCase = new UserRegisterUsecase({
       userRepository: this.userRepository,
+      eventPublisher: this.eventPublisher,
       decrypt: this.decrypt,
       encrypt: this.encrypt
     })
 
-    return userRegisterUseCase.register({
+    const result = await userRegisterUseCase.register({
       name,
       password,
       email
     })
+
+    return result.toValue()
   }
 
-  async login(
-    name: string,
-    password: string
-  ): Promise<{ success: boolean; errorMessage?: string }> {
+  async login(name: string, password: string): Promise<string> {
     const userLoginUseCase = new UserLoginUseCase({
       userRepository: this.userRepository,
+      eventPublisher: this.eventPublisher,
       generateToken: (user: User) => {
         return jwt.sign(
           {
@@ -67,9 +70,11 @@ export class App {
       },
       encrypt: this.encrypt
     })
-    return userLoginUseCase.login({
+    const result = userLoginUseCase.login({
       name,
       password
     })
+
+    return result
   }
 }

@@ -1,4 +1,4 @@
-import { InMemoryUserRepository } from "authentication/infrastructure/persistence/in-memory/user-repository"
+import { InMemoryUserRepository } from "authentication/command/persistence/in-memory/user-repository"
 import { User } from "../model/user"
 import { UserLoginService } from "./user-login-service"
 import jwt from "jsonwebtoken"
@@ -44,17 +44,12 @@ describe("user login service", () => {
   })
 
   it("should pass", async () => {
-    const eventPromise =new Promise<string>((resolve=>
-      {
-        eventPublisher.register<UserLogined>("UserLogined", (e)=>{
-          resolve(e.payload.id)
-        })
+    const eventPromise = new Promise<string>(resolve => {
+      eventPublisher.register<UserLogined>("UserLogined", e => {
+        resolve(e.payload.id)
       })
-    )
-    const token = await userLoginService.login(
-      "ricky",
-      "123456"
-    )  
+    })
+    const token = await userLoginService.login("ricky", "123456")
     expect(token).toBeDefined()
     expect(await eventPromise).toBeDefined()
   })
@@ -62,10 +57,10 @@ describe("user login service", () => {
   it("should failed for the password not matched", async () => {
     let error
 
-    try{
+    try {
       const token = await userLoginService.login("ricky", "")
-    }catch(e){
-      error =e
+    } catch (e) {
+      error = e
     }
 
     expect(error).toBeDefined()
@@ -73,14 +68,11 @@ describe("user login service", () => {
 
   it("should failed for user not found", async () => {
     let error
-    
-    try{
-      const token = await userLoginService.login(
-        "ricky123",
-        "123456"
-      )
-    }catch(e){
-      error =e
+
+    try {
+      const token = await userLoginService.login("ricky123", "123456")
+    } catch (e) {
+      error = e
     }
 
     expect(error).toBeDefined()
