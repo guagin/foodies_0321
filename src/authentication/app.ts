@@ -5,32 +5,53 @@ import jwt from "jsonwebtoken"
 import { User } from "./command/domain/user/model/user"
 import { DomainEventPublisher } from "domain-event-publisher"
 import debug from "debug"
+import { LocalRepositoryEventPublisher } from "./CQRS-repository/repository-event-publisher"
+import { CQRSUserRepository } from "./CQRS-repository/cqrs-user-repository"
+import { CQRSUserViewRepository } from "./CQRS-repository/cqrs-user-vew-repository"
+import { Connection } from "mongoose"
+import { MongoEventStoreUserRepository } from "./command/infrastructure/persistence/mongodb/event-store-user-repository"
+import { v4 as uuidV4 } from "uuid"
+import { MongoUserViewRepository } from "./query/infrastructure/persistence/mongodb/mongo-user-view-repository"
+import { UserOfIdUsaeCase } from "./query/application/user-of-id"
+import { UserView } from "./query/domain/user/model/user"
 
 const logger = debug("app:")
 
 export class App {
-  private eventPublisher: DomainEventPublisher
-  private userRepository: UserRepository
+  private crossContextEventPublisher: DomainEventPublisher
+
+  private userRepository: CQRSUserRepository
+  private userViewRepository: CQRSUserViewRepository
+
   private decrypt: (value: string) => string
   private encrypt: (value: string) => string
 
   constructor(dependencies: {
-    eventPublisher: DomainEventPublisher
-    userRepository: UserRepository
+    crossContextEventPublisher: DomainEventPublisher
+    connection: Connection
   }) {
-    this.eventPublisher = dependencies.eventPublisher
-    this.initEventListener(dependencies.eventPublisher)
-    this.userRepository = dependencies.userRepository
+    this.crossContextEventPublisher = dependencies.crossContextEventPublisher
+    this.initCQRSModel(dependencies.connection)
     this.decrypt = (value: string) => value
     this.encrypt = (value: string) => value
   }
 
-  private initEventListener(domainEventPublisher: DomainEventPublisher): void {
-    /*
-    domainEventPublisher.register<CreatedOrder>("CreatedOrder", e => {
-      logger(JSON.stringify(logger))
+  private initCQRSModel(connection: Connection) {
+    const eventPublisher = new LocalRepositoryEventPublisher()
+    const userRepository = new MongoEventStoreUserRepository({
+      connection,
+      generateUUID: () => {
+        return uuidV4()
+      }
     })
-    */
+
+    this.userRepository = new CQRSUserRepository(userRepository, eventPublisher)
+
+    const userViewRepository = new MongoUserViewRepository(connection)
+    this.userViewRepository = new CQRSUserViewRepository(
+      userViewRepository,
+      eventPublisher
+    )
   }
 
   async register(
@@ -40,7 +61,7 @@ export class App {
   ): Promise<string> {
     const userRegisterUseCase = new UserRegisterUsecase({
       userRepository: this.userRepository,
-      eventPublisher: this.eventPublisher,
+      eventPublisher: this.crossContextEventPublisher,
       decrypt: this.decrypt,
       encrypt: this.encrypt
     })
@@ -57,7 +78,7 @@ export class App {
   async login(name: string, password: string): Promise<string> {
     const userLoginUseCase = new UserLoginUseCase({
       userRepository: this.userRepository,
-      eventPublisher: this.eventPublisher,
+      eventPublisher: this.crossContextEventPublisher,
       generateToken: (user: User) => {
         return jwt.sign(
           {
@@ -76,5 +97,10 @@ export class App {
     })
 
     return result
+  }
+
+  async ofId(id: string): Promise<UserView> {
+    const ofIdUseCase = new UserOfIdUsaeCase(this.userViewRepository)
+    return ofIdUseCase.ofId(id)
   }
 }
