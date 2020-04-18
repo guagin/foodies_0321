@@ -39,8 +39,39 @@ describe("event store user repository save", () => {
   })
 })
 
-describe("event store user repository save(update usage)", () => {})
+describe("event store user repository save(update usage)", () => {
+  it("should pass", async () => {
+    const mongoEventStoreUserRepository = new MongoEventStoreUserRepository({
+      connection: mongoConnection,
+      generateUUID: () => {
+        return uuidV4()
+      }
+    })
 
-describe("event store user repository ofId", () => {})
+    const userId = await mongoEventStoreUserRepository.nextId()
 
-describe("event store user repository ofName", () => {})
+    await mongoEventStoreUserRepository.save(
+      new User(
+        userId,
+        {
+          name: "ricky",
+          password: "123456",
+          email: "123"
+        },
+        (value: string) => value,
+        (value: string) => value
+      )
+    )
+
+    const user = await mongoEventStoreUserRepository.ofId(userId)
+
+    user.changeEmail("123456")
+
+    await mongoEventStoreUserRepository.save(user)
+
+    const updatedUser = await mongoEventStoreUserRepository.ofId(user.id)
+
+    expect(updatedUser).toBeDefined()
+    expect(updatedUser.email).toEqual("123456")
+  })
+})
