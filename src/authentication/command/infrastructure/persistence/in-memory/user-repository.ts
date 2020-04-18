@@ -1,5 +1,5 @@
-import { UserRepository } from "authentication/command/user/user-repository"
-import { UserId, User } from "authentication/command/user/model/user"
+import { UserRepository } from "authentication/command/domain/user/user-repository"
+import { UserId, User } from "authentication/command/domain/user/model/user"
 
 export class InMemoryUserRepository implements UserRepository {
   private currentId = 0

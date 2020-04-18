@@ -1,7 +1,8 @@
-import { UserRepository } from "authentication/command/user/user-repository"
-import { User, UserId } from "authentication/command/user/model/user"
+import { UserRepository } from "authentication/command/domain/user/user-repository"
+import { User, UserId } from "authentication/command/domain/user/model/user"
 import { Document, Schema, Model, Connection } from "mongoose"
 import { MongoEventStore } from "./mongo-event-store"
+import { updateIfCurrentPlugin } from "mongoose-update-if-current"
 
 // todo: implements this in somewhere else.
 const encrypt = (value: string) => value
@@ -37,7 +38,7 @@ const UserSnapshotSchema = new Schema(
     timestamps: true,
     _id: false
   }
-)
+).plugin(updateIfCurrentPlugin)
 
 const UserEventStreamDocument = new Schema(
   {
@@ -48,7 +49,7 @@ const UserEventStreamDocument = new Schema(
     timestamps: true,
     _id: false
   }
-)
+).plugin(updateIfCurrentPlugin)
 
 export class MongoEventStoreUserRepository
   extends MongoEventStore<UserSnapshotDocument, UserEventStreamDocument>
@@ -97,7 +98,7 @@ export class MongoEventStoreUserRepository
       return user
     }
 
-    user.mutate(eventStream.events)
+    user.mutate(eventStream.events, eventStream.__v)
 
     return user
   }
@@ -130,7 +131,7 @@ export class MongoEventStoreUserRepository
       return user
     }
 
-    user.mutate(eventStream.events)
+    user.mutate(eventStream.events, eventStream.__v)
 
     return user
   }
@@ -157,6 +158,7 @@ export class MongoEventStoreUserRepository
 
     if (foundUserEventStrema) {
       foundUserEventStrema.events = user.eventStream
+      foundUserEventStrema.__v = user.version
       await foundUserEventStrema.save()
     } else {
       const newUserEventStream = new this.userEventStreamModel({

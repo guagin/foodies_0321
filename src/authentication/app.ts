@@ -1,8 +1,8 @@
-import { UserRepository } from "./command/user/user-repository"
+import { UserRepository } from "./command/domain/user/user-repository"
 import { UserRegisterUsecase } from "./command/application/user-register"
 import { UserLoginUseCase } from "./command/application/user-login"
 import jwt from "jsonwebtoken"
-import { User } from "./command/user/model/user"
+import { User } from "./command/domain/user/model/user"
 import { DomainEventPublisher } from "domain-event-publisher"
 import debug from "debug"
 

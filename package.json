@@ -55,6 +55,7 @@
     "log4js": "^4.5.1",
     "moment": "^2.24.0",
     "mongoose": "^5.9.7",
+    "mongoose-update-if-current": "^1.4.0",
     "nconf": "^0.10.0",
     "reflect-metadata": "^0.1.13",
     "uuid": "^7.0.3"

@@ -1,4 +1,4 @@
-import { User } from "authentication/command/user/model/user"
+import { User } from "authentication/command/domain/user/model/user"
 import { v4 as uuidV4 } from "uuid"
 import mongoose from "mongoose"
 import { MongoEventStoreUserRepository } from "./event-store-user-repository"

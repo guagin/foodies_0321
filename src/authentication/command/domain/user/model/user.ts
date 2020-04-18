@@ -3,6 +3,7 @@ import { Entity } from "entity"
 import { UserEvent } from "./event/user-event"
 import { ChangedEmail } from "./event/changed-email"
 import { ChangedPassword } from "./event/changed-password"
+import { AggregateRoot } from "aggregate-root"
 
 export class UserId extends EntityId {}
 
@@ -46,9 +47,8 @@ interface UserPropsInput {
   email: string
 }
 
-export class User extends Entity {
+export class User extends AggregateRoot<UserEvent> {
   private props: UserProps
-  private events: UserEvent[]
 
   constructor(
     id: UserId,
@@ -57,7 +57,6 @@ export class User extends Entity {
     private encrypt: (value: string) => string
   ) {
     super(id)
-    this.events = []
     const { password, ...rest } = userPropsInput
     this.props = new UserProps({
       password: encrypt(password),
@@ -65,8 +64,9 @@ export class User extends Entity {
     })
   }
 
-  mutate(events: UserEvent[]): void {
-    this.events = events
+  mutate(events: UserEvent[], version: number): void {
+    this.assignEvents(events)
+    this.assignVersion(version)
     events.forEach(e => {
       switch (e.name) {
         case ChangedEmail.name:
@@ -94,7 +94,11 @@ export class User extends Entity {
   }
 
   get eventStream(): UserEvent[] {
-    return [...this.events]
+    return [...this.aggregateProps.events]
+  }
+
+  get version(): number {
+    return this._version
   }
 
   isPasswordMatched(value: string): boolean {
@@ -103,7 +107,7 @@ export class User extends Entity {
 
   changeEmail(value: string) {
     const event = new ChangedEmail(value)
-    this.events.push(event)
+    this.pushEvent(event)
     this.whenChangedEmail(value)
   }
 
@@ -116,7 +120,7 @@ export class User extends Entity {
 
   changePassword(value: string) {
     const event = new ChangedPassword(value)
-    this.events.push(event)
+    this.pushEvent(event)
     this.whenChangedPassword(value)
   }
 

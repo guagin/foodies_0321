@@ -18,7 +18,6 @@ export class RegisterService {
     this.userEventPublisher = input.userEventPublisher
     this.decrypt = input.decrypt
     this.encrypt = input.encrypt
-
   }
 
   async register(input: {
@@ -26,9 +25,8 @@ export class RegisterService {
     password: string
     email: string
   }): Promise<UserId> {
-
     const userId = await this.userRepository.nextId()
-    
+
     const user = new User(
       userId,
       {

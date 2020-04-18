@@ -63,8 +63,8 @@ describe("create user instance ", () => {
   })
 })
 
-describe("change email", ()=>{
-  it('should pass', ()=>{
+describe("change email", () => {
+  it("should pass", () => {
     const user = new User(
       new UserId("0"),
       {
@@ -78,13 +78,12 @@ describe("change email", ()=>{
 
     user.changeEmail("456")
 
-    expect(user.email).toBe('456')
+    expect(user.email).toBe("456")
   })
 })
 
-
-describe("change password", ()=>{
-  it('should pass', ()=>{
+describe("change password", () => {
+  it("should pass", () => {
     const user = new User(
       new UserId("0"),
       {
@@ -98,6 +97,6 @@ describe("change password", ()=>{
 
     user.changePassword("456")
 
-    expect(user.isPasswordMatched('456')).toBeTruthy()
+    expect(user.isPasswordMatched("456")).toBeTruthy()
   })
 })
