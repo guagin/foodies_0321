@@ -1,6 +1,6 @@
 import { UserView } from "./user"
 
-export interface UserRepository {
+export interface UserViewRepository {
   ofId(id: string): Promise<UserView | undefined>
   ofName(name: string): Promise<UserView | undefined>
   save(userView: UserView): Promise<void>

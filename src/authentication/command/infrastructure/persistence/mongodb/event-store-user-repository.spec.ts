@@ -6,9 +6,9 @@ import { MongoEventStoreUserRepository } from "./event-store-user-repository"
 let mongoConnection = mongoose.connection
 
 describe("event store user repository save", () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     const mongoURL = process.env.mongo_url
-    mongoose.connect(mongoURL)
+    await mongoose.connect(mongoURL)
   })
   it("should pass", async () => {
     const mongoEventStoreUserRepository = new MongoEventStoreUserRepository({
