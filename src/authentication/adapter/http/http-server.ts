@@ -2,6 +2,9 @@ import fastify, { FastifyInstance } from "fastify"
 import { App } from "authentication/app"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import mongoose from "mongoose"
+import { makeOfName } from "./of-name"
+import { makeOfId } from "./of-id"
+import { makeRegister } from "./register"
 
 export class HttpServer {
   static instance: HttpServer
@@ -40,41 +43,29 @@ export class HttpServer {
 
   private initRoute(app: App): void {
     this.logger("init route")
-    this.fastifyInstance.route({
-      method: "GET",
-      url: "/authentication/user/ofId/:id",
-      schema: {
-        response: {
-          200: {
-            type: "object",
-            properties: {
-              id: { type: "string" },
-              name: { type: "string" },
-              email: { type: "string" }
-            }
-          }
+    this.fastifyInstance.addContentTypeParser(
+      "application/json",
+      { parseAs: "string" },
+      function(req, body, done) {
+        try {
+          var json = JSON.parse(body)
+          done(null, json)
+        } catch (err) {
+          err.statusCode = 400
+          done(err, undefined)
         }
-      },
-      handler: async (request, reply) => {
-        const user = await app.ofId(request.params.id)
-        this.logger(`${JSON.stringify(user)}`)
-        reply.send({
-          id: user.id,
-          name: user.name,
-          email: user.email
-        })
       }
-    })
-    this.fastifyInstance.get(
-      "/authentication/user/ofName/:name",
-      async (request, reply) => {
-        const user = await app.ofName(request.params.name)
-        this.logger(`${JSON.stringify(user)}`)
-        reply.send({
-          id: user.id,
-          name: user.name,
-          email: user.email
-        })
+    )
+
+    this.fastifyInstance.register(
+      (fastify, opts, next) => {
+        fastify.get("/user/ofId/:id", makeOfName(app, this.logger))
+        fastify.get("/user/ofName/:name", makeOfId(app, this.logger))
+        fastify.post("/user/register", makeRegister(app, this.logger))
+        next()
+      },
+      {
+        prefix: "/authentication"
       }
     )
   }
