@@ -5,7 +5,8 @@ const logger = debug("app:")
 
 logger("test")
 
-const httpServer = HttpServer.getInstance(logger)
+// authenticationServer
+const httpServer = HttpServer.getInstance(debug("app:authentication:"))
   .then()
   .catch(e => {
     logger(JSON.stringify(e))
