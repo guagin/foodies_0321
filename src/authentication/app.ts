@@ -14,6 +14,7 @@ import { v4 as uuidV4 } from "uuid"
 import { MongoUserViewRepository } from "./query/infrastructure/persistence/mongodb/mongo-user-view-repository"
 import { UserOfIdUsaeCase } from "./query/application/user-of-id"
 import { UserView } from "./query/domain/user/model/user"
+import { UserOfNameUsaeCase } from "./query/application/user-of-name"
 
 const logger = debug("app:")
 
@@ -102,5 +103,10 @@ export class App {
   async ofId(id: string): Promise<UserView> {
     const ofIdUseCase = new UserOfIdUsaeCase(this.userViewRepository)
     return ofIdUseCase.ofId(id)
+  }
+
+  async ofName(name: string): Promise<UserView> {
+    const ofNameuse = new UserOfNameUsaeCase(this.userViewRepository)
+    return ofNameuse.ofName(name)
   }
 }

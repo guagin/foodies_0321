@@ -65,5 +65,17 @@ export class HttpServer {
         })
       }
     })
+    this.fastifyInstance.get(
+      "/authentication/user/ofName/:name",
+      async (request, reply) => {
+        const user = await app.ofName(request.params.name)
+        this.logger(`${JSON.stringify(user)}`)
+        reply.send({
+          id: user.id,
+          name: user.name,
+          email: user.email
+        })
+      }
+    )
   }
 }
