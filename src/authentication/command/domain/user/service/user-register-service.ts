@@ -25,14 +25,19 @@ export class RegisterService {
     password: string
     email: string
   }): Promise<UserId> {
+    const { name, password, email } = input
+    const foundUser = await this.userRepository.ofName(name)
+    if (foundUser) {
+      return foundUser.id
+    }
     const userId = await this.userRepository.nextId()
 
     const user = new User(
       userId,
       {
-        name: input.name,
-        password: input.password,
-        email: input.email
+        name: name,
+        password: password,
+        email: email
       },
       this.decrypt,
       this.encrypt
@@ -41,9 +46,9 @@ export class RegisterService {
     await this.userRepository.save(user)
 
     this.userEventPublisher.userRegistered({
-      name: user.name,
-      email: user.email,
-      userId: user.id.toValue()
+      name: name,
+      email: email,
+      userId: userId.toValue()
     })
 
     return userId
