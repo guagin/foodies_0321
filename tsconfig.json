@@ -1,21 +1,21 @@
 {
-    "compilerOptions": {
-        "experimentalDecorators": true,
-        "target": "esnext",
-        "module": "commonjs",
-        "noImplicitAny": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "sourceMap": true,
-        "outDir": "dist",
-        "strict": false,
-        "paths": {
-            "@modules/*": ["./modules/*"]
-        },
-        "esModuleInterop": true,
-        "lib": ["esnext", "dom"],
-        "baseUrl": "./src"
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "esnext",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "strict": false,
+    "paths": {
+      "@modules/*": ["./modules/*"]
     },
-    "include": ["./src/**/*.ts", "./src/**/*.d.ts"],
-    "exclude": ["./node_modules", "dist"]
+    "esModuleInterop": true,
+    "lib": ["esnext", "dom"],
+    "baseUrl": "./src"
+  },
+  "include": ["./src/**/*.ts", "./src/**/*.d.ts"],
+  "exclude": ["./node_modules", "dist"]
 }

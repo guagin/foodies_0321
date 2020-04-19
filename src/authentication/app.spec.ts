@@ -10,7 +10,7 @@ describe("authentication app", () => {
 
     const app = new App({
       crossContextEventPublisher: new SynchronizedDomainEventPublisher(),
-      connection: mongoose.connection
+      mongoConnection: mongoose.connection
     })
 
     const userId = await app.register("ricky", "12345", "11121")

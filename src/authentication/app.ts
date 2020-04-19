@@ -28,10 +28,10 @@ export class App {
 
   constructor(dependencies: {
     crossContextEventPublisher: DomainEventPublisher
-    connection: Connection
+    mongoConnection: Connection
   }) {
     this.crossContextEventPublisher = dependencies.crossContextEventPublisher
-    this.initCQRSModel(dependencies.connection)
+    this.initCQRSModel(dependencies.mongoConnection)
     this.decrypt = (value: string) => value
     this.encrypt = (value: string) => value
   }

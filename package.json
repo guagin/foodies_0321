@@ -9,7 +9,7 @@
     "type-check": "tsc --noEmit",
     "start": "yarn build && node ./dist/app.js",
     "build": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
-    "dev": "tsnd -r dotenv/config --respawn src/app.ts",
+    "dev": "tsnd -r dotenv/config -r tsconfig-paths/register --respawn src/app.ts",
     "lint": "yarn eslint src --ext .ts",
     "test": "cross-env NODE_ENV=debug jest"
   },
@@ -42,6 +42,7 @@
     "ts-jest": "^25.2.1",
     "ts-node": "^8.3.0",
     "ts-node-dev": "^1.0.0-pre.40",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^3.8.3",
     "typescript-eslint-parser": "^22.0.0"
   },
@@ -49,6 +50,7 @@
     "cross-env": "^5.2.0",
     "del": "^5.0.0",
     "dotenv": "^8.0.0",
+    "fastify": "^2.13.1",
     "graphql": "^14.4.2",
     "graphql-import": "^0.7.1",
     "jsonwebtoken": "^8.5.1",
