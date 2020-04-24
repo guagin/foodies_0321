@@ -1,7 +1,7 @@
-import { AmountIsZero } from "./error/amount-is-zero"
-import { AmountIsFloat } from "./error/amount-is-float"
-import { AmountIsNegtaive } from "./error/amount-is-negative-integer"
-import { AmountIsGreaterThanProductAmount } from "./error/amount-is-greater-than-product-amount"
+import { AmountIsZero } from "../error/amount-is-zero"
+import { AmountIsFloat } from "../error/amount-is-float"
+import { AmountIsNegtaive } from "../error/amount-is-negative-integer"
+import { AmountIsGreaterThanProductAmount } from "../error/amount-is-greater-than-product-amount"
 
 interface ProductProps {
   id: string

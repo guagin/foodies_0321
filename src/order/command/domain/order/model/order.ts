@@ -1,11 +1,11 @@
 import { Entity } from "entity"
 import { EntityId } from "entity-id"
-import { CreatedByNotValid } from "./error/created-by-not-valid"
-import { OrderNotPended } from "./error/order-not-pended"
-import { OrderNotPlaced } from "./error/order-not-placed"
+import { CreatedByNotValid } from "../error/created-by-not-valid"
+import { OrderNotPended } from "../error/order-not-pended"
+import { OrderNotPlaced } from "../error/order-not-placed"
 import { Product } from "./product"
-import { ProductNotOrdered } from "./error/product-not-ordered"
-import { ProductIsEmpty } from "./error/product-is-empty"
+import { ProductNotOrdered } from "../error/product-not-ordered"
+import { ProductIsEmpty } from "../error/product-is-empty"
 
 export class OrderId extends EntityId {}
 
@@ -29,7 +29,7 @@ export class Order extends Entity {
     propsInput: {
       createdBy: string
       orderedProducts: Product[]
-      status: OrderStatus,
+      status: OrderStatus
       takeOutId: string
     }
   ) {
@@ -45,20 +45,20 @@ export class Order extends Entity {
     return this.props.orderedProducts
   }
 
-  get createdBy(): string{
+  get createdBy(): string {
     return this.props.createdBy
   }
 
-  get status(): OrderStatus{
+  get status(): OrderStatus {
     return this.props.status
   }
 
-  get takeOutId(): string{
+  get takeOutId(): string {
     return this.props.takeOutId
   }
 
   place(): void {
-    if(this.props.orderedProducts.length === 0){
+    if (this.props.orderedProducts.length === 0) {
       throw new ProductIsEmpty(``)
     }
 
@@ -125,7 +125,7 @@ export class Order extends Entity {
       return
     }
 
-    if(foundProduct){
+    if (foundProduct) {
       foundProduct.decrease(amount)
       return
     }
@@ -148,12 +148,12 @@ export class Order extends Entity {
     return this.props.createdBy === userId
   }
 
-  isProductExists(productId: string): boolean{
+  isProductExists(productId: string): boolean {
     const index = this.products.findIndex(p => p.id === productId)
     return index > -1
   }
 
-  appendTo(takeOutId: string){
+  appendTo(takeOutId: string) {
     this.props = {
       ...this.props,
       takeOutId

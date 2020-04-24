@@ -1,6 +1,6 @@
-import { OrderRepository } from "../order-repository"
-import { Product } from "../product"
-import { OrderId } from "../order"
+import { OrderRepository } from "../model/order-repository"
+import { Product } from "../model/product"
+import { OrderId } from "../model/order"
 import { OrderNotFound } from "../error/order-not-found"
 import { OrderEventPublisher } from "../event/order-event-publisher"
 
@@ -8,7 +8,10 @@ export class AppendProductService {
   private orderRepository: OrderRepository
   private orderEventPublisher: OrderEventPublisher
 
-constructor(input: { orderRepository: OrderRepository, eventPublisher: OrderEventPublisher }) {
+  constructor(input: {
+    orderRepository: OrderRepository
+    eventPublisher: OrderEventPublisher
+  }) {
     this.orderRepository = input.orderRepository
     this.orderEventPublisher = input.eventPublisher
   }

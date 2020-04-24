@@ -1,5 +1,5 @@
-import { OrderRepository } from "../order-repository"
-import { OrderId } from "../order"
+import { OrderRepository } from "../model/order-repository"
+import { OrderId } from "../model/order"
 import { ProductNotFound } from "../error/product-not-found"
 
 export class DecreaseProductAmountService {

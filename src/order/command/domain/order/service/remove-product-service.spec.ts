@@ -1,6 +1,6 @@
 import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory-oder-repository"
-import { Order, OrderStatus } from "../order"
-import { Product } from "../product"
+import { Order, OrderStatus } from "../model/order"
+import { Product } from "../model/product"
 import { RemoveProductService } from "./remove-product-service"
 import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory-take-out-repository"
 import { TakeOut } from "order/command/domain/take-out/take-out"

@@ -1,5 +1,5 @@
-import { OrderRepository } from "order/command/domain/order/order-repository"
-import { OrderId, Order } from "order/command/domain/order/order"
+import { OrderRepository } from "order/command/domain/order/model/order-repository"
+import { OrderId, Order } from "order/command/domain/order/model/order"
 
 export class InMemoryOrderRepository implements OrderRepository {
   private data: Order[] = []

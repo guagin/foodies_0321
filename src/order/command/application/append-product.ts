@@ -1,8 +1,8 @@
-import { OrderRepository } from "order/command/domain/order/order-repository"
+import { OrderRepository } from "order/command/domain/order/model/order-repository"
 import { OrderEventPublisher } from "order/command/domain/order/event/order-event-publisher"
 import { DomainEventPublisher } from "domain-event-publisher"
-import { OrderId } from "order/command/domain/order/order"
-import { Product } from "order/command/domain/order/product"
+import { OrderId } from "order/command/domain/order/model/order"
+import { Product } from "order/command/domain/order/model/product"
 
 export class AppendProduct {
   private orderRepository: OrderRepository

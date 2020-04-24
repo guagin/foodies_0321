@@ -1,4 +1,4 @@
-import { OrderRepository } from "order/command/domain/order/order-repository"
+import { OrderRepository } from "order/command/domain/order/model/order-repository"
 import { OrderEventPublisher } from "order/command/domain/order/event/order-event-publisher"
 import { PlaceOrderService } from "order/command/domain/order/service/place-order-service"
 import { DomainEventPublisher } from "domain-event-publisher"

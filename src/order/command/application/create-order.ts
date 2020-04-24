@@ -1,6 +1,6 @@
-import { OrderRepository } from "order/command/domain/order/order-repository"
+import { OrderRepository } from "order/command/domain/order/model/order-repository"
 
-import { OrderId } from "order/command/domain/order/order"
+import { OrderId } from "order/command/domain/order/model/order"
 import { CreateOrderService } from "order/command/domain/order/service/create-order.service"
 import { DomainEventPublisher } from "domain-event-publisher"
 import { OrderEventPublisher } from "order/command/domain/order/event/order-event-publisher"

@@ -1,6 +1,6 @@
 import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory-oder-repository"
-import { Order, OrderStatus, OrderId } from "../order"
-import { Product } from "../product"
+import { Order, OrderStatus, OrderId } from "../model/order"
+import { Product } from "../model/product"
 import { AppendProductService } from "./append-product-service"
 import { OrderEventPublisher } from "../event/order-event-publisher"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"

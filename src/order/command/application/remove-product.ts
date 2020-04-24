@@ -1,7 +1,7 @@
-import { OrderRepository } from "order/command/domain/order/order-repository"
+import { OrderRepository } from "order/command/domain/order/model/order-repository"
 import { OrderEventPublisher } from "order/command/domain/order/event/order-event-publisher"
 import { DomainEventPublisher } from "domain-event-publisher"
-import { OrderId } from "order/command/domain/order/order"
+import { OrderId } from "order/command/domain/order/model/order"
 import { OrderedProductEmpty } from "order/command/domain/order/error/ordered-product-empty"
 
 export class RemoveProduct {
