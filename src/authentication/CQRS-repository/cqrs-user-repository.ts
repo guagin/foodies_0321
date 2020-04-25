@@ -12,7 +12,7 @@ export class CQRSUserRepository implements UserRepository {
     return this.userRepository.nextId()
   }
   ofId(id: UserId): Promise<User | undefined> {
-    return this.ofId(id)
+    return this.userRepository.ofId(id)
   }
   ofName(name: string): Promise<User | undefined> {
     return this.userRepository.ofName(name)
