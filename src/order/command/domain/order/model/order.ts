@@ -91,7 +91,7 @@ export class Order extends AggregateRoot<OrderEvent> {
     this.whenAppendedProduct(product)
   }
 
-  whenAppendedProduct(product: Product): void {
+  private whenAppendedProduct(product: Product): void {
     const { orderedProducts } = this.props
     const foundIndex = orderedProducts.findIndex(elem => {
       return elem.id === product.id
@@ -111,7 +111,7 @@ export class Order extends AggregateRoot<OrderEvent> {
     this.whenPlaced()
   }
 
-  whenPlaced(): void {
+  private whenPlaced(): void {
     if (this.props.orderedProducts.length === 0) {
       throw new ProductIsEmpty(``)
     }
@@ -132,7 +132,7 @@ export class Order extends AggregateRoot<OrderEvent> {
     this.whenCanceled()
   }
 
-  whenCanceled(): void {
+  private whenCanceled(): void {
     if (this.props.status === OrderStatus.canceled) {
       return
     }
@@ -149,7 +149,7 @@ export class Order extends AggregateRoot<OrderEvent> {
     this.whenIncreasedProductAmount(input)
   }
 
-  whenIncreasedProductAmount(input: {
+  private whenIncreasedProductAmount(input: {
     productId: string
     amount: number
   }): void {
@@ -172,7 +172,7 @@ export class Order extends AggregateRoot<OrderEvent> {
     this.whenDecreaseProductAmouint(input)
   }
 
-  whenDecreaseProductAmouint(input: {
+  private whenDecreaseProductAmouint(input: {
     productId: string
     amount: number
   }): void {
@@ -200,7 +200,7 @@ export class Order extends AggregateRoot<OrderEvent> {
     this.whenRemovedProduct(input)
   }
 
-  whenRemovedProduct(input: { productId: string }): void {
+  private whenRemovedProduct(input: { productId: string }): void {
     const { productId } = input
     const { orderedProducts } = this.props
     const foundIndex = orderedProducts.findIndex(elem => {

@@ -3,6 +3,7 @@ import { EntityId } from "entity-id"
 
 interface AggregateProps<EventType> {
   events: EventType[]
+  version: number
 }
 
 export abstract class AggregateRoot<EventType> extends Entity {
@@ -10,7 +11,8 @@ export abstract class AggregateRoot<EventType> extends Entity {
   constructor(id: EntityId) {
     super(id)
     this.aggregateProps = {
-      events: []
+      events: [],
+      version: 0
     }
   }
 
@@ -23,4 +25,16 @@ export abstract class AggregateRoot<EventType> extends Entity {
   }
 
   abstract mutate(events: EventType[], version: number): void
+
+  get events(): EventType[] {
+    return this.aggregateProps.events
+  }
+
+  protected assignVersion(version: number): void {
+    this.aggregateProps.version = version
+  }
+
+  get version(): number {
+    return this.aggregateProps.version
+  }
 }

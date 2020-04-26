@@ -97,10 +97,6 @@ export class User extends AggregateRoot<UserEvent> {
     return [...this.aggregateProps.events]
   }
 
-  get version(): number {
-    return this._version
-  }
-
   isPasswordMatched(value: string): boolean {
     return this.props.password === this.decryptor(value)
   }
