@@ -1,5 +1,5 @@
-import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory-oder-repository"
-import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory-take-out-repository"
+import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-oder-repository"
+import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { OrderAppended } from "event/order-appended"
 import { CreateTakeOutService } from "order/command/domain/take-out/service/create-take-out-service"

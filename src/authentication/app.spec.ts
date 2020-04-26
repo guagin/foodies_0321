@@ -2,6 +2,7 @@ import { App } from "./app"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import mongoose from "mongoose"
 import { UserView } from "./query/domain/user/model/user"
+import faker from "faker"
 
 describe("authentication app", () => {
   it("should pass", async () => {
@@ -13,7 +14,10 @@ describe("authentication app", () => {
       mongoConnection: mongoose.connection
     })
 
-    const userId = await app.register("ricky", "12345", "11121")
+    const name = faker.name.firstName()
+    const password = faker.random.words(16)
+    const email = faker.random.words(16)
+    const userId = await app.register(name, password, email)
 
     const promiseFetchUser = new Promise<UserView>(resolve => {
       setTimeout(() => {
@@ -27,6 +31,6 @@ describe("authentication app", () => {
     })
 
     const userView = await promiseFetchUser
-    expect(userView.email).toBe("11121")
+    expect(userView.email).toEqual(email)
   })
 })

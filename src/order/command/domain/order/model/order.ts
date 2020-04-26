@@ -6,6 +6,14 @@ import { OrderNotPlaced } from "../error/order-not-placed"
 import { Product } from "./product"
 import { ProductNotOrdered } from "../error/product-not-ordered"
 import { ProductIsEmpty } from "../error/product-is-empty"
+import { OrderEvent } from "./event/order-event"
+import { AggregateRoot } from "aggregate-root"
+import { PlacedOrder } from "./event/placed-order"
+import { AppendedProduct } from "./event/appended-product"
+import { CanceledOrder } from "./event/canceled-order"
+import { DecreasedProductAmount } from "./event/decreased-product-amount"
+import { IncreasedProductAmount } from "./event/increased-product-amount"
+import { RemovedProduct } from "./event/removed-product"
 
 export class OrderId extends EntityId {}
 
@@ -22,7 +30,7 @@ export enum OrderStatus {
   canceled
 }
 
-export class Order extends Entity {
+export class Order extends AggregateRoot<OrderEvent> {
   private props: OrderProps
   constructor(
     id: OrderId,
@@ -57,7 +65,53 @@ export class Order extends Entity {
     return this.props.takeOutId
   }
 
+  mutate(events: OrderEvent[], version: number): void {
+    this.assignEvents(events)
+    this.assignVersion(version)
+    events.forEach(e => {
+      switch (e.name) {
+        case AppendedProduct.name:
+          break
+        case CanceledOrder.name:
+          break
+        case DecreasedProductAmount.name:
+          break
+        case IncreasedProductAmount.name:
+          break
+        case PlacedOrder.name:
+          break
+        case RemovedProduct.name:
+          break
+      }
+    })
+  }
+
+  appendProduct(product: Product): void {
+    this.pushEvent(new AppendedProduct(product))
+    this.whenAppendedProduct(product)
+  }
+
+  whenAppendedProduct(product: Product): void {
+    const { orderedProducts } = this.props
+    const foundIndex = orderedProducts.findIndex(elem => {
+      return elem.id === product.id
+    })
+
+    if (foundIndex > -1) {
+      return
+    }
+
+    const newProducts = [...orderedProducts]
+    newProducts.push(product)
+    this.props.orderedProducts = newProducts
+  }
+
   place(): void {
+    this.pushEvent(new PlacedOrder())
+    this.whenPlaced()
+  }
+
+  whenPlaced(): void {
     if (this.props.orderedProducts.length === 0) {
       throw new ProductIsEmpty(``)
     }
@@ -74,6 +128,11 @@ export class Order extends Entity {
   }
 
   cancel(): void {
+    this.pushEvent(new CanceledOrder())
+    this.whenCanceled()
+  }
+
+  whenCanceled(): void {
     if (this.props.status === OrderStatus.canceled) {
       return
     }
@@ -85,22 +144,16 @@ export class Order extends Entity {
     throw new OrderNotPlaced(`status: ${this.props.status}`)
   }
 
-  appendProduct(product: Product): void {
-    const { orderedProducts } = this.props
-    const foundIndex = orderedProducts.findIndex(elem => {
-      return elem.id === product.id
-    })
-
-    if (foundIndex > -1) {
-      return
-    }
-
-    const newProducts = [...orderedProducts]
-    newProducts.push(product)
-    this.props.orderedProducts = newProducts
+  increaseProductAmount(input: { productId: string; amount: number }): void {
+    this.pushEvent(new IncreasedProductAmount(input))
+    this.whenIncreasedProductAmount(input)
   }
 
-  increateProductAmount(productId: string, amount: number): void {
+  whenIncreasedProductAmount(input: {
+    productId: string
+    amount: number
+  }): void {
+    const { productId, amount } = input
     const { orderedProducts } = this.props
     const foundProduct = orderedProducts.find(elem => {
       return elem.id === productId
@@ -114,14 +167,23 @@ export class Order extends Entity {
     throw new ProductNotOrdered(`${productId}`)
   }
 
-  decreaseProductAmount(productId: string, amount: number): void {
+  decreaseProductAmount(input: { productId: string; amount: number }): void {
+    this.pushEvent(new DecreasedProductAmount(input))
+    this.whenDecreaseProductAmouint(input)
+  }
+
+  whenDecreaseProductAmouint(input: {
+    productId: string
+    amount: number
+  }): void {
+    const { productId, amount } = input
     const { orderedProducts } = this.props
     const foundProduct = orderedProducts.find(elem => {
       return elem.id === productId
     })
 
     if (foundProduct && foundProduct.amount === amount) {
-      this.removeProduct(productId)
+      this.removeProduct({ productId })
       return
     }
 
@@ -133,7 +195,13 @@ export class Order extends Entity {
     throw new ProductNotOrdered(`${productId}`)
   }
 
-  removeProduct(productId: string): void {
+  removeProduct(input: { productId: string }): void {
+    this.pushEvent(new RemovedProduct(input))
+    this.whenRemovedProduct(input)
+  }
+
+  whenRemovedProduct(input: { productId: string }): void {
+    const { productId } = input
     const { orderedProducts } = this.props
     const foundIndex = orderedProducts.findIndex(elem => {
       return elem.id === productId

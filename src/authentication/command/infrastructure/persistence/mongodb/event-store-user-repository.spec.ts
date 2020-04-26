@@ -2,6 +2,7 @@ import { User } from "authentication/command/domain/user/model/user"
 import { v4 as uuidV4 } from "uuid"
 import mongoose from "mongoose"
 import { MongoEventStoreUserRepository } from "./event-store-user-repository"
+import faker from "faker"
 
 let mongoConnection = mongoose.connection
 
@@ -20,18 +21,18 @@ describe("event store user repository save", () => {
 
     const userId = await mongoEventStoreUserRepository.nextId()
 
-    await mongoEventStoreUserRepository.save(
-      new User(
-        userId,
-        {
-          name: "ricky",
-          password: "123456",
-          email: "123"
-        },
-        (value: string) => value,
-        (value: string) => value
-      )
+    const userToCreate = new User(
+      userId,
+      {
+        name: faker.name.firstName(),
+        password: faker.random.words(16),
+        email: faker.random.words(16)
+      },
+      (value: string) => value,
+      (value: string) => value
     )
+
+    await mongoEventStoreUserRepository.save(userToCreate)
 
     const user = await mongoEventStoreUserRepository.ofId(userId)
     expect(user).toBeDefined()
@@ -50,18 +51,18 @@ describe("event store user repository save(update usage)", () => {
 
     const userId = await mongoEventStoreUserRepository.nextId()
 
-    await mongoEventStoreUserRepository.save(
-      new User(
-        userId,
-        {
-          name: "ricky",
-          password: "123456",
-          email: "123"
-        },
-        (value: string) => value,
-        (value: string) => value
-      )
+    const userToCreate = new User(
+      userId,
+      {
+        name: faker.name.firstName(),
+        password: faker.random.words(16),
+        email: faker.random.words(16)
+      },
+      (value: string) => value,
+      (value: string) => value
     )
+
+    await mongoEventStoreUserRepository.save(userToCreate)
 
     const user = await mongoEventStoreUserRepository.ofId(userId)
 

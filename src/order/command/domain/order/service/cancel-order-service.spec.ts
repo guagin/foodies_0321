@@ -1,11 +1,11 @@
-import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory-oder-repository"
+import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-oder-repository"
 import { OrderEventPublisher } from "../event/order-event-publisher"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { Order, OrderStatus, OrderId } from "../model/order"
 import { Product } from "../model/product"
 import { CancelOrderService } from "./cancel-order-service"
 import { OrderCanceled } from "event/order-cancel"
-import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory-take-out-repository"
+import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
 import { TakeOut } from "order/command/domain/take-out/take-out"
 
 const Day = 1000 * 60 * 60 * 24

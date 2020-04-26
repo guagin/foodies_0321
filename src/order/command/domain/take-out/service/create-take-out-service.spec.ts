@@ -1,4 +1,4 @@
-import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory-take-out-repository"
+import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
 import { CreateTakeOutService } from "./create-take-out-service"
 import { TakeOutEventPublisher } from "../event/take-out-event-publisher"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"

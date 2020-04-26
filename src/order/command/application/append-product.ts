@@ -29,7 +29,10 @@ export class AppendProduct {
     this.productsToAppend.forEach(productToAppend => {
       if (order.isProductExists(productToAppend.id)) {
         // how to deal with note?
-        order.increateProductAmount(productToAppend.id, productToAppend.amount)
+        order.increaseProductAmount({
+          productId: productToAppend.id,
+          amount: productToAppend.amount
+        })
         return
       }
       order.appendProduct(

@@ -1,8 +1,8 @@
-import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory-oder-repository"
+import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-oder-repository"
 import { Order, OrderStatus } from "../model/order"
 import { Product } from "../model/product"
 import { DecreaseProductAmountService } from "./decrease-product-amount-service"
-import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory-take-out-repository"
+import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
 import { TakeOut } from "order/command/domain/take-out/take-out"
 
 const Day = 1000 * 60 * 60 * 24

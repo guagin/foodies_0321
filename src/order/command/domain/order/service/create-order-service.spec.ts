@@ -1,4 +1,4 @@
-import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory-oder-repository"
+import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-oder-repository"
 import { CreateOrderService } from "./create-order.service"
 import { OrderEventPublisher } from "../event/order-event-publisher"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"

@@ -9,7 +9,7 @@ describe("create order", () => {
         new Product({
           id: "p0",
           amount: 1,
-          note: "",
+          note: ""
         })
       ],
       status: OrderStatus.pended,
@@ -138,7 +138,7 @@ describe("increase product", () => {
       takeOutId: ""
     })
 
-    order.increateProductAmount("p0", 100)
+    order.increaseProductAmount({ productId: "p0", amount: 100 })
     const product = order.products.find(elem => elem.id === "p0")
     expect(product).toBeDefined()
     if (product) {
@@ -161,7 +161,7 @@ describe("increase product", () => {
         takeOutId: ""
       })
 
-      order.increateProductAmount("p1", 100)
+      order.increaseProductAmount({ productId: "p1", amount: 100 })
     }).toThrow()
   })
 })

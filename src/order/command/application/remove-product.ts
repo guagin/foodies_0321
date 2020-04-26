@@ -28,7 +28,7 @@ export class RemoveProduct {
     this.productsToRmeove.forEach(productToRemove => {
       if (order.isProductExists(productToRemove.id)) {
         const { id, amount } = productToRemove
-        order.decreaseProductAmount(id, amount)
+        order.decreaseProductAmount({ productId: id, amount })
       }
     })
 

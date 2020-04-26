@@ -9,7 +9,7 @@ export class RemoveProductService {
 
   async remove(orderId: OrderId, productId: string): Promise<void> {
     const order = await this.orderRepository.ofId(orderId)
-    order.removeProduct(productId)
+    order.removeProduct({ productId })
     await this.orderRepository.save(order)
   }
 }

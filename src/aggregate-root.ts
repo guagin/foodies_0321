@@ -21,4 +21,6 @@ export abstract class AggregateRoot<EventType> extends Entity {
   protected pushEvent(event: EventType) {
     this.aggregateProps.events.push(event)
   }
+
+  abstract mutate(events: EventType[], version: number): void
 }

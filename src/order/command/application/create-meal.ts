@@ -1,4 +1,4 @@
-import { InMemoryMealRepository } from "order/command/intrastructure/persistence/in-memory-meal-repository"
+import { InMemoryMealRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-meal-repository"
 import { MealId } from "order/command/domain/meal/meal"
 import { CreateMealService } from "order/command/domain/meal/service/create-meal-service"
 import { MealEventPublisher } from "order/command/domain/meal/meal-event-publisher"

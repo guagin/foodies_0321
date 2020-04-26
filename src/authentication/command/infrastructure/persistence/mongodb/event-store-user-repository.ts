@@ -18,6 +18,7 @@ type UserSnapshotDocument = Document & UserSnapshot
 
 interface UserEvent {
   name: string
+  occurredAt: Date
 }
 
 interface UserEventStream {

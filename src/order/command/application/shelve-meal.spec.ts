@@ -1,4 +1,4 @@
-import { InMemoryMealRepository } from "order/command/intrastructure/persistence/in-memory-meal-repository"
+import { InMemoryMealRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-meal-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { Meal, MealStatus } from "order/command/domain/meal/meal"
 import { ShelveMeal } from "./shelve-meal"
