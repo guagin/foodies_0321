@@ -1,9 +1,9 @@
 import { OrderRepository } from "../model/order-repository"
 import { OrderEventPublisher } from "../event/order-event-publisher"
-import { TakeOutRepository } from "order/command/domain/take-out/take-out-repository"
+import { TakeOutRepository } from "order/command/domain/take-out/model/take-out-repository"
 import { OrderId } from "../model/order"
 import { OrderNotFound } from "../error/order-not-found"
-import { TakeOutId } from "order/command/domain/take-out/take-out"
+import { TakeOutId } from "order/command/domain/take-out/model/take-out"
 import { TakeOutNotFound } from "order/command/error/take-out-not-found"
 import { ActivityNotAvailable } from "order/command/domain/take-out/error/activity-not-available"
 

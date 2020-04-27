@@ -6,7 +6,7 @@ import { OrderEventPublisher } from "../event/order-event-publisher"
 import { PlaceOrderService } from "./place-order-service"
 import { OrderPlaced } from "event/order-placed"
 import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
-import { TakeOut } from "order/command/domain/take-out/take-out"
+import { TakeOut } from "order/command/domain/take-out/model/take-out"
 
 const Day = 1000 * 60 * 60 * 24
 

@@ -4,7 +4,7 @@ import { CreateOrder } from "./create-order"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { OrderCreated } from "event/order-created"
 import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
-import { TakeOut } from "order/command/domain/take-out/take-out"
+import { TakeOut } from "order/command/domain/take-out/model/take-out"
 
 const Day = 1000 * 60 * 60 * 24
 

@@ -5,7 +5,7 @@ import { Product } from "order/command/domain/order/model/product"
 import { RemoveProduct } from "./remove-product"
 import { ProductRemoved } from "event/product-removed"
 import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
-import { TakeOut } from "order/command/domain/take-out/take-out"
+import { TakeOut } from "order/command/domain/take-out/model/take-out"
 
 const Day = 1000 * 60 * 60 * 24
 

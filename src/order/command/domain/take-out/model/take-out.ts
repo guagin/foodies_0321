@@ -43,6 +43,10 @@ export class TakeOut extends AggregateRoot<TakeOutEvent> {
     return this.props.endAt
   }
 
+  get enabled(): boolean {
+    return this.props.enabled
+  }
+
   mutate(events: TakeOutEvent[], version: number): void {
     this.assignEvents(events)
     this.assignVersion(version)

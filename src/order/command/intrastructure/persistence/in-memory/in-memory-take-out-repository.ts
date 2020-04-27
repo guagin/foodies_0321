@@ -1,5 +1,8 @@
-import { TakeOutRepository } from "order/command/domain/take-out/take-out-repository"
-import { TakeOut, TakeOutId } from "order/command/domain/take-out/take-out"
+import { TakeOutRepository } from "order/command/domain/take-out/model/take-out-repository"
+import {
+  TakeOut,
+  TakeOutId
+} from "order/command/domain/take-out/model/take-out"
 
 export class InMemoryTakeOutRepository implements TakeOutRepository {
   private data: TakeOut[]
@@ -13,6 +16,17 @@ export class InMemoryTakeOutRepository implements TakeOutRepository {
 
   async ofId(id: TakeOutId): Promise<TakeOut | undefined> {
     return this.data.find(d => d.id.equals(id))
+  }
+
+  async ofUserId(userId: string): Promise<TakeOut[]> {
+    const takeOuts = this.data.reduce<TakeOut[]>((result, takeOut) => {
+      if (takeOut.createdBy === userId) {
+        result.push(takeOut)
+      }
+      return result
+    }, [])
+
+    return takeOuts
   }
 
   async save(takeOut: TakeOut): Promise<void> {

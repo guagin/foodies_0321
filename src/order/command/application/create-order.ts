@@ -4,9 +4,9 @@ import { OrderId } from "order/command/domain/order/model/order"
 import { CreateOrderService } from "order/command/domain/order/service/create-order.service"
 import { DomainEventPublisher } from "domain-event-publisher"
 import { OrderEventPublisher } from "order/command/domain/order/event/order-event-publisher"
-import { TakeOutRepository } from "order/command/domain/take-out/take-out-repository"
+import { TakeOutRepository } from "order/command/domain/take-out/model/take-out-repository"
 import { TakeOutNotFound } from "order/command/error/take-out-not-found"
-import { TakeOutId } from "order/command/domain/take-out/take-out"
+import { TakeOutId } from "order/command/domain/take-out/model/take-out"
 import { AppendOrderToTakeOutService } from "order/command/domain/order/service/append-order-to-take-out-service"
 
 export class CreateOrder {
