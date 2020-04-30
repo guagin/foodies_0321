@@ -2,7 +2,7 @@ export interface MealView {
   id: string
   name: string
   price: number
-  description: number
+  description: string
   pictures: string[]
   status: number
   provider: string
