@@ -2,7 +2,7 @@ import { OrderRepository } from "order/command/domain/order/model/order-reposito
 
 import { OrderId, Order } from "order/command/domain/order/model/order"
 import { Saved } from "./saved"
-import { RepositoryEventPublisher } from "./repository-event-publisher"
+import { RepositoryEventPublisher } from "../repository-event-publisher"
 
 export class CQRSOrderRepository implements OrderRepository {
   constructor(

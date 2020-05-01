@@ -1,12 +1,12 @@
 import { MealViewRepository } from "order/query/domain/meal/meal-view-repository"
 import { MealView } from "order/query/domain/meal/meal-view"
-import { RepositoryEventPublisher } from "./repository-event-publisher"
+import { RepositoryEventPublisher } from "../repository-event-publisher"
 import { Saved } from "./saved"
 
 export class CQRSMealViewRepository implements MealViewRepository {
   constructor(private repository: MealViewRepository) {}
 
-  listen(eventPublisher: RepositoryEventPublisher): void {
+  listenTo(eventPublisher: RepositoryEventPublisher): void {
     eventPublisher.register<Saved>(Saved.name, async event => {
       const { meal } = event
 

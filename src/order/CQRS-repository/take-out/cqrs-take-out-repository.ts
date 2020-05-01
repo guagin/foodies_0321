@@ -4,7 +4,7 @@ import {
   TakeOut
 } from "order/command/domain/take-out/model/take-out"
 import { Saved } from "./saved"
-import { RepositoryEventPublisher } from "./repository-event-publisher"
+import { RepositoryEventPublisher } from "../repository-event-publisher"
 
 export class CQRSTakeOutRepository implements TakeOutRepository {
   constructor(

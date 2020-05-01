@@ -1,7 +1,8 @@
 import { TakeOutViewRepository } from "order/query/domain/take-out/model/take-out-view-repository"
 import { TakeOutView } from "order/query/domain/take-out/model/take-out-view"
-import { RepositoryEventPublisher } from "./repository-event-publisher"
+
 import { Saved } from "./saved"
+import { RepositoryEventPublisher } from "../repository-event-publisher"
 
 export class CQRSTakeOutViewRepository implements TakeOutViewRepository {
   constructor(private repository: TakeOutViewRepository) {}
