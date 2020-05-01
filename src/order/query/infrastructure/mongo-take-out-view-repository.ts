@@ -12,7 +12,7 @@ type TakeOutViewDocument = Document & {
   enabled: boolean
 }
 
-const TakeOutSchema = new Schema({
+const TakeOutViewSchema = new Schema({
   _id: { type: String, required: true },
   title: { type: String, required: true },
   createdBy: { type: String, required: true },
@@ -37,7 +37,12 @@ const modelFromDoc: (doc: TakeOutViewDocument) => TakeOutView = doc => {
 export class MongoTakeOutViewRepository implements TakeOutViewRepository {
   private model: Model<TakeOutViewDocument>
 
-  constructor(connection: Connection) {}
+  constructor(connection: Connection) {
+    this.model = connection.model<TakeOutViewDocument>(
+      "takeOutView",
+      TakeOutViewSchema
+    )
+  }
 
   async ofId(id: string): Promise<TakeOutView> {
     const doc = await this.model.findById(id)
@@ -73,6 +78,7 @@ export class MongoTakeOutViewRepository implements TakeOutViewRepository {
     } else {
       const docToSave = new this.model({
         _id: view.id,
+        title: view.title,
         createdBy: view.createdBy,
         description: view.description,
         startedAt: view.startedAt,

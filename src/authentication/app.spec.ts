@@ -26,7 +26,7 @@ describe("authentication app", () => {
           .then(result => {
             resolve(result)
           })
-          .then(e => console.log(e))
+          .catch(e => console.log(e))
       }, 2000)
     })
 

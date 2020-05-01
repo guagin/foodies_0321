@@ -1,7 +1,7 @@
 import { TakeOutViewRepository } from "../model/take-out-view-repository"
 import { TakeOutView } from "../model/take-out-view"
 
-export class TakeOutOfIdService {
+export class TakeOutViewOfIdService {
   constructor(private repository: TakeOutViewRepository) {}
 
   async ofId(id: string): Promise<TakeOutView> {
