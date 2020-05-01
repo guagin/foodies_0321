@@ -1,7 +1,7 @@
 import { OrderViewRepository } from "../model/order-view-repository"
 import { OrderView } from "../model/order-view"
 
-export class OrderOdIdService {
+export class OrderViewOfIdService {
   constructor(private repository: OrderViewRepository) {}
 
   async ofId(id: string): Promise<OrderView> {

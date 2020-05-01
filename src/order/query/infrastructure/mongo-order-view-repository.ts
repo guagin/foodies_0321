@@ -7,7 +7,7 @@ type OrderViewDocument = Document & {
   id: string
   createdBy: string
   orderProducts: ProductView[]
-  status: string
+  status: number
   takeOutId: string
 }
 
@@ -21,7 +21,7 @@ const OrderViewSchema = new Schema({
   _id: { type: String, required: true },
   createdBy: { type: String, required: true },
   orderProducts: { type: [ProductViewSchema] },
-  status: { type: String, required: true },
+  status: { type: Number, required: true },
   takeOutId: { type: String, required: true }
 })
 

@@ -4,6 +4,6 @@ export interface OrderView {
   id: string
   createdBy: string
   orderProducts: ProductView[]
-  status: string
+  status: number
   takeOutId: string
 }

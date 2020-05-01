@@ -1,10 +1,10 @@
 import { OrderViewRepository } from "../model/order-view-repository"
 import { OrderView } from "../model/order-view"
 
-export class OrderOfNameService {
+export class OrderViewOfUserIdService {
   constructor(private repository: OrderViewRepository) {}
 
-  async ofUserId(userId: string): Promise<OrderView> {
+  async ofUserId(userId: string): Promise<OrderView[]> {
     const result = await this.repository.ofUserId(userId)
 
     if (!result) {
