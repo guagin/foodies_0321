@@ -5,7 +5,7 @@ describe("create order", () => {
   it("should pass", () => {
     const order = new Order(new OrderId("12345"), {
       createdBy: "6030",
-      orderedProducts: [
+      products: [
         new Product({
           id: "p0",
           amount: 1,
@@ -23,7 +23,7 @@ describe("create order", () => {
     expect(() => {
       const order = new Order(new OrderId("12345"), {
         createdBy: "",
-        orderedProducts: [
+        products: [
           new Product({
             id: "p0",
             amount: 1,
@@ -41,7 +41,7 @@ describe("place order", () => {
   it("should pass", () => {
     const order = new Order(new OrderId("12345"), {
       createdBy: "6030",
-      orderedProducts: [
+      products: [
         new Product({
           id: "p0",
           amount: 1,
@@ -58,7 +58,7 @@ describe("place order", () => {
     expect(() => {
       const order = new Order(new OrderId("12345"), {
         createdBy: "6030",
-        orderedProducts: [
+        products: [
           new Product({
             id: "p0",
             amount: 1,
@@ -77,7 +77,7 @@ describe("place order", () => {
     expect(() => {
       const order = new Order(new OrderId("12345"), {
         createdBy: "6030",
-        orderedProducts: [],
+        products: [],
         status: OrderStatus.pended,
         takeOutId: ""
       })
@@ -91,7 +91,7 @@ describe("cancel order", () => {
   it("should success", () => {
     const order = new Order(new OrderId("12345"), {
       createdBy: "6030",
-      orderedProducts: [
+      products: [
         new Product({
           id: "p0",
           amount: 1,
@@ -108,7 +108,7 @@ describe("cancel order", () => {
     expect(() => {
       const order = new Order(new OrderId("12345"), {
         createdBy: "6030",
-        orderedProducts: [
+        products: [
           new Product({
             id: "p0",
             amount: 1,
@@ -127,7 +127,7 @@ describe("increase product", () => {
   it("should pass", () => {
     const order = new Order(new OrderId("12345"), {
       createdBy: "6030",
-      orderedProducts: [
+      products: [
         new Product({
           id: "p0",
           amount: 1,
@@ -150,7 +150,7 @@ describe("increase product", () => {
     expect(() => {
       const order = new Order(new OrderId("12345"), {
         createdBy: "6030",
-        orderedProducts: [
+        products: [
           new Product({
             id: "p0",
             amount: 1,

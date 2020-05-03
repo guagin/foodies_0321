@@ -31,7 +31,7 @@ describe("decrease product amount service", () => {
 
     const order = new Order(orderId, {
       createdBy: "ricky",
-      orderedProducts: [
+      products: [
         new Product({
           id: "p0",
           amount: 2,
@@ -77,7 +77,7 @@ describe("decrease product amount service", () => {
 
       const order = new Order(orderId, {
         createdBy: "ricky",
-        orderedProducts: [],
+        products: [],
         status: OrderStatus.pended,
         takeOutId: takeOutId.toValue()
       })

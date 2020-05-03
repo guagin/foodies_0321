@@ -10,6 +10,7 @@ import { ProductView } from "order/query/domain/order/model/product"
 const logger = debug("debug: CQRSOrderViewRepository")
 
 const convertToProductView: (product: Product) => ProductView = product => {
+  logger(`${JSON.stringify(product)}`)
   return {
     id: product.id,
     amount: product.amount,
@@ -24,7 +25,8 @@ export class CQRSOrderViewRepository implements OrderViewRepository {
     eventPublisher.register<Saved>(Saved.name, async event => {
       const { order } = event
       logger(`recevied event: ${JSON.stringify(order)}`)
-
+      const orderProducts = order.products.map(p => convertToProductView(p))
+      logger(`orderProducts: ${JSON.stringify(orderProducts)}`)
       await this.save({
         id: order.id.toValue(),
         createdBy: order.createdBy,

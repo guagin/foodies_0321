@@ -31,7 +31,7 @@ describe("increase product amount", () => {
     )
     const order = new Order(orderId, {
       createdBy: "ricky",
-      orderedProducts: [
+      products: [
         new Product({
           id: "p0",
           amount: 1,
@@ -79,7 +79,7 @@ describe("increase product amount", () => {
 
       const order = new Order(orderId, {
         createdBy: "ricky",
-        orderedProducts: [
+        products: [
           new Product({
             id: "p0",
             amount: 1,

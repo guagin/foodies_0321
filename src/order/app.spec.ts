@@ -125,7 +125,7 @@ describe("order app, append product", () => {
     await app.appendProduct({
       products: [
         {
-          id: "p01",
+          id: "p99",
           amount: 1000
         }
       ],
@@ -135,7 +135,7 @@ describe("order app, append product", () => {
     await app.appendProduct({
       products: [
         {
-          id: "p01",
+          id: "p99",
           amount: 1000
         }
       ],

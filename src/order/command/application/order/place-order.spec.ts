@@ -29,7 +29,7 @@ describe("place order", () => {
     const orderId = await orderRepository.nextId()
     const order = new Order(orderId, {
       createdBy: "ricky",
-      orderedProducts: [
+      products: [
         new Product({
           id: "p0",
           amount: 100,

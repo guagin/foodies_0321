@@ -19,7 +19,7 @@ export class OrderId extends EntityId {}
 
 interface OrderProps {
   createdBy: string
-  orderedProducts: Product[]
+  products: Product[]
   status: OrderStatus
   takeOutId: string
 }
@@ -36,7 +36,7 @@ export class Order extends AggregateRoot<OrderEvent> {
     id: OrderId,
     propsInput: {
       createdBy: string
-      orderedProducts: Product[]
+      products: Product[]
       status: OrderStatus
       takeOutId: string
     }
@@ -50,7 +50,7 @@ export class Order extends AggregateRoot<OrderEvent> {
   }
 
   get products(): Product[] {
-    return this.props.orderedProducts
+    return [...this.props.products]
   }
 
   get createdBy(): string {
@@ -71,7 +71,7 @@ export class Order extends AggregateRoot<OrderEvent> {
     events.forEach(e => {
       switch (e.name) {
         case AppendedProduct.name:
-          this.whenAppendedProduct((e as AppendedProduct).product)
+          this.whenAppendedProduct(new Product((e as AppendedProduct).product))
           break
         case CanceledOrder.name:
           this.whenCanceled()
@@ -93,23 +93,30 @@ export class Order extends AggregateRoot<OrderEvent> {
   }
 
   appendProduct(product: Product): void {
-    this.pushEvent(new AppendedProduct(product))
+    this.pushEvent(
+      new AppendedProduct({
+        id: product.id,
+        amount: product.amount,
+        note: product.note
+      })
+    )
     this.whenAppendedProduct(product)
   }
 
   private whenAppendedProduct(product: Product): void {
-    const { orderedProducts } = this.props
-    const foundIndex = orderedProducts.findIndex(elem => {
-      return elem.id === product.id
-    })
+    const { products } = this.props
 
-    if (foundIndex > -1) {
+    if (this.isProductExists(product.id)) {
+      this.whenIncreasedProductAmount({
+        productId: product.id,
+        amount: product.amount
+      })
       return
     }
 
-    const newProducts = [...orderedProducts]
+    const newProducts = [...products]
     newProducts.push(product)
-    this.props.orderedProducts = newProducts
+    this.props.products = newProducts
   }
 
   place(): void {
@@ -118,7 +125,7 @@ export class Order extends AggregateRoot<OrderEvent> {
   }
 
   private whenPlaced(): void {
-    if (this.props.orderedProducts.length === 0) {
+    if (this.props.products.length === 0) {
       throw new ProductIsEmpty(``)
     }
 
@@ -160,8 +167,8 @@ export class Order extends AggregateRoot<OrderEvent> {
     amount: number
   }): void {
     const { productId, amount } = input
-    const { orderedProducts } = this.props
-    const foundProduct = orderedProducts.find(elem => {
+    const { products } = this.props
+    const foundProduct = products.find(elem => {
       return elem.id === productId
     })
 
@@ -183,8 +190,8 @@ export class Order extends AggregateRoot<OrderEvent> {
     amount: number
   }): void {
     const { productId, amount } = input
-    const { orderedProducts } = this.props
-    const foundProduct = orderedProducts.find(elem => {
+    const { products: products } = this.props
+    const foundProduct = products.find(elem => {
       return elem.id === productId
     })
 
@@ -208,14 +215,14 @@ export class Order extends AggregateRoot<OrderEvent> {
 
   private whenRemovedProduct(input: { productId: string }): void {
     const { productId } = input
-    const { orderedProducts } = this.props
-    const foundIndex = orderedProducts.findIndex(elem => {
+    const { products: products } = this.props
+    const foundIndex = products.findIndex(elem => {
       return elem.id === productId
     })
     if (foundIndex < 0) {
       return
     }
-    orderedProducts.splice(foundIndex, 1)
+    products.splice(foundIndex, 1)
   }
 
   isOwnedBy(userId: string): boolean {
@@ -223,7 +230,10 @@ export class Order extends AggregateRoot<OrderEvent> {
   }
 
   isProductExists(productId: string): boolean {
-    const index = this.products.findIndex(p => p.id === productId)
+    const index = this.products.findIndex(p => {
+      console.log(`WTF ${p.id === productId}, ${p.id} ${productId}`)
+      return p.id === productId
+    })
     return index > -1
   }
 

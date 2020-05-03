@@ -27,14 +27,6 @@ export class AppendProduct {
     const order = await this.orderRepository.ofId(new OrderId(orderId))
 
     this.productsToAppend.forEach(productToAppend => {
-      if (order.isProductExists(productToAppend.id)) {
-        // how to deal with note?
-        order.increaseProductAmount({
-          productId: productToAppend.id,
-          amount: productToAppend.amount
-        })
-        return
-      }
       order.appendProduct(
         new Product({
           id: productToAppend.id,

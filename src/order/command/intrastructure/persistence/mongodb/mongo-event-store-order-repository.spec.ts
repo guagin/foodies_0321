@@ -22,7 +22,7 @@ describe("mongo event store order repository update", () => {
 
     const order = new Order(orderId, {
       createdBy: createdBy,
-      orderedProducts: [],
+      products: [],
       status: 0,
       takeOutId
     })

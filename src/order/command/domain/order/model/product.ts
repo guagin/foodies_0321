@@ -14,7 +14,7 @@ const checkAmount: (amount: number) => void = amount => {
   }
 
   if (!Number.isInteger(amount)) {
-    throw new AmountIsFloat("")
+    throw new AmountIsFloat(`amount: ${amount}`)
   }
 
   if (amount < 0) {
@@ -29,7 +29,7 @@ export class Product {
     this.props = props
   }
 
-  get id() {
+  get id(): string {
     return this.props.id
   }
 

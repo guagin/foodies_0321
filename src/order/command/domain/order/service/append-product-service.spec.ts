@@ -37,7 +37,7 @@ describe("append product service", () => {
 
     const order = new Order(orderId, {
       createdBy: "ricky",
-      orderedProducts: [],
+      products: [],
       status: OrderStatus.pended,
       takeOutId: takeOutId.toValue()
     })

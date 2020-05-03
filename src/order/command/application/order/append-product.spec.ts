@@ -43,7 +43,7 @@ describe("append product", () => {
     const order = new Order(orderId, {
       createdBy: "ricky",
       takeOutId: takeOutId.toValue(),
-      orderedProducts: [
+      products: [
         new Product({
           id: "p0",
           amount: 1,
@@ -77,6 +77,7 @@ describe("append product", () => {
 
     const updateOrder = await orderRepository.ofId(orderId)
     expect(updateOrder.products.length).toBe(2)
+    expect(updateOrder.products[0].amount).toBe(101)
     expect(updateOrder.products).toStrictEqual([
       new Product({
         id: "p0",

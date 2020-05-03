@@ -20,7 +20,7 @@ export class CreateOrderService {
 
     const order = new Order(orderId, {
       createdBy: userId,
-      orderedProducts: [],
+      products: [],
       status: OrderStatus.pended,
       takeOutId
     })

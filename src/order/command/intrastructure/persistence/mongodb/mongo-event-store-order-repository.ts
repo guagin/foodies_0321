@@ -2,12 +2,12 @@ import { Document, Schema, Model, Connection } from "mongoose"
 import { OrderRepository } from "order/command/domain/order/model/order-repository"
 import { OrderId, Order } from "order/command/domain/order/model/order"
 import { OrderEvent } from "order/command/domain/order/model/event/order-event"
-import { Product as ProductModel } from "order/command/domain/order/model/product"
+import { Product } from "order/command/domain/order/model/product"
 import debug from "debug"
 
 const logger = debug("debug:MongoEventStoreOrderRepository")
 
-interface Product {
+interface ProductDocument {
   id: string
   amount: number
   note: string
@@ -16,7 +16,7 @@ interface Product {
 type OrderDocument = Document & {
   id: string
   createdBy: string
-  products: Product[]
+  products: ProductDocument[]
   status: number
   takeOutId: string
   events: OrderEvent[]
@@ -26,7 +26,7 @@ const generateOrderFromDocument: (doc: OrderDocument) => Order = (
   doc: OrderDocument
 ) => {
   const products = doc.products.map(p => {
-    return new ProductModel({
+    return new Product({
       id: p.id,
       amount: p.amount,
       note: p.note
@@ -35,7 +35,7 @@ const generateOrderFromDocument: (doc: OrderDocument) => Order = (
 
   const order = new Order(new OrderId(doc.id), {
     createdBy: doc.createdBy,
-    orderedProducts: products,
+    products: products,
     status: doc.status,
     takeOutId: doc.takeOutId
   })
@@ -100,20 +100,17 @@ export class MongoEventStoreOrderRepository implements OrderRepository {
       foundDoc.events = order.events
       foundDoc.__v = order.version
       await foundDoc.save()
-      logger(`updated: ${JSON.stringify(order)}`)
       return
     }
 
     const doc = new this.model({
       _id: order.id.toValue(),
       createdBy: order.createdBy,
-      orderedProducts: order.products,
+      products: order.products,
       status: order.status,
       takeOutId: order.takeOutId,
       events: order.events
     })
-
-    logger(`save: ${JSON.stringify(order)}`)
 
     await doc.save()
   }
