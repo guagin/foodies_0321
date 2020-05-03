@@ -71,16 +71,22 @@ export class Order extends AggregateRoot<OrderEvent> {
     events.forEach(e => {
       switch (e.name) {
         case AppendedProduct.name:
+          this.whenAppendedProduct((e as AppendedProduct).product)
           break
         case CanceledOrder.name:
+          this.whenCanceled()
           break
         case DecreasedProductAmount.name:
+          this.whenDecreaseProductAmouint((e as DecreasedProductAmount).payload)
           break
         case IncreasedProductAmount.name:
+          this.whenIncreasedProductAmount((e as IncreasedProductAmount).payload)
           break
         case PlacedOrder.name:
+          this.whenPlaced()
           break
         case RemovedProduct.name:
+          this.whenRemovedProduct((e as RemovedProduct).payload)
           break
       }
     })

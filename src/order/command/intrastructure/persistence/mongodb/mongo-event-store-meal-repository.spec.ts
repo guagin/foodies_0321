@@ -44,7 +44,6 @@ describe("mongo event store meal repository save", () => {
 
     const updatedMeal = await repository.ofId(meal.id)
 
-    console.log(`updatedMeal: ${updatedMeal}`)
     expect(updatedMeal).toBeDefined()
     expect(updatedMeal.status).toBe(MealStatus.launched)
   })

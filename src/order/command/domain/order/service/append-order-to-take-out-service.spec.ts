@@ -4,7 +4,7 @@ import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publ
 import { OrderAppended } from "event/order-appended"
 import { CreateTakeOutService } from "order/command/domain/take-out/service/create-take-out-service"
 import { TakeOutEventPublisher } from "order/command/domain/take-out/event/take-out-event-publisher"
-import { CreateOrderService } from "./create-order.service"
+import { CreateOrderService } from "./create-order-service"
 import { OrderEventPublisher } from "../event/order-event-publisher"
 import { AppendOrderToTakeOutService } from "./append-order-to-take-out-service"
 

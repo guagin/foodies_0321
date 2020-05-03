@@ -40,6 +40,5 @@ export class LocalRepositoryEventPublisher implements RepositoryEventPublisher {
 
     const handlers = this.eventHandlers[event.constructor.name]
     handlers.forEach(handler => handler(event))
-    this.eventHandlers[event.constructor.name] = []
   }
 }

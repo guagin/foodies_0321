@@ -3,14 +3,18 @@ import { Saved } from "./saved"
 import { OrderView } from "order/query/domain/order/model/order-view"
 import { RepositoryEventPublisher } from "../repository-event-publisher"
 
+import debug from "debug"
+
+const logger = debug("debug: CQRSOrderViewRepository")
+
 export class CQRSOrderViewRepository implements OrderViewRepository {
   constructor(private repository: OrderViewRepository) {}
 
   listenTo(eventPublisher: RepositoryEventPublisher) {
-    eventPublisher.register<Saved>(Saved.name, event => {
+    eventPublisher.register<Saved>(Saved.name, async event => {
       const { order } = event
-
-      this.save({
+      logger(`recevied event: ${JSON.stringify(order)}`)
+      await this.save({
         id: order.id.toValue(),
         createdBy: order.createdBy,
         orderProducts: order.products,
@@ -29,6 +33,6 @@ export class CQRSOrderViewRepository implements OrderViewRepository {
   }
 
   async save(orderView: OrderView): Promise<void> {
-    this.repository.save(orderView)
+    return this.repository.save(orderView)
   }
 }

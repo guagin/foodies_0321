@@ -11,7 +11,7 @@
     "build": "babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
     "dev": "tsnd -r dotenv/config -r tsconfig-paths/register --respawn src/app.ts",
     "lint": "yarn eslint src --ext .ts",
-    "test": "cross-env NODE_ENV=debug jest"
+    "test": "cross-env NODE_ENV=debug DEBUG=debug:* jest"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",

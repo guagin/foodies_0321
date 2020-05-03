@@ -59,7 +59,6 @@ export class MongoEventStoreTakeOutRepository implements TakeOutRepository {
 
   async nextId(): Promise<TakeOutId> {
     const value = await this.generateUUID()
-    console.log(`next Id :${value}`)
     return new TakeOutId(value)
   }
 
@@ -91,7 +90,6 @@ export class MongoEventStoreTakeOutRepository implements TakeOutRepository {
       foundDoc.__v = takeOut.version
       await foundDoc.save()
     } else {
-      console.log(`save: ${JSON.stringify(takeOut)}`)
       const docToSave = new this.model({
         _id: takeOut.id.toValue(),
         createdBy: takeOut.createdBy,

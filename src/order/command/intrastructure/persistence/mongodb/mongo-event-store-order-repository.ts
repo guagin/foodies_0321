@@ -3,6 +3,9 @@ import { OrderRepository } from "order/command/domain/order/model/order-reposito
 import { OrderId, Order } from "order/command/domain/order/model/order"
 import { OrderEvent } from "order/command/domain/order/model/event/order-event"
 import { Product as ProductModel } from "order/command/domain/order/model/product"
+import debug from "debug"
+
+const logger = debug("debug:MongoEventStoreOrderRepository")
 
 interface Product {
   id: string
@@ -56,7 +59,8 @@ const OrderSchema = new Schema({
   products: { type: [ProductSchema], default: [] },
   status: { type: Number, required: true },
   note: { type: String },
-  events: { type: Schema.Types.Mixed, required: true }
+  events: { type: Schema.Types.Mixed, required: true },
+  takeOutId: { type: String, required: true }
 })
 
 export class MongoEventStoreOrderRepository implements OrderRepository {
@@ -93,35 +97,23 @@ export class MongoEventStoreOrderRepository implements OrderRepository {
     const foundDoc = await this.model.findById(order.id.toValue())
 
     if (foundDoc) {
-      const products = order.products.map(p => {
-        return {
-          id: p.id,
-          amount: p.amount,
-          note: p.note
-        }
-      })
-
-      console.log(`update: ${JSON.stringify(order)}`)
-      foundDoc.createdBy = order.createdBy
-      foundDoc.products = products
-      foundDoc.status = order.status
-      foundDoc.takeOutId = order.takeOutId
       foundDoc.events = order.events
       foundDoc.__v = order.version
       await foundDoc.save()
+      logger(`updated: ${JSON.stringify(order)}`)
       return
     }
-
-    console.log(`save: ${JSON.stringify(order)}`)
 
     const doc = new this.model({
       _id: order.id.toValue(),
       createdBy: order.createdBy,
       orderedProducts: order.products,
       status: order.status,
-      takeOutId: order.status,
+      takeOutId: order.takeOutId,
       events: order.events
     })
+
+    logger(`save: ${JSON.stringify(order)}`)
 
     await doc.save()
   }

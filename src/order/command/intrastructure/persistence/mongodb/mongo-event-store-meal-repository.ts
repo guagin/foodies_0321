@@ -68,7 +68,6 @@ export class MongoEventStoreMealRepository implements MealRepository {
     if (foundDoc) {
       foundDoc.events = meal.events
       foundDoc.__v = meal.version
-
       await foundDoc.save()
     } else {
       const docToSave = new this.model({

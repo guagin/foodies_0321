@@ -26,6 +26,7 @@ import { OrderViewOfId } from "./query/application/order/of-id"
 import { CreateTakeOut } from "./command/application/take-out/create-take-out"
 import { TakeOutView } from "./query/domain/take-out/model/take-out-view"
 import { TakeOutViewOfId } from "./query/application/take-out/of-id"
+import { AppendProduct } from "./command/application/order/append-product"
 
 export class App {
   private mongoConnection: Connection
@@ -145,5 +146,22 @@ export class App {
   public async OrderOfId(id: string): Promise<OrderView> {
     const orderOfId = new OrderViewOfId(this.orderViewRepository)
     return orderOfId.ofId(id)
+  }
+
+  public async appendProduct(input: {
+    products: {
+      id: string
+      amount: number
+    }[]
+    orderId: string
+  }): Promise<void> {
+    const appendProduct = new AppendProduct({
+      orderRepository: this.orderRepository,
+      eventPublisher: this.crossContextEventPublisher
+    })
+
+    const { products, orderId } = input
+
+    return appendProduct.append(products).to(orderId)
   }
 }
