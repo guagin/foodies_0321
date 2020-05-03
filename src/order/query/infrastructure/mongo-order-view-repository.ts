@@ -14,7 +14,7 @@ type OrderViewDocument = Document & {
 const ProductViewSchema = new Schema({
   id: { type: String, required: true },
   amount: { type: Number, required: true },
-  note: { type: String, required: true }
+  note: { type: String }
 })
 
 const OrderViewSchema = new Schema({

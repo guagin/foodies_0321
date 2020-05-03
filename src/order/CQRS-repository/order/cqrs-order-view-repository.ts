@@ -4,8 +4,18 @@ import { OrderView } from "order/query/domain/order/model/order-view"
 import { RepositoryEventPublisher } from "../repository-event-publisher"
 
 import debug from "debug"
+import { Product } from "order/command/domain/order/model/product"
+import { ProductView } from "order/query/domain/order/model/product"
 
 const logger = debug("debug: CQRSOrderViewRepository")
+
+const convertToProductView: (product: Product) => ProductView = product => {
+  return {
+    id: product.id,
+    amount: product.amount,
+    note: product.note
+  }
+}
 
 export class CQRSOrderViewRepository implements OrderViewRepository {
   constructor(private repository: OrderViewRepository) {}
@@ -14,10 +24,11 @@ export class CQRSOrderViewRepository implements OrderViewRepository {
     eventPublisher.register<Saved>(Saved.name, async event => {
       const { order } = event
       logger(`recevied event: ${JSON.stringify(order)}`)
+
       await this.save({
         id: order.id.toValue(),
         createdBy: order.createdBy,
-        orderProducts: order.products,
+        orderProducts: order.products.map(p => convertToProductView(p)),
         status: order.status,
         takeOutId: order.takeOutId
       })
