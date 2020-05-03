@@ -24,6 +24,8 @@ import { MealRepository } from "./command/domain/meal/meal-repository"
 import { OrderView } from "./query/domain/order/model/order-view"
 import { OrderViewOfId } from "./query/application/order/of-id"
 import { CreateTakeOut } from "./command/application/take-out/create-take-out"
+import { TakeOutView } from "./query/domain/take-out/model/take-out-view"
+import { TakeOutViewOfId } from "./query/application/take-out/of-id"
 
 export class App {
   private mongoConnection: Connection
@@ -118,6 +120,11 @@ export class App {
     })
 
     return takeOutId.toValue()
+  }
+
+  public async takeOutOfId(id: string): Promise<TakeOutView> {
+    const takeOutOfId = new TakeOutViewOfId(this.takeOutViewRepository)
+    return takeOutOfId.ofId(id)
   }
 
   public async createOrder(input: {

@@ -8,7 +8,7 @@ export class TakeOutViewOfIdService {
     const takeOutView = await this.repository.ofId(id)
 
     if (!takeOutView) {
-      throw new Error()
+      throw new Error(`take out view not found, id:${id}`)
     }
 
     return takeOutView
