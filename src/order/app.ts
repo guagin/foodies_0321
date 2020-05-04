@@ -27,6 +27,7 @@ import { CreateTakeOut } from "./command/application/take-out/create-take-out"
 import { TakeOutView } from "./query/domain/take-out/model/take-out-view"
 import { TakeOutViewOfId } from "./query/application/take-out/of-id"
 import { AppendProduct } from "./command/application/order/append-product"
+import { RemoveProduct } from "./command/application/order/remove-product"
 
 export class App {
   private mongoConnection: Connection
@@ -163,5 +164,21 @@ export class App {
     const { products, orderId } = input
 
     return appendProduct.append(products).to(orderId)
+  }
+
+  public async removeProduct(input: {
+    orderId: string
+    products: {
+      id: string
+      amount: number
+    }[]
+  }): Promise<void> {
+    const { orderId, products } = input
+    const removeProduct = new RemoveProduct({
+      orderRepository: this.orderRepository,
+      eventPublisher: this.crossContextEventPublisher
+    })
+
+    removeProduct.remove(products).from(orderId)
   }
 }

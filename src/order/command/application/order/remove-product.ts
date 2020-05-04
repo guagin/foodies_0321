@@ -2,7 +2,7 @@ import { OrderRepository } from "order/command/domain/order/model/order-reposito
 import { OrderEventPublisher } from "order/command/domain/order/event/order-event-publisher"
 import { DomainEventPublisher } from "domain-event-publisher"
 import { OrderId } from "order/command/domain/order/model/order"
-import { OrderedProductEmpty } from "order/command/domain/order/error/ordered-product-empty"
+import { RemoveProductService } from "order/command/domain/order/service/remove-product-service"
 
 export class RemoveProduct {
   private orderRepository: OrderRepository
@@ -23,16 +23,11 @@ export class RemoveProduct {
   }
 
   async from(orderId: string): Promise<void> {
-    const order = await this.orderRepository.ofId(new OrderId(orderId))
-
-    this.productsToRmeove.forEach(productToRemove => {
-      if (order.isProductExists(productToRemove.id)) {
-        const { id, amount } = productToRemove
-        order.decreaseProductAmount({ productId: id, amount })
-      }
+    const removeProduct = new RemoveProductService({
+      orderRepository: this.orderRepository,
+      eventPublisher: this.eventPublisher
     })
 
-    await this.orderRepository.save(order)
-    this.eventPublisher.productRemoved(order)
+    removeProduct.remove(new OrderId(orderId), this.productsToRmeove)
   }
 }

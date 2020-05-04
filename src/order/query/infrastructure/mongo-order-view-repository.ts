@@ -6,7 +6,7 @@ import { ProductView } from "../domain/order/model/product"
 type OrderViewDocument = Document & {
   id: string
   createdBy: string
-  orderProducts: ProductView[]
+  products: ProductView[]
   status: number
   takeOutId: string
 }
@@ -20,7 +20,7 @@ const ProductViewSchema = new Schema({
 const OrderViewSchema = new Schema({
   _id: { type: String, required: true },
   createdBy: { type: String, required: true },
-  orderProducts: { type: [ProductViewSchema] },
+  products: { type: [ProductViewSchema] },
   status: { type: Number, required: true },
   takeOutId: { type: String, required: true }
 })
@@ -29,7 +29,7 @@ const generateOrderViewFrom = (doc: OrderViewDocument) => {
   return {
     id: doc._id,
     createdBy: doc.createdBy,
-    orderProducts: doc.orderProducts,
+    products: doc.products,
     status: doc.status,
     takeOutId: doc.takeOutId
   }
@@ -69,7 +69,7 @@ export class MongoOrderViewRepository implements OrderViewRepository {
     const foundDoc = await this.model.findOne({ _id: orderView.id })
     if (foundDoc) {
       foundDoc.createdBy = orderView.createdBy
-      foundDoc.orderProducts = orderView.orderProducts
+      foundDoc.products = orderView.products
       foundDoc.status = orderView.status
       foundDoc.takeOutId = orderView.takeOutId
       await foundDoc.save()
@@ -77,7 +77,7 @@ export class MongoOrderViewRepository implements OrderViewRepository {
       const docToSave = new this.model({
         _id: orderView.id,
         createdBy: orderView.createdBy,
-        orderProducts: orderView.orderProducts,
+        products: orderView.products,
         status: orderView.status,
         takeOutId: orderView.takeOutId
       })

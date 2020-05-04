@@ -4,6 +4,8 @@ import { Product } from "../model/product"
 import { RemoveProductService } from "./remove-product-service"
 import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
 import { TakeOut } from "order/command/domain/take-out/model/take-out"
+import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
+import { OrderEventPublisher } from "../event/order-event-publisher"
 
 const Day = 1000 * 60 * 60 * 24
 
@@ -23,8 +25,12 @@ describe("remove product service", () => {
     await takeOutRepository.save(takeOut)
 
     const orderRepository = new InMemoryOrderRepository()
+    const eventPublisher = new SynchronizedDomainEventPublisher()
 
-    const removeProductService = new RemoveProductService({ orderRepository })
+    const removeProductService = new RemoveProductService({
+      orderRepository,
+      eventPublisher: new OrderEventPublisher(eventPublisher)
+    })
 
     const orderId = await orderRepository.nextId()
     const order = new Order(orderId, {
@@ -42,7 +48,7 @@ describe("remove product service", () => {
 
     await orderRepository.save(order)
 
-    await removeProductService.remove(orderId, "p0")
+    await removeProductService.remove(orderId, [{ id: "p0", amount: 100 }])
 
     const updatedOrder = await orderRepository.ofId(orderId)
     expect(updatedOrder.products.length).toBe(0)

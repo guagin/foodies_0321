@@ -25,12 +25,12 @@ export class CQRSOrderViewRepository implements OrderViewRepository {
     eventPublisher.register<Saved>(Saved.name, async event => {
       const { order } = event
       logger(`recevied event: ${JSON.stringify(order)}`)
-      const orderProducts = order.products.map(p => convertToProductView(p))
-      logger(`orderProducts: ${JSON.stringify(orderProducts)}`)
+      const products = order.products.map(p => convertToProductView(p))
+      logger(`products: ${JSON.stringify(products)}`)
       await this.save({
         id: order.id.toValue(),
         createdBy: order.createdBy,
-        orderProducts: order.products.map(p => convertToProductView(p)),
+        products: order.products.map(p => convertToProductView(p)),
         status: order.status,
         takeOutId: order.takeOutId
       })

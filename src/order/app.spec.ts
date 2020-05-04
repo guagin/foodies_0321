@@ -104,8 +104,8 @@ describe("order app, append product", () => {
 
     const order = await app.OrderOfId(orderId)
 
-    expect(order.orderProducts.length).toBe(1)
-    expect(order.orderProducts[0].amount).toBe(1000)
+    expect(order.products.length).toBe(1)
+    expect(order.products[0].amount).toBe(1000)
   })
 
   it("should pass, when push 2 same products", async () => {
@@ -153,7 +153,123 @@ describe("order app, append product", () => {
 
     const order = await app.OrderOfId(orderId)
 
-    expect(order.orderProducts.length).toBe(1)
-    expect(order.orderProducts[0].amount).toBe(2000)
+    expect(order.products.length).toBe(1)
+    expect(order.products[0].amount).toBe(2000)
+  })
+})
+
+describe("order app remove product", () => {
+  it("should pass", async () => {
+    const takeOutId = await app.createTakeOut({
+      createdBy: faker.random.uuid(),
+      title: faker.random.words(10),
+      description: faker.random.words(10),
+      startedAt: new Date(),
+      endAt: new Date(Date.now() + oneHour)
+    })
+
+    const orderId = await app.createOrder({
+      createdBy: faker.random.uuid(),
+      takeOutId
+    })
+
+    await app.appendProduct({
+      products: [
+        {
+          id: "p01",
+          amount: 1000
+        },
+        {
+          id: "p02",
+          amount: 1000
+        }
+      ],
+      orderId
+    })
+
+    await app.removeProduct({
+      orderId,
+      products: [
+        {
+          id: "p01",
+          amount: 1000
+        }
+      ]
+    })
+
+    // TODO: should wait untile the takeout created.
+    const wait1SecondsPromise = new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, 1000)
+    })
+
+    await wait1SecondsPromise
+
+    const order = await app.OrderOfId(orderId)
+
+    expect(order).toBeDefined()
+    expect(order.products.length).toEqual(1)
+  })
+
+  it("should pass", async () => {
+    const takeOutId = await app.createTakeOut({
+      createdBy: faker.random.uuid(),
+      title: faker.random.words(10),
+      description: faker.random.words(10),
+      startedAt: new Date(),
+      endAt: new Date(Date.now() + oneHour)
+    })
+
+    const orderId = await app.createOrder({
+      createdBy: faker.random.uuid(),
+      takeOutId
+    })
+
+    await app.appendProduct({
+      products: [
+        {
+          id: "p01",
+          amount: 1001
+        },
+        {
+          id: "p02",
+          amount: 1000
+        }
+      ],
+      orderId
+    })
+
+    await app.removeProduct({
+      orderId,
+      products: [
+        {
+          id: "p01",
+          amount: 1
+        },
+        {
+          id: "p02",
+          amount: 10
+        }
+      ]
+    })
+
+    // TODO: should wait untile the takeout created.
+    const wait1SecondsPromise = new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, 1000)
+    })
+
+    await wait1SecondsPromise
+
+    const order = await app.OrderOfId(orderId)
+
+    console.log(`orderId :${orderId}`)
+
+    expect(order).toBeDefined()
+    expect(order.products.length).toEqual(2)
+    expect(order.products[0].amount).toEqual(1000)
+    expect(order.products[1].amount).toEqual(990)
   })
 })

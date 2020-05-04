@@ -3,7 +3,7 @@ import { ProductView } from "./product"
 export interface OrderView {
   id: string
   createdBy: string
-  orderProducts: ProductView[]
+  products: ProductView[]
   status: number
   takeOutId: string
 }

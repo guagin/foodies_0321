@@ -11,8 +11,6 @@ import { AggregateRoot } from "aggregate-root"
 import { PlacedOrder } from "./event/placed-order"
 import { AppendedProduct } from "./event/appended-product"
 import { CanceledOrder } from "./event/canceled-order"
-import { DecreasedProductAmount } from "./event/decreased-product-amount"
-import { IncreasedProductAmount } from "./event/increased-product-amount"
 import { RemovedProduct } from "./event/removed-product"
 
 export class OrderId extends EntityId {}
@@ -76,12 +74,6 @@ export class Order extends AggregateRoot<OrderEvent> {
         case CanceledOrder.name:
           this.whenCanceled()
           break
-        case DecreasedProductAmount.name:
-          this.whenDecreaseProductAmouint((e as DecreasedProductAmount).payload)
-          break
-        case IncreasedProductAmount.name:
-          this.whenIncreasedProductAmount((e as IncreasedProductAmount).payload)
-          break
         case PlacedOrder.name:
           this.whenPlaced()
           break
@@ -117,6 +109,24 @@ export class Order extends AggregateRoot<OrderEvent> {
     const newProducts = [...products]
     newProducts.push(product)
     this.props.products = newProducts
+  }
+
+  private whenIncreasedProductAmount(input: {
+    productId: string
+    amount: number
+  }): void {
+    const { productId, amount } = input
+    const { products } = this.props
+    const foundProduct = products.find(elem => {
+      return elem.id === productId
+    })
+
+    if (foundProduct) {
+      foundProduct.increase(amount)
+      return
+    }
+
+    throw new ProductNotOrdered(`${productId}`)
   }
 
   place(): void {
@@ -157,46 +167,25 @@ export class Order extends AggregateRoot<OrderEvent> {
     throw new OrderNotPlaced(`status: ${this.props.status}`)
   }
 
-  increaseProductAmount(input: { productId: string; amount: number }): void {
-    this.pushEvent(new IncreasedProductAmount(input))
-    this.whenIncreasedProductAmount(input)
+  removeProduct(input: { id: string; amount: number }): void {
+    this.pushEvent(new RemovedProduct(input))
+    this.whenRemovedProduct(input)
   }
 
-  private whenIncreasedProductAmount(input: {
-    productId: string
-    amount: number
-  }): void {
-    const { productId, amount } = input
+  private whenRemovedProduct(input: { id: string; amount: number }): void {
+    const { id, amount } = input
     const { products } = this.props
-    const foundProduct = products.find(elem => {
-      return elem.id === productId
+    const foundIndex = products.findIndex(elem => {
+      return elem.id === id
     })
-
-    if (foundProduct) {
-      foundProduct.increase(amount)
+    if (foundIndex < 0) {
       return
     }
 
-    throw new ProductNotOrdered(`${productId}`)
-  }
-
-  decreaseProductAmount(input: { productId: string; amount: number }): void {
-    this.pushEvent(new DecreasedProductAmount(input))
-    this.whenDecreaseProductAmouint(input)
-  }
-
-  private whenDecreaseProductAmouint(input: {
-    productId: string
-    amount: number
-  }): void {
-    const { productId, amount } = input
-    const { products: products } = this.props
-    const foundProduct = products.find(elem => {
-      return elem.id === productId
-    })
+    const foundProduct = products[foundIndex]
 
     if (foundProduct && foundProduct.amount === amount) {
-      this.removeProduct({ productId })
+      products.splice(foundIndex, 1)
       return
     }
 
@@ -204,25 +193,6 @@ export class Order extends AggregateRoot<OrderEvent> {
       foundProduct.decrease(amount)
       return
     }
-
-    throw new ProductNotOrdered(`${productId}`)
-  }
-
-  removeProduct(input: { productId: string }): void {
-    this.pushEvent(new RemovedProduct(input))
-    this.whenRemovedProduct(input)
-  }
-
-  private whenRemovedProduct(input: { productId: string }): void {
-    const { productId } = input
-    const { products: products } = this.props
-    const foundIndex = products.findIndex(elem => {
-      return elem.id === productId
-    })
-    if (foundIndex < 0) {
-      return
-    }
-    products.splice(foundIndex, 1)
   }
 
   isOwnedBy(userId: string): boolean {
@@ -231,7 +201,6 @@ export class Order extends AggregateRoot<OrderEvent> {
 
   isProductExists(productId: string): boolean {
     const index = this.products.findIndex(p => {
-      console.log(`WTF ${p.id === productId}, ${p.id} ${productId}`)
       return p.id === productId
     })
     return index > -1
