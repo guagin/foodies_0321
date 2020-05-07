@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 import faker from "faker"
 import { App } from "./app"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
+import { MealView } from "./query/domain/meal/meal-view"
 
 let app: App
 
@@ -62,7 +63,7 @@ describe("order app, create order", () => {
       }, 1000)
     })
 
-    const order = await app.OrderOfId(orderId)
+    const order = await app.orderOfId(orderId)
 
     expect(order).toBeDefined()
   })
@@ -102,7 +103,7 @@ describe("order app, append product", () => {
 
     await wait1SecondsPromise
 
-    const order = await app.OrderOfId(orderId)
+    const order = await app.orderOfId(orderId)
 
     expect(order.products.length).toBe(1)
     expect(order.products[0].amount).toBe(1000)
@@ -151,7 +152,7 @@ describe("order app, append product", () => {
 
     await wait1SecondsPromise
 
-    const order = await app.OrderOfId(orderId)
+    const order = await app.orderOfId(orderId)
 
     expect(order.products.length).toBe(1)
     expect(order.products[0].amount).toBe(2000)
@@ -206,7 +207,7 @@ describe("order app remove product", () => {
 
     await wait1SecondsPromise
 
-    const order = await app.OrderOfId(orderId)
+    const order = await app.orderOfId(orderId)
 
     expect(order).toBeDefined()
     expect(order.products.length).toEqual(1)
@@ -263,7 +264,7 @@ describe("order app remove product", () => {
 
     await wait1SecondsPromise
 
-    const order = await app.OrderOfId(orderId)
+    const order = await app.orderOfId(orderId)
 
     console.log(`orderId :${orderId}`)
 
@@ -271,5 +272,47 @@ describe("order app remove product", () => {
     expect(order.products.length).toEqual(2)
     expect(order.products[0].amount).toEqual(1000)
     expect(order.products[1].amount).toEqual(990)
+  })
+})
+
+describe("create meal", () => {
+  it("should pass", async () => {
+    const mealIds = await app.createMeals({
+      meals: [
+        {
+          name: "meal01",
+          price: 100,
+          description: "meal 1",
+          pictures: ["pic1", "pic2"],
+          provider: "test"
+        },
+        {
+          name: "meal02",
+          price: 100,
+          description: "meal 2",
+          pictures: ["pic1", "pic2"],
+          provider: "test"
+        }
+      ]
+    })
+
+    // TODO: should wait untile the takeout created.
+    const wait1SecondsPromise = new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, 1000)
+    })
+
+    await wait1SecondsPromise
+
+    const promiseToFetchMeals: Promise<MealView>[] = []
+
+    mealIds.forEach(mealId => {
+      promiseToFetchMeals.push(app.mealOfId({ mealId }))
+    })
+
+    const mealViews = await Promise.all(promiseToFetchMeals)
+
+    expect(mealViews.length).toBe(2)
   })
 })

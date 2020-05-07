@@ -1,12 +1,12 @@
-import { InMemoryMealRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-meal-repository"
 import { MealId } from "order/command/domain/meal/meal"
 import { CreateMealService } from "order/command/domain/meal/service/create-meal-service"
 import { MealEventPublisher } from "order/command/domain/meal/meal-event-publisher"
 import { DomainEventPublisher } from "domain-event-publisher"
+import { MealRepository } from "order/command/domain/meal/meal-repository"
 
 export class CreateMeal {
   constructor(
-    private mealRepository: InMemoryMealRepository,
+    private mealRepository: MealRepository,
     private eventPublisher: DomainEventPublisher
   ) {}
 

@@ -28,6 +28,10 @@ import { TakeOutView } from "./query/domain/take-out/model/take-out-view"
 import { TakeOutViewOfId } from "./query/application/take-out/of-id"
 import { AppendProduct } from "./command/application/order/append-product"
 import { RemoveProduct } from "./command/application/order/remove-product"
+import { MealId } from "./command/domain/meal/meal"
+import { CreateMeal } from "./command/application/meal/create-meal"
+import { MealView } from "./query/domain/meal/meal-view"
+import { MealViewOfIdUseCase } from "./query/application/meal/of-id"
 
 export class App {
   private mongoConnection: Connection
@@ -144,7 +148,7 @@ export class App {
     return (await createOrder.createBy(createdBy).appendTo(takeOutId)).toValue()
   }
 
-  public async OrderOfId(id: string): Promise<OrderView> {
+  public async orderOfId(id: string): Promise<OrderView> {
     const orderOfId = new OrderViewOfId(this.orderViewRepository)
     return orderOfId.ofId(id)
   }
@@ -180,5 +184,37 @@ export class App {
     })
 
     removeProduct.remove(products).from(orderId)
+  }
+
+  public async createMeals(input: {
+    meals: {
+      name: string
+      price: number
+      description: string
+      pictures: string[]
+      provider: string
+    }[]
+  }): Promise<string[]> {
+    const createMeal = new CreateMeal(
+      this.mealRepository,
+      this.crossContextEventPublisher
+    )
+
+    const { meals } = input
+
+    const promiseToCreateMeals: Promise<MealId>[] = []
+    meals.forEach(meal => {
+      promiseToCreateMeals.push(createMeal.create(meal))
+    })
+
+    const mealIds = await Promise.all(promiseToCreateMeals)
+
+    return mealIds.map(mealId => mealId.toValue())
+  }
+
+  public async mealOfId(input: { mealId: string }): Promise<MealView> {
+    const { mealId } = input
+    const mealOfId = new MealViewOfIdUseCase(this.mealViewRepository)
+    return mealOfId.ofId(mealId)
   }
 }
