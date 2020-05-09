@@ -1,12 +1,12 @@
 import debug from "debug"
-import { HttpServer } from "authentication/adapter/http/http-server"
+import { HttpServer } from "http-server"
 
 const logger = debug("app:")
 
 logger("test")
 
 // authenticationServer
-const httpServer = HttpServer.getInstance(debug("app:authentication:"))
+const httpServer = HttpServer.getInstance(debug("app:"))
   .then()
   .catch(e => {
     logger(JSON.stringify(e))
