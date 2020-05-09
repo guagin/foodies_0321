@@ -33,6 +33,8 @@ import { CreateMeal } from "./command/application/meal/create-meal"
 import { MealView } from "./query/domain/meal/meal-view"
 import { MealViewOfIdUseCase } from "./query/application/meal/of-id"
 import { LaunchMeal } from "./command/application/meal/launch-meal"
+import { PrepareMeal } from "./command/application/meal/prepare-meal"
+import { ShelveMeal } from "./command/application/meal/shelve-meal"
 
 export class App {
   private mongoConnection: Connection
@@ -227,5 +229,25 @@ export class App {
     )
 
     await launchMeal.launch(mealId)
+  }
+
+  public async prepareMeal(input: { mealId: string }): Promise<void> {
+    const { mealId } = input
+    const prepareMeal = new PrepareMeal(
+      this.mealRepository,
+      this.crossContextEventPublisher
+    )
+
+    await prepareMeal.prepare(mealId)
+  }
+
+  public async shelveMeal(input: { mealId: string }): Promise<void> {
+    const { mealId } = input
+    const shelveMeal = new ShelveMeal(
+      this.mealRepository,
+      this.crossContextEventPublisher
+    )
+
+    await shelveMeal.shelve(mealId)
   }
 }

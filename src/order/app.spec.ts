@@ -355,3 +355,118 @@ describe("launch meal", () => {
     expect(launchedMeal.status).toBe(MealStatus.launched)
   })
 })
+
+describe("prepare meal", () => {
+  it("should pass, idempotent", async () => {
+    const mealIds = await app.createMeals({
+      meals: [
+        {
+          name: "meal01",
+          price: 100,
+          description: "meal 1",
+          pictures: ["pic1", "pic2"],
+          provider: "test"
+        },
+        {
+          name: "meal02",
+          price: 100,
+          description: "meal 2",
+          pictures: ["pic1", "pic2"],
+          provider: "test"
+        }
+      ]
+    })
+
+    await app.prepareMeal({ mealId: mealIds[0] })
+
+    // TODO: should wait untile the takeout created.
+    const wait1SecondsPromise = new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, 1000)
+    })
+
+    await wait1SecondsPromise
+
+    const launchedMeal = await app.mealOfId({ mealId: mealIds[0] })
+
+    expect(launchedMeal.status).toBe(MealStatus.preparing)
+  })
+
+  it("should pass, idempotent", async () => {
+    const mealIds = await app.createMeals({
+      meals: [
+        {
+          name: "meal01",
+          price: 100,
+          description: "meal 1",
+          pictures: ["pic1", "pic2"],
+          provider: "test"
+        },
+        {
+          name: "meal02",
+          price: 100,
+          description: "meal 2",
+          pictures: ["pic1", "pic2"],
+          provider: "test"
+        }
+      ]
+    })
+
+    await app.launchMeal({ mealId: mealIds[0] })
+    await app.shelveMeal({ mealId: mealIds[0] })
+    await app.prepareMeal({ mealId: mealIds[0] })
+
+    // TODO: should wait untile the takeout created.
+    const wait1SecondsPromise = new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, 1000)
+    })
+
+    await wait1SecondsPromise
+
+    const launchedMeal = await app.mealOfId({ mealId: mealIds[0] })
+
+    expect(launchedMeal.status).toBe(MealStatus.preparing)
+  })
+})
+
+describe("shelve meal", () => {
+  it("should pass", async () => {
+    const mealIds = await app.createMeals({
+      meals: [
+        {
+          name: "meal01",
+          price: 100,
+          description: "meal 1",
+          pictures: ["pic1", "pic2"],
+          provider: "test"
+        },
+        {
+          name: "meal02",
+          price: 100,
+          description: "meal 2",
+          pictures: ["pic1", "pic2"],
+          provider: "test"
+        }
+      ]
+    })
+
+    await app.launchMeal({ mealId: mealIds[0] })
+    await app.shelveMeal({ mealId: mealIds[0] })
+
+    // TODO: should wait untile the takeout created.
+    const wait1SecondsPromise = new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, 1000)
+    })
+
+    await wait1SecondsPromise
+
+    const launchedMeal = await app.mealOfId({ mealId: mealIds[0] })
+
+    expect(launchedMeal.status).toBe(MealStatus.shelved)
+  })
+})
