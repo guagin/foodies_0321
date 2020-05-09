@@ -17,6 +17,7 @@ const MealSchema = new Schema(
   {
     _id: { type: String, required: true },
     name: { type: String, required: true },
+    price: { type: String, required: true },
     description: { type: String, required: true },
     status: { type: Number, required: true },
     provider: { type: String, required: true },
@@ -73,6 +74,7 @@ export class MongoEventStoreMealRepository implements MealRepository {
       const docToSave = new this.model({
         _id: meal.id.toValue(),
         name: meal.name,
+        price: meal.price,
         description: meal.description,
         pictures: meal.pictures,
         events: meal.events,

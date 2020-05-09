@@ -9,7 +9,7 @@ export class CQRSMealViewRepository implements MealViewRepository {
   listenTo(eventPublisher: RepositoryEventPublisher): void {
     eventPublisher.register<Saved>(Saved.name, async event => {
       const { meal } = event
-
+      console.log(`${JSON.stringify(meal)}`)
       await this.save({
         id: meal.id.toValue(),
         name: meal.name,

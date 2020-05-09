@@ -17,7 +17,7 @@ describe("order of name", () => {
     const sampleOrder: OrderView = {
       id,
       createdBy: userId,
-      orderProducts: [
+      products: [
         {
           id: faker.random.uuid(),
           amount: faker.random.number(),

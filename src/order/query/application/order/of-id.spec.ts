@@ -16,7 +16,7 @@ describe("order view of id", () => {
     const sampleOrderView: OrderView = {
       id,
       createdBy: faker.random.uuid(),
-      orderProducts: [
+      products: [
         {
           id: faker.random.uuid(),
           amount: faker.random.number(),
@@ -51,7 +51,7 @@ describe("order view of id", () => {
     const sampleOrderView: OrderView = {
       id,
       createdBy: faker.random.uuid(),
-      orderProducts: [
+      products: [
         {
           id: faker.random.uuid(),
           amount: faker.random.number(),

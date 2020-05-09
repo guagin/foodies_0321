@@ -32,6 +32,7 @@ import { MealId } from "./command/domain/meal/meal"
 import { CreateMeal } from "./command/application/meal/create-meal"
 import { MealView } from "./query/domain/meal/meal-view"
 import { MealViewOfIdUseCase } from "./query/application/meal/of-id"
+import { LaunchMeal } from "./command/application/meal/launch-meal"
 
 export class App {
   private mongoConnection: Connection
@@ -216,5 +217,15 @@ export class App {
     const { mealId } = input
     const mealOfId = new MealViewOfIdUseCase(this.mealViewRepository)
     return mealOfId.ofId(mealId)
+  }
+
+  public async launchMeal(input: { mealId: string }): Promise<void> {
+    const { mealId } = input
+    const launchMeal = new LaunchMeal(
+      this.mealRepository,
+      this.crossContextEventPublisher
+    )
+
+    await launchMeal.launch(mealId)
   }
 }

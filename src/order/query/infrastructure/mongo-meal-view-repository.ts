@@ -20,6 +20,7 @@ const MealSchema = new Schema(
     price: { type: Number, required: true },
     description: { type: String, required: true },
     picture: { type: [String], required: true },
+    status: { type: Number, required: true },
     provider: { type: String, required: true }
   },
   { timestamps: true, _id: false }

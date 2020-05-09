@@ -3,6 +3,7 @@ import faker from "faker"
 import { App } from "./app"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { MealView } from "./query/domain/meal/meal-view"
+import { MealStatus } from "./command/domain/meal/meal"
 
 let app: App
 
@@ -314,5 +315,43 @@ describe("create meal", () => {
     const mealViews = await Promise.all(promiseToFetchMeals)
 
     expect(mealViews.length).toBe(2)
+  })
+})
+
+describe("launch meal", () => {
+  it("should pass", async () => {
+    const mealIds = await app.createMeals({
+      meals: [
+        {
+          name: "meal01",
+          price: 100,
+          description: "meal 1",
+          pictures: ["pic1", "pic2"],
+          provider: "test"
+        },
+        {
+          name: "meal02",
+          price: 100,
+          description: "meal 2",
+          pictures: ["pic1", "pic2"],
+          provider: "test"
+        }
+      ]
+    })
+
+    await app.launchMeal({ mealId: mealIds[0] })
+
+    // TODO: should wait untile the takeout created.
+    const wait1SecondsPromise = new Promise(resolve => {
+      setTimeout(() => {
+        resolve()
+      }, 1000)
+    })
+
+    await wait1SecondsPromise
+
+    const launchedMeal = await app.mealOfId({ mealId: mealIds[0] })
+
+    expect(launchedMeal.status).toBe(MealStatus.launched)
   })
 })
