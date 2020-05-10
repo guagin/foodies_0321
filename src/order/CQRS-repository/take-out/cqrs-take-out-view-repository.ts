@@ -14,7 +14,7 @@ export class CQRSTakeOutViewRepository implements TakeOutViewRepository {
       await this.save({
         id: takeOut.id.toValue(),
         title: takeOut.title,
-        createdBy: takeOut.title,
+        createdBy: takeOut.createdBy,
         description: takeOut.description,
         startedAt: takeOut.startedAt,
         endAt: takeOut.endAt,

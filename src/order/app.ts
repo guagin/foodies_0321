@@ -6,6 +6,7 @@ import { CQRSOrderRepository } from "./CQRS-repository/order/cqrs-order-reposito
 import { CQRSOrderViewRepository } from "./CQRS-repository/order/cqrs-order-view-repository"
 import { MongoEventStoreOrderRepository } from "./command/intrastructure/persistence/mongodb/mongo-event-store-order-repository"
 import { v4 as UUIDV4 } from "uuid"
+import moment from "moment"
 
 import { MongoOrderViewRepository } from "./query/infrastructure/mongo-order-view-repository"
 import { CQRSTakeOutRepository } from "./CQRS-repository/take-out/cqrs-take-out-repository"
@@ -34,6 +35,7 @@ import { MealViewOfIdUseCase } from "./query/application/meal/of-id"
 import { LaunchMeal } from "./command/application/meal/launch-meal"
 import { PrepareMeal } from "./command/application/meal/prepare-meal"
 import { ShelveMeal } from "./command/application/meal/shelve-meal"
+import { TakeOutViewOfUserId } from "./query/application/take-out/of-user-id"
 
 export class App {
   private mongoConnection: Connection
@@ -109,8 +111,8 @@ export class App {
     createdBy: string
     title: string
     description: string
-    startedAt: Date
-    endAt: Date
+    startedAt: string
+    endAt: string
   }): Promise<string> {
     const { createdBy, title, description, startedAt, endAt } = input
 
@@ -123,16 +125,25 @@ export class App {
       createdBy,
       title,
       description,
-      startedAt,
-      endAt
+      startedAt: moment(startedAt).toDate(),
+      endAt: moment(endAt).toDate()
     })
 
     return takeOutId.toValue()
   }
 
-  public async takeOutOfId(id: string): Promise<TakeOutView> {
+  public async takeOutOfId(input: { takeOutId: string }): Promise<TakeOutView> {
+    const { takeOutId } = input
     const takeOutOfId = new TakeOutViewOfId(this.takeOutViewRepository)
-    return takeOutOfId.ofId(id)
+    return takeOutOfId.ofId(takeOutId)
+  }
+
+  public async takeOutOfUserId(input: {
+    userId: string
+  }): Promise<TakeOutView[]> {
+    const { userId } = input
+    const takeOutOfUserId = new TakeOutViewOfUserId(this.takeOutViewRepository)
+    return takeOutOfUserId.ofUserId(userId)
   }
 
   public async createOrder(input: {

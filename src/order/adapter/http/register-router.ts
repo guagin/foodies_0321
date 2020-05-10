@@ -11,6 +11,8 @@ import { mealOfId } from "./meal-of-id"
 import { prepareMeal } from "./prepare-meal"
 import { removeProduct } from "./remove-product"
 import { shelveMeal } from "./shelve-meal"
+import { takeOutOfId } from "./take-out-of-id"
+import { takeOutOfUserId } from "./take-out-of-user-id"
 
 const verifyToken = (handler: (request: FastifyRequest) => void) => {
   return async (request: FastifyRequest) => {
@@ -41,6 +43,11 @@ export const registerOrderRouter = (
   fastify.post("/meal/prepare", verifyToken(prepareMeal(app, logger)))
   fastify.post("/oprder/removeProduct", verifyToken(removeProduct(app, logger)))
   fastify.post("/meal/shelve", verifyToken(shelveMeal(app, logger)))
+  fastify.get("/takeout/ofId/:id", verifyToken(takeOutOfId(app, logger)))
+  fastify.get(
+    "/takeout/ofUserId/:userId",
+    verifyToken(takeOutOfUserId(app, logger))
+  )
 
   next()
 }

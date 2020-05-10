@@ -6,7 +6,7 @@ export const shelveMeal = (app: App, logger: (msg: string) => void) => {
     const { body } = request
     const { id } = body
 
-    await app.shelveMeal(id)
+    await app.shelveMeal({ mealId: id })
 
     return {}
   }
