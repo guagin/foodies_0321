@@ -15,8 +15,8 @@ export const registerAuthenticationRouter = (
   },
   next: (err?: FastifyError) => void
 ) => {
-  fastify.get("/user/ofId/:id", userOfName(app, logger))
-  fastify.get("/user/ofName/:name", userOfId(app, logger))
+  fastify.get("/user/ofName/:name", userOfName(app, logger))
+  fastify.get("/user/ofId/:id", userOfId(app, logger))
   fastify.post("/user/register", registerUser(app, logger))
   fastify.post("/user/login", userLogin(app, logger))
   next()
