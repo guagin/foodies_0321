@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken"
 import { createTakeOut } from "./create-take-out"
 import { App } from "order/app"
 import { createOrder } from "./create-order"
-import { orderOfId } from "./oder-of-id"
+import { orderOfId } from "./order-of-id"
 import { appendProduct } from "./append-product"
 import { createMeal } from "./create-meal"
 import { launchMeal } from "./launch-meal"
@@ -33,15 +33,15 @@ export const registerOrderRouter = (
   },
   next: (err?: FastifyError) => void
 ) => {
-  fastify.post("/order/appendproduct", verifyToken(appendProduct(app, logger)))
+  fastify.post("/order/appendProduct", verifyToken(appendProduct(app, logger)))
   fastify.post("/meal/create", verifyToken(createMeal(app, logger)))
   fastify.post("/order/create", verifyToken(createOrder(app, logger)))
   fastify.post("/takeout/create", verifyToken(createTakeOut(app, logger)))
   fastify.post("/meal/launch", verifyToken(launchMeal(app, logger)))
   fastify.get("/meal/ofId/:id", verifyToken(mealOfId(app, logger)))
-  fastify.get("/order/ofid/:id", verifyToken(orderOfId(app, logger)))
+  fastify.get("/order/ofId/:id", verifyToken(orderOfId(app, logger)))
   fastify.post("/meal/prepare", verifyToken(prepareMeal(app, logger)))
-  fastify.post("/oprder/removeProduct", verifyToken(removeProduct(app, logger)))
+  fastify.post("/order/removeProduct", verifyToken(removeProduct(app, logger)))
   fastify.post("/meal/shelve", verifyToken(shelveMeal(app, logger)))
   fastify.get("/takeout/ofId/:id", verifyToken(takeOutOfId(app, logger)))
   fastify.get(

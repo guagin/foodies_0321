@@ -11,11 +11,14 @@ type OrderViewDocument = Document & {
   takeOutId: string
 }
 
-const ProductViewSchema = new Schema({
-  id: { type: String, required: true },
-  amount: { type: Number, required: true },
-  note: { type: String }
-})
+const ProductViewSchema = new Schema(
+  {
+    id: { type: String, required: true },
+    amount: { type: Number, required: true },
+    note: { type: String }
+  },
+  { _id: false }
+)
 
 const OrderViewSchema = new Schema({
   _id: { type: String, required: true },

@@ -1,5 +1,5 @@
 import { AmountIsZero } from "../error/amount-is-zero"
-import { AmountIsFloat } from "../error/amount-is-float"
+import { AmountIsFloat as AmountIsNotInteger } from "../error/amount-is-float"
 import { AmountIsNegtaive } from "../error/amount-is-negative-integer"
 import { AmountIsGreaterThanProductAmount } from "../error/amount-is-greater-than-product-amount"
 
@@ -14,7 +14,7 @@ const checkAmount: (amount: number) => void = amount => {
   }
 
   if (!Number.isInteger(amount)) {
-    throw new AmountIsFloat(`amount: ${amount}`)
+    throw new AmountIsNotInteger(`amount: ${amount}`)
   }
 
   if (amount < 0) {
