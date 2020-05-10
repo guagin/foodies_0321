@@ -1,5 +1,4 @@
 import fastify, { FastifyInstance, FastifyError } from "fastify"
-import { option } from "./authentication/adapter/http/register-router"
 
 export type registerRouter = (
   fastify: FastifyInstance,
@@ -9,16 +8,21 @@ export type registerRouter = (
   next: (err?: FastifyError) => void
 ) => void
 
+interface Router {
+  register: registerRouter
+  prefix: string
+}
+
 export class HttpServer {
   static instance: HttpServer
   static async getInstance(
     logger: (value: string) => void,
-    registerRouters: registerRouter[]
+    routers: Router[]
   ): Promise<HttpServer> {
     if (HttpServer.instance) {
       return HttpServer.instance
     }
-    const instance = new HttpServer(logger, registerRouters)
+    const instance = new HttpServer(logger, routers)
     await instance.init()
     HttpServer.instance = instance
     return instance
@@ -26,14 +30,11 @@ export class HttpServer {
 
   private fastifyInstance: FastifyInstance
   private logger: (value: string) => void
-  private registerRouters: registerRouter[]
+  private routers: Router[]
 
-  private constructor(
-    logger: (value: string) => void,
-    registerRouters: registerRouter[]
-  ) {
+  private constructor(logger: (value: string) => void, routers: Router[]) {
     this.logger = logger
-    this.registerRouters = registerRouters
+    this.routers = routers
   }
 
   private async init(): Promise<void> {
@@ -62,8 +63,8 @@ export class HttpServer {
 
   private initRoute(): void {
     this.logger("init route")
-    this.registerRouters.forEach(registerRouter => {
-      this.fastifyInstance.register(registerRouter, option)
+    this.routers.forEach(router => {
+      this.fastifyInstance.register(router.register, { prefix: router.prefix })
     })
   }
 }

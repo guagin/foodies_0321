@@ -16,8 +16,6 @@ import { UserOfIdUsaeCase } from "./query/application/user-of-id"
 import { UserView } from "./query/domain/user/model/user"
 import { UserOfNameUsaeCase } from "./query/application/user-of-name"
 
-const logger = debug("app:")
-
 export class App {
   private crossContextEventPublisher: DomainEventPublisher
 
