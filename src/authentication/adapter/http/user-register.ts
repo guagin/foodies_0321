@@ -1,7 +1,7 @@
 import { App } from "authentication/app"
 import { FastifyRequest } from "fastify"
 
-export const makeRegister = (app: App, logger: (msg: string) => void) => {
+export const registerUser = (app: App, logger: (msg: string) => void) => {
   return async (request: FastifyRequest) => {
     logger(request.body)
     const id = await app.register(

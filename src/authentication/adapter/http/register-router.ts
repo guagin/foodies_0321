@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyError } from "fastify"
-import { makeOfName } from "./of-name"
-import { makeOfId } from "./of-id"
-import { makeRegister } from "./register"
+import { userOfName } from "./user-of-name"
+import { userOfId } from "./user-of-id"
+import { registerUser } from "./user-register"
 import { App } from "authentication/app"
 
 export const makeRegisterRouter = (
@@ -14,9 +14,9 @@ export const makeRegisterRouter = (
   },
   next: (err?: FastifyError) => void
 ) => {
-  fastify.get("/user/ofId/:id", makeOfName(app, logger))
-  fastify.get("/user/ofName/:name", makeOfId(app, logger))
-  fastify.post("/user/register", makeRegister(app, logger))
+  fastify.get("/user/ofId/:id", userOfName(app, logger))
+  fastify.get("/user/ofName/:name", userOfId(app, logger))
+  fastify.post("/user/register", registerUser(app, logger))
   next()
 }
 
