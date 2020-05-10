@@ -16,6 +16,7 @@ export class CreateMeal {
     description: string
     pictures: string[]
     provider: string
+    createdBy: string
   }): Promise<MealId> {
     const createMealService = new CreateMealService({
       mealRepository: this.mealRepository,

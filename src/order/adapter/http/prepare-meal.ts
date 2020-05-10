@@ -7,5 +7,7 @@ export const prepareMeal = (app: App, logger: (msg: string) => void) => {
     const { id } = body
 
     await app.prepareMeal(id)
+
+    return {}
   }
 }

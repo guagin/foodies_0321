@@ -9,5 +9,7 @@ export const removeProduct = (app: App, logger: (msg: string) => void) => {
       orderId,
       products
     })
+
+    return {}
   }
 }

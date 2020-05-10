@@ -23,6 +23,7 @@ interface MealProps {
   pictures: string[]
   status: MealStatus
   provider: string
+  createdBy: string
 }
 
 export class Meal extends AggregateRoot<MealEvent> {
@@ -54,6 +55,10 @@ export class Meal extends AggregateRoot<MealEvent> {
 
   get status(): MealStatus {
     return this.props.status
+  }
+
+  get createdBy(): string {
+    return this.props.createdBy
   }
 
   mutate(events: MealEvent[], version: number): void {

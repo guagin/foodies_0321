@@ -11,6 +11,7 @@ type MealDocument = Document & {
   pictures: string[]
   status: number
   provider: string
+  createdBy: string
 }
 
 const MealSchema = new Schema(
@@ -21,7 +22,8 @@ const MealSchema = new Schema(
     description: { type: String, required: true },
     picture: { type: [String], required: true },
     status: { type: Number, required: true },
-    provider: { type: String, required: true }
+    provider: { type: String, required: true },
+    createdBy: { type: String, required: true }
   },
   { timestamps: true, _id: false }
 )
@@ -34,7 +36,8 @@ const generateModelFromDocument: (doc: MealDocument) => MealView = doc => {
     description: doc.description,
     pictures: doc.pictures,
     status: doc.status,
-    provider: doc.provider
+    provider: doc.provider,
+    createdBy: doc.createdBy
   }
 }
 
@@ -84,6 +87,7 @@ export class MongoMealViewRepository implements MealViewRepository {
       found.pictures = view.pictures
       found.status = view.status
       found.provider = view.provider
+      found.createdBy = view.createdBy
       await found.save()
     } else {
       const toSave = new this.model({
@@ -93,7 +97,8 @@ export class MongoMealViewRepository implements MealViewRepository {
         description: view.description,
         pictures: view.pictures,
         status: view.status,
-        provider: view.provider
+        provider: view.provider,
+        createdBy: view.createdBy
       })
 
       await toSave.save()

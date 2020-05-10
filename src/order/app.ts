@@ -196,17 +196,18 @@ export class App {
       pictures: string[]
       provider: string
     }[]
+    createdBy: string
   }): Promise<string[]> {
     const createMeal = new CreateMeal(
       this.mealRepository,
       this.crossContextEventPublisher
     )
 
-    const { meals } = input
+    const { meals, createdBy } = input
 
     const promiseToCreateMeals: Promise<MealId>[] = []
     meals.forEach(meal => {
-      promiseToCreateMeals.push(createMeal.create(meal))
+      promiseToCreateMeals.push(createMeal.create({ ...meal, createdBy }))
     })
 
     const mealIds = await Promise.all(promiseToCreateMeals)

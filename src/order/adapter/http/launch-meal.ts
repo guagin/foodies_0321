@@ -6,5 +6,6 @@ export const launchMeal = (app: App, logger: (msg: string) => void) => {
     const { body } = request
     const { id } = body
     await app.launchMeal(id)
+    return {}
   }
 }

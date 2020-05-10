@@ -11,6 +11,7 @@ type MealDocument = Document & {
   status: number
   provider: string
   events: MealEvent[]
+  createdBy: string
 }
 
 const MealSchema = new Schema(
@@ -21,7 +22,8 @@ const MealSchema = new Schema(
     description: { type: String, required: true },
     status: { type: Number, required: true },
     provider: { type: String, required: true },
-    events: { type: Schema.Types.Mixed, required: true }
+    events: { type: Schema.Types.Mixed, required: true },
+    createdBy: { type: String, required: true, default: "" }
   },
   { timestamps: true, _id: false }
 )
@@ -35,7 +37,8 @@ const generateDomainModelFromDoc: (doc: MealDocument) => Meal = doc => {
     description: doc.description,
     pictures: doc.pictures,
     status: doc.status,
-    provider: doc.provider
+    provider: doc.provider,
+    createdBy: doc.createdBy
   })
 
   meal.mutate(doc.events, doc.__v || 0)
@@ -79,7 +82,8 @@ export class MongoEventStoreMealRepository implements MealRepository {
         pictures: meal.pictures,
         events: meal.events,
         provider: meal.provider,
-        status: meal.status
+        status: meal.status,
+        createdBy: meal.createdBy
       })
 
       await docToSave.save()

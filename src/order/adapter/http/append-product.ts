@@ -9,5 +9,7 @@ export const appendProduct = (app: App, logger: (msg: string) => void) => {
       products,
       orderId
     })
+
+    return {}
   }
 }

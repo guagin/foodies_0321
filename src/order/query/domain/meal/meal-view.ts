@@ -6,4 +6,5 @@ export interface MealView {
   pictures: string[]
   status: number
   provider: string
+  createdBy: string
 }
