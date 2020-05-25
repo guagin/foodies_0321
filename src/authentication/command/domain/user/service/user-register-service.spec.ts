@@ -19,7 +19,10 @@ describe("user register service", () => {
       userRepository,
       userEventPublisher: new UserEventPublisher(eventPublisher),
       decrypt: (value: string) => value,
-      encrypt: (value: string) => value
+      encrypt: (value: string) => value,
+      localizeErrorMsg: (value: string) => {
+        return ""
+      }
     })
 
     const userId = await registerService.register({

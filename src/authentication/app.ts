@@ -14,6 +14,28 @@ import { UserOfIdUsaeCase } from "./query/application/user-of-id"
 import { UserView } from "./query/domain/user/model/user"
 import { UserOfNameUsaeCase } from "./query/application/user-of-name"
 
+// TODO: i18n
+type Language = "en" | "zh-tw"
+
+const LocalizeLocalMap: {
+  [index: string]: {
+    [index: string]: string
+  }
+} = {
+  ["en"]: {
+    user_exists: "user exists"
+  },
+  ["zh-tw"]: {
+    user_exists: "使用者已被註冊"
+  }
+}
+
+const localizeErrorMsg: (
+  lang: Language
+) => (key: string) => string = lang => key => {
+  return LocalizeLocalMap[lang][key]
+}
+
 export class App {
   private crossContextEventPublisher: DomainEventPublisher
 
@@ -60,7 +82,8 @@ export class App {
       userRepository: this.userRepository,
       eventPublisher: this.crossContextEventPublisher,
       decrypt: this.decrypt,
-      encrypt: this.encrypt
+      encrypt: this.encrypt,
+      localizeErrorMsg: localizeErrorMsg("en")
     })
 
     const result = await userRegisterUseCase.register({

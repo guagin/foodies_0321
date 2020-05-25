@@ -9,17 +9,20 @@ export class UserRegisterUsecase {
   private eventPublisher: DomainEventPublisher
   private decrypt: (value: string) => string
   private encrypt: (value: string) => string
+  private localizeErrorMsg: (value: string) => string
 
   constructor(input: {
     userRepository: UserRepository
     eventPublisher: DomainEventPublisher
     decrypt: (value: string) => string
     encrypt: (value: string) => string
+    localizeErrorMsg: (value: string) => string
   }) {
     this.userRepository = input.userRepository
     this.eventPublisher = input.eventPublisher
     this.decrypt = input.decrypt
     this.encrypt = input.encrypt
+    this.localizeErrorMsg = input.localizeErrorMsg
   }
 
   async register(input: {
@@ -31,7 +34,8 @@ export class UserRegisterUsecase {
       userRepository: this.userRepository,
       userEventPublisher: new UserEventPublisher(this.eventPublisher),
       decrypt: this.decrypt,
-      encrypt: this.encrypt
+      encrypt: this.encrypt,
+      localizeErrorMsg: this.localizeErrorMsg
     })
 
     const userId = await userRegisterService.register({ ...input })

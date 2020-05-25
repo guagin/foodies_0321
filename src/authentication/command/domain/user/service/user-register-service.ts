@@ -7,17 +7,20 @@ export class RegisterService {
   private userEventPublisher: UserEventPublisher
   private decrypt: (value: string) => string
   private encrypt: (value: string) => string
+  private localizeErrorMsg: (value: string) => string
 
   constructor(input: {
     userRepository: UserRepository
     userEventPublisher: UserEventPublisher
     decrypt: (value: string) => string
     encrypt: (value: string) => string
+    localizeErrorMsg: (value: string) => string
   }) {
     this.userRepository = input.userRepository
     this.userEventPublisher = input.userEventPublisher
     this.decrypt = input.decrypt
     this.encrypt = input.encrypt
+    this.localizeErrorMsg = input.localizeErrorMsg
   }
 
   async register(input: {
@@ -27,9 +30,15 @@ export class RegisterService {
   }): Promise<UserId> {
     const { name, password, email } = input
     const foundUser = await this.userRepository.ofName(name)
+
     if (foundUser) {
-      return foundUser.id
+      throw {
+        id: foundUser.id.toValue(),
+        msg: this.localizeErrorMsg("user_exists")
+      }
+      // return foundUser.id
     }
+
     const userId = await this.userRepository.nextId()
 
     const user = new User(

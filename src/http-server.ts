@@ -1,4 +1,5 @@
 import fastify, { FastifyInstance, FastifyError } from "fastify"
+import fastifyCors from "fastify-cors"
 
 export type registerRouter = (
   fastify: FastifyInstance,
@@ -40,6 +41,7 @@ export class HttpServer {
   private async init(): Promise<void> {
     this.logger("init")
     this.fastifyInstance = fastify({ logger: true })
+    this.fastifyInstance.register(fastifyCors)
     this.initParser()
     this.initRoute()
     this.fastifyInstance.listen(3000)
