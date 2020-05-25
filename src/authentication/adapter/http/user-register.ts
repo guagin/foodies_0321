@@ -26,10 +26,10 @@ export const registerUser: (
       }
     } catch (e) {
       return {
+        id: e.id,
         status: {
           code: "ERROR",
-          id: e.id,
-          msg: e.msg
+          msg: e.message || ""
         }
       }
     }

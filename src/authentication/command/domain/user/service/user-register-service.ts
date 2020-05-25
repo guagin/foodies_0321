@@ -34,7 +34,7 @@ export class RegisterService {
     if (foundUser) {
       throw {
         id: foundUser.id.toValue(),
-        msg: this.localizeErrorMsg("user_exists")
+        message: this.localizeErrorMsg("user_exists")
       }
       // return foundUser.id
     }
