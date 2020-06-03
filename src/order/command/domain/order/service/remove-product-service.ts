@@ -25,7 +25,7 @@ export class RemoveProductService {
     const order = await this.orderRepository.ofId(orderId)
 
     if (!order) {
-      throw new OrderNotFound(`order not found, id:${orderId}`)
+      throw new OrderNotFound(`order not found, id:${orderId.toValue()}`)
     }
 
     products.forEach(({ id, amount }) => {
