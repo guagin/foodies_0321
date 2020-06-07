@@ -6,13 +6,13 @@ import { PrepareMealService } from "order/command/domain/meal/service/prepare-me
 
 export class PrepareMeal {
   constructor(
-    private mealrepository: MealRepository,
+    private mealRepository: MealRepository,
     private eventPublisher: DomainEventPublisher
   ) {}
 
   async prepare(id: string): Promise<void> {
     const prepareMealService = new PrepareMealService(
-      this.mealrepository,
+      this.mealRepository,
       new MealEventPublisher(this.eventPublisher)
     )
 

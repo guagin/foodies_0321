@@ -1,7 +1,7 @@
-import { Document, Schema, Connection, Model } from "mongoose"
+import { Document, Schema, Connection, PaginateModel } from "mongoose"
 import { MealViewRepository } from "../domain/meal/meal-view-repository"
 import { MealView } from "../domain/meal/meal-view"
-import { OrderCanceled } from "event/order-cancel"
+import mognoosePaginate from "mongoose-paginate-v2"
 
 type MealDocument = Document & {
   id: string
@@ -26,7 +26,7 @@ const MealSchema = new Schema(
     createdBy: { type: String, required: true }
   },
   { timestamps: true, _id: false }
-)
+).plugin(mognoosePaginate)
 
 const generateModelFromDocument: (doc: MealDocument) => MealView = doc => {
   return {
@@ -42,9 +42,12 @@ const generateModelFromDocument: (doc: MealDocument) => MealView = doc => {
 }
 
 export class MongoMealViewRepository implements MealViewRepository {
-  private model: Model<MealDocument>
+  private model: PaginateModel<MealDocument>
   constructor(connection: Connection) {
-    this.model = connection.model<MealDocument>("mealView", MealSchema)
+    this.model = connection.model<MealDocument>(
+      "mealView",
+      MealSchema
+    ) as PaginateModel<MealDocument>
   }
 
   async ofId(id: String): Promise<MealView | undefined> {
@@ -102,6 +105,36 @@ export class MongoMealViewRepository implements MealViewRepository {
       })
 
       await toSave.save()
+    }
+  }
+
+  async ofPage({
+    page
+  }: {
+    page: number
+  }): Promise<{
+    meals: MealView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+  }> {
+    const {
+      docs,
+      totalPages,
+      hasNextPage,
+      hasPrevPage
+    } = await this.model.paginate(
+      {},
+      {
+        page,
+        limit: 10
+      }
+    )
+    return {
+      totalPages
+      meals: docs,
+      hasNext: hasNextPage,
+      hasPrevious: hasPrevPage,
     }
   }
 }
