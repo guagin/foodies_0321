@@ -13,6 +13,7 @@ import { removeProduct } from "./remove-product"
 import { shelveMeal } from "./shelve-meal"
 import { takeOutOfId } from "./take-out-of-id"
 import { takeOutOfUserId } from "./take-out-of-user-id"
+import { mealsOfPage } from "./meals-of-page"
 
 const verifyToken = (handler: (request: FastifyRequest) => void) => {
   return async (request: FastifyRequest) => {
@@ -48,6 +49,7 @@ export const registerOrderRouter = (
     "/takeout/ofUserId/:userId",
     verifyToken(takeOutOfUserId(app, logger))
   )
+  fastify.get("/meal/ofPage", verifyToken(mealsOfPage(app, logger)))
 
   next()
 }

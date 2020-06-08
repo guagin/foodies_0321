@@ -109,7 +109,7 @@ export class MongoMealViewRepository implements MealViewRepository {
   }
 
   async ofPage({
-    page
+    page: pageInput
   }: {
     page: number
   }): Promise<{
@@ -117,24 +117,28 @@ export class MongoMealViewRepository implements MealViewRepository {
     hasNext: boolean
     hasPrevious: boolean
     totalPages: number
+    page: number
   }> {
     const {
       docs,
       totalPages,
       hasNextPage,
-      hasPrevPage
+      hasPrevPage,
+      page
     } = await this.model.paginate(
       {},
       {
-        page,
+        page: pageInput,
         limit: 10
       }
     )
+
     return {
-      totalPages
+      totalPages,
       meals: docs,
       hasNext: hasNextPage,
       hasPrevious: hasPrevPage,
+      page
     }
   }
 }

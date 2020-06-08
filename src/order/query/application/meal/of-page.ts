@@ -3,7 +3,7 @@ import { MealViewRepository } from "order/query/domain/meal/meal-view-repository
 import { MealView } from "order/query/domain/meal/meal-view"
 import { MealsOfPageService } from "order/query/domain/meal/service/meals-of-page"
 
-export class MealsOfPage {
+export class MealViewsOfPage {
   constructor(private mealRepository: MealViewRepository) {}
 
   async ofPage({

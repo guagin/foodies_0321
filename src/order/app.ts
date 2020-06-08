@@ -36,6 +36,7 @@ import { LaunchMeal } from "./command/application/meal/launch-meal"
 import { PrepareMeal } from "./command/application/meal/prepare-meal"
 import { ShelveMeal } from "./command/application/meal/shelve-meal"
 import { TakeOutViewOfUserId } from "./query/application/take-out/of-user-id"
+import { MealViewsOfPage } from "./query/application/meal/of-page"
 
 export class App {
   private mongoConnection: Connection
@@ -260,5 +261,21 @@ export class App {
     )
 
     await shelveMeal.shelve(mealId)
+  }
+
+  public async mealOfPage({
+    page
+  }: {
+    page: number
+  }): Promise<{
+    meals: MealView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+  }> {
+    const mealsOfPage = new MealViewsOfPage(this.mealViewRepository)
+
+    return mealsOfPage.ofPage({ page })
   }
 }

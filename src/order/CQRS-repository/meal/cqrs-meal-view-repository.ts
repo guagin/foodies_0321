@@ -37,4 +37,18 @@ export class CQRSMealViewRepository implements MealViewRepository {
   async save(view: MealView): Promise<void> {
     return this.repository.save(view)
   }
+
+  async ofPage({
+    page
+  }: {
+    page: number
+  }): Promise<{
+    meals: MealView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+  }> {
+    return this.repository.ofPage({ page })
+  }
 }
