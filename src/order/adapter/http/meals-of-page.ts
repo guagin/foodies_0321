@@ -16,7 +16,7 @@ export const mealsOfPage: (
     totalPages: number
     page: number
   }
-  stataus: Status
+  status: Status
 }> = (app, logger) => {
   return async request => {
     const { page: pageInput, count } = request.query
