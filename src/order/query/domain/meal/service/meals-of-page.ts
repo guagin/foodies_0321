@@ -5,9 +5,11 @@ export class MealsOfPageService {
   constructor(private mealRepository: MealViewRepository) {}
 
   async ofPage({
-    page: pageInput
+    page: pageInput,
+    count
   }: {
     page: number
+    count: number
   }): Promise<{
     meals: MealView[]
     hasNext: boolean
@@ -21,7 +23,7 @@ export class MealsOfPageService {
       hasPrevious,
       totalPages,
       page
-    } = await this.mealRepository.ofPage({ page: pageInput })
+    } = await this.mealRepository.ofPage({ page: pageInput, count })
 
     return {
       meals,

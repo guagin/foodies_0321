@@ -264,9 +264,11 @@ export class App {
   }
 
   public async mealOfPage({
-    page
+    page,
+    count
   }: {
     page: number
+    count: number
   }): Promise<{
     meals: MealView[]
     hasNext: boolean
@@ -276,6 +278,6 @@ export class App {
   }> {
     const mealsOfPage = new MealViewsOfPage(this.mealViewRepository)
 
-    return mealsOfPage.ofPage({ page })
+    return mealsOfPage.ofPage({ page, count })
   }
 }

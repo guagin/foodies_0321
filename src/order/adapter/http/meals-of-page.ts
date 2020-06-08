@@ -9,7 +9,7 @@ export const mealsOfPage: (
 ) => (
   request: FastifyRequest
 ) => Promise<{
-  data: {
+  data?: {
     meals: MealView[]
     hasNext: boolean
     hasPrevious: boolean
@@ -19,8 +19,9 @@ export const mealsOfPage: (
   stataus: Status
 }> = (app, logger) => {
   return async request => {
-    const pageInput = request.query.page
+    const { page: pageInput, count } = request.query
 
+    console.log(`page: ${pageInput} count: ${count}`)
     const {
       meals,
       hasNext,
@@ -28,7 +29,8 @@ export const mealsOfPage: (
       totalPages,
       page
     } = await app.mealOfPage({
-      page: pageInput
+      page: pageInput,
+      count
     })
 
     return {

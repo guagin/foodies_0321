@@ -6,9 +6,11 @@ export interface MealViewRepository {
   ofProvider(providerId: string): Promise<MealView[]>
   save(view: MealView): Promise<void>
   ofPage({
-    page
+    page,
+    count
   }: {
     page: number
+    count: number
   }): Promise<{
     meals: MealView[]
     hasNext: boolean

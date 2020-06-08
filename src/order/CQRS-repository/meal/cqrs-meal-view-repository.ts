@@ -39,9 +39,11 @@ export class CQRSMealViewRepository implements MealViewRepository {
   }
 
   async ofPage({
-    page
+    page,
+    count
   }: {
     page: number
+    count: number
   }): Promise<{
     meals: MealView[]
     hasNext: boolean
@@ -49,6 +51,6 @@ export class CQRSMealViewRepository implements MealViewRepository {
     totalPages: number
     page: number
   }> {
-    return this.repository.ofPage({ page })
+    return this.repository.ofPage({ page, count })
   }
 }

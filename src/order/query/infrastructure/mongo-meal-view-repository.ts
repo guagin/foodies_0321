@@ -109,9 +109,11 @@ export class MongoMealViewRepository implements MealViewRepository {
   }
 
   async ofPage({
-    page: pageInput
+    page: pageInput,
+    count
   }: {
     page: number
+    count: number
   }): Promise<{
     meals: MealView[]
     hasNext: boolean
@@ -129,7 +131,7 @@ export class MongoMealViewRepository implements MealViewRepository {
       {},
       {
         page: pageInput,
-        limit: 10
+        limit: count
       }
     )
 
