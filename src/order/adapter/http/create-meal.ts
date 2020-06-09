@@ -1,7 +1,18 @@
 import { App } from "order/app"
 import { FastifyRequest } from "fastify"
+import { Status } from "./status"
 
-export const createMeal = (app: App, logger: (msg: string) => void) => {
+export const createMeal: (
+  app: App,
+  logger: (msg: string) => void
+) => (
+  request: FastifyRequest
+) => Promise<{
+  data?: {
+    ids: string[]
+  }
+  status: Status
+}> = (app: App, logger: (msg: string) => void) => {
   return async (request: FastifyRequest) => {
     const { body } = request
     const { meals } = body
@@ -11,7 +22,13 @@ export const createMeal = (app: App, logger: (msg: string) => void) => {
       createdBy: request.headers.user.id
     })
     return {
-      id: mealIds
+      data: {
+        ids: mealIds
+      },
+      status: {
+        code: "SUCCESS",
+        msg: ""
+      }
     }
   }
 }
