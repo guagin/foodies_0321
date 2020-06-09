@@ -120,13 +120,15 @@ export class MongoMealViewRepository implements MealViewRepository {
     hasPrevious: boolean
     totalPages: number
     page: number
+    totalCount: number
   }> {
     const {
       docs,
       totalPages,
       hasNextPage,
       hasPrevPage,
-      page
+      page,
+      totalDocs
     } = await this.model.paginate(
       {},
       {
@@ -137,10 +139,11 @@ export class MongoMealViewRepository implements MealViewRepository {
 
     return {
       totalPages,
-      meals: docs,
+      meals: docs.map(doc => generateModelFromDocument(doc)),
       hasNext: hasNextPage,
       hasPrevious: hasPrevPage,
-      page
+      page,
+      totalCount: totalDocs
     }
   }
 }

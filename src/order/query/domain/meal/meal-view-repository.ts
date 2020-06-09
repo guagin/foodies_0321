@@ -17,5 +17,6 @@ export interface MealViewRepository {
     hasPrevious: boolean
     totalPages: number
     page: number
+    totalCount: number
   }>
 }

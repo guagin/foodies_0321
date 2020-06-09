@@ -15,6 +15,7 @@ export const mealsOfPage: (
     hasPrevious: boolean
     totalPages: number
     page: number
+    totalCount: number
   }
   status: Status
 }> = (app, logger) => {
@@ -27,7 +28,8 @@ export const mealsOfPage: (
       hasNext,
       hasPrevious,
       totalPages,
-      page
+      page,
+      totalCount
     } = await app.mealOfPage({
       page: pageInput,
       count
@@ -43,6 +45,7 @@ export const mealsOfPage: (
         hasPrevious,
         totalPages,
         page,
+        totalCount,
         meals
       }
     }

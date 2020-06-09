@@ -18,6 +18,7 @@ export class MealViewsOfPage {
     hasPrevious: boolean
     totalPages: number
     page: number
+    totalCount: number
   }> {
     const mealsOfPage = new MealsOfPageService(this.mealRepository)
 

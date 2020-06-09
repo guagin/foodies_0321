@@ -50,6 +50,7 @@ export class CQRSMealViewRepository implements MealViewRepository {
     hasPrevious: boolean
     totalPages: number
     page: number
+    totalCount: number
   }> {
     return this.repository.ofPage({ page, count })
   }

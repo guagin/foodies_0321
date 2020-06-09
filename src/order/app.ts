@@ -275,6 +275,7 @@ export class App {
     hasPrevious: boolean
     totalPages: number
     page: number
+    totalCount: number
   }> {
     const mealsOfPage = new MealViewsOfPage(this.mealViewRepository)
 

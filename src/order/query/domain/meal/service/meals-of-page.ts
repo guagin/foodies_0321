@@ -16,13 +16,15 @@ export class MealsOfPageService {
     hasPrevious: boolean
     totalPages: number
     page: number
+    totalCount: number
   }> {
     const {
       meals,
       hasNext,
       hasPrevious,
       totalPages,
-      page
+      page,
+      totalCount
     } = await this.mealRepository.ofPage({ page: pageInput, count })
 
     return {
@@ -30,7 +32,8 @@ export class MealsOfPageService {
       hasNext,
       hasPrevious,
       totalPages,
-      page
+      page,
+      totalCount
     }
   }
 }
