@@ -41,7 +41,7 @@ export class Order extends AggregateRoot<OrderEvent> {
     super(id)
     const { createdBy } = propsInput
     if (!createdBy) {
-      throw new CreatedByNotValid("userId empty.")
+      throw new CreatedByNotValid("createdBy  empty.")
     }
     this.props = { ...propsInput }
   }
