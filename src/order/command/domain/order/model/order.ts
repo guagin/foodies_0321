@@ -1,4 +1,3 @@
-import { Entity } from "entity"
 import { EntityId } from "entity-id"
 import { CreatedByNotValid } from "../error/created-by-not-valid"
 import { OrderNotPended } from "../error/order-not-pended"
