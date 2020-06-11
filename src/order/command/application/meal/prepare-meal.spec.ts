@@ -2,6 +2,7 @@ import { InMemoryMealRepository } from "order/command/intrastructure/persistence
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { Meal, MealStatus } from "order/command/domain/meal/meal"
 import { PrepareMeal } from "./prepare-meal"
+import faker from "faker"
 
 describe("prepare meal", () => {
   it("should pass", async () => {
@@ -15,7 +16,8 @@ describe("prepare meal", () => {
       description: "",
       pictures: [""],
       status: MealStatus.shelved,
-      provider: "uber"
+      provider: "uber",
+      createdBy: faker.random.word()
     })
 
     await mealRepository.save(meal)

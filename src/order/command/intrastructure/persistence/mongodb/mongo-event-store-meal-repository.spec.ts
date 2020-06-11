@@ -33,7 +33,8 @@ describe("mongo event store meal repository save", () => {
       description,
       pictures,
       status: MealStatus.preparing,
-      provider
+      provider,
+      createdBy: faker.random.word()
     })
 
     await repository.save(meal)

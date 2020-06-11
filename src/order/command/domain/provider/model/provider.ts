@@ -43,7 +43,23 @@ export class Provider extends AggregateRoot<ProviderEvent> {
   }
 
   mutate(events: ProviderEvent[], version: number): void {
-    throw new Error("Method not implemented.")
+    this.assignEvents(events)
+    this.assignVersion(version)
+    events.forEach(e => {
+      switch (e.name) {
+        case ChangeDescrition.name:
+          this.whenChangeDescription(
+            (e as ChangeDescrition).payload.description
+          )
+          break
+        case ChangeName.name:
+          this.whenChangeName((e as ChangeName).payload.name)
+          break
+        case ChangePhone.name:
+          this.whenChangePhone((e as ChangePhone).payload.phone)
+          break
+      }
+    })
   }
 
   changeName(value: string): void {

@@ -4,6 +4,7 @@ import { MealShelved } from "event/meal-shelved"
 import { MealEventPublisher } from "../meal-event-publisher"
 import { MealStatus, Meal } from "../meal"
 import { ShelveMealService } from "./shelve-meal-service"
+import faker from "faker"
 
 describe("shelve meal service", () => {
   it("should pass", async () => {
@@ -26,7 +27,8 @@ describe("shelve meal service", () => {
       description: "good",
       pictures: [""],
       provider: "uber",
-      status: MealStatus.launched
+      status: MealStatus.launched,
+      createdBy: faker.random.word()
     })
 
     await mealRepository.save(meal)

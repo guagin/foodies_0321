@@ -4,6 +4,7 @@ import { App } from "./app"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { MealView } from "./query/domain/meal/meal-view"
 import { MealStatus } from "./command/domain/meal/meal"
+import moment from "moment"
 
 let app: App
 
@@ -21,8 +22,10 @@ describe("order app, create take out", () => {
       createdBy: faker.random.uuid(),
       title: faker.random.words(10),
       description: faker.random.words(10),
-      startedAt: new Date(),
-      endAt: new Date(Date.now() + oneHour)
+      startedAt: moment().format(),
+      endAt: moment()
+        .add(1, "hours")
+        .format()
     })
 
     expect(takeOutId).toBeDefined()
@@ -36,7 +39,7 @@ describe("order app, create take out", () => {
 
     await wait1SecondsPromise
 
-    const takeOut = await app.takeOutOfId(takeOutId)
+    const takeOut = await app.takeOutOfId({ takeOutId })
 
     expect(takeOut).toBeDefined()
   })
@@ -48,8 +51,10 @@ describe("order app, create order", () => {
       createdBy: faker.random.uuid(),
       title: faker.random.words(10),
       description: faker.random.words(10),
-      startedAt: new Date(),
-      endAt: new Date(Date.now() + oneHour)
+      startedAt: moment().format(),
+      endAt: moment()
+        .add(1, "hours")
+        .format()
     })
 
     const orderId = await app.createOrder({
@@ -64,6 +69,8 @@ describe("order app, create order", () => {
       }, 1000)
     })
 
+    await wait1SecondsPromise
+
     const order = await app.orderOfId(orderId)
 
     expect(order).toBeDefined()
@@ -76,8 +83,10 @@ describe("order app, append product", () => {
       createdBy: faker.random.uuid(),
       title: faker.random.words(10),
       description: faker.random.words(10),
-      startedAt: new Date(),
-      endAt: new Date(Date.now() + oneHour)
+      startedAt: moment().format(),
+      endAt: moment()
+        .add(1, "hours")
+        .format()
     })
 
     const orderId = await app.createOrder({
@@ -115,8 +124,10 @@ describe("order app, append product", () => {
       createdBy: faker.random.uuid(),
       title: faker.random.words(10),
       description: faker.random.words(10),
-      startedAt: new Date(),
-      endAt: new Date(Date.now() + oneHour)
+      startedAt: moment().format(),
+      endAt: moment()
+        .add(1, "hours")
+        .format()
     })
 
     const orderId = await app.createOrder({
@@ -166,8 +177,10 @@ describe("order app remove product", () => {
       createdBy: faker.random.uuid(),
       title: faker.random.words(10),
       description: faker.random.words(10),
-      startedAt: new Date(),
-      endAt: new Date(Date.now() + oneHour)
+      startedAt: moment().format(),
+      endAt: moment()
+        .add(1, "hours")
+        .format()
     })
 
     const orderId = await app.createOrder({
@@ -219,8 +232,10 @@ describe("order app remove product", () => {
       createdBy: faker.random.uuid(),
       title: faker.random.words(10),
       description: faker.random.words(10),
-      startedAt: new Date(),
-      endAt: new Date(Date.now() + oneHour)
+      startedAt: moment().format(),
+      endAt: moment()
+        .add(1, "hours")
+        .format()
     })
 
     const orderId = await app.createOrder({
@@ -294,7 +309,8 @@ describe("create meal", () => {
           pictures: ["pic1", "pic2"],
           provider: "test"
         }
-      ]
+      ],
+      createdBy: faker.random.word()
     })
 
     // TODO: should wait untile the takeout created.
@@ -336,7 +352,8 @@ describe("launch meal", () => {
           pictures: ["pic1", "pic2"],
           provider: "test"
         }
-      ]
+      ],
+      createdBy: faker.random.word()
     })
 
     await app.launchMeal({ mealId: mealIds[0] })
@@ -374,7 +391,8 @@ describe("prepare meal", () => {
           pictures: ["pic1", "pic2"],
           provider: "test"
         }
-      ]
+      ],
+      createdBy: faker.random.word()
     })
 
     await app.prepareMeal({ mealId: mealIds[0] })
@@ -410,7 +428,8 @@ describe("prepare meal", () => {
           pictures: ["pic1", "pic2"],
           provider: "test"
         }
-      ]
+      ],
+      createdBy: faker.random.word()
     })
 
     await app.launchMeal({ mealId: mealIds[0] })
@@ -450,7 +469,8 @@ describe("shelve meal", () => {
           pictures: ["pic1", "pic2"],
           provider: "test"
         }
-      ]
+      ],
+      createdBy: faker.random.word()
     })
 
     await app.launchMeal({ mealId: mealIds[0] })

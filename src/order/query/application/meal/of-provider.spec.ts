@@ -24,7 +24,8 @@ describe("meal of provider", () => {
       description,
       pictures,
       status,
-      provider
+      provider,
+      createdBy: faker.random.word()
     }
 
     const mealViewSample2 = {
@@ -34,7 +35,8 @@ describe("meal of provider", () => {
       description,
       pictures,
       status,
-      provider
+      provider,
+      createdBy: faker.random.word()
     }
 
     await repository.save(mealViewSample)
@@ -65,7 +67,8 @@ describe("meal of provider", () => {
       description,
       pictures,
       status,
-      provider
+      provider,
+      createdBy: faker.random.word()
     }
 
     const mealViewSample2 = {
@@ -75,7 +78,8 @@ describe("meal of provider", () => {
       description,
       pictures,
       status,
-      provider
+      provider,
+      createdBy: faker.random.word()
     }
 
     await repository.save(mealViewSample)

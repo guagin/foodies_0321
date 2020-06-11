@@ -17,7 +17,8 @@ describe("mealView of id", () => {
       description: faker.random.word(),
       pictures: [faker.image.imageUrl(), faker.image.imageUrl()],
       status: 0,
-      provider: faker.random.uuid()
+      provider: faker.random.uuid(),
+      createdBy: faker.random.word()
     })
 
     const mealOfIdUseCase = new MealViewOfIdUseCase(repository)

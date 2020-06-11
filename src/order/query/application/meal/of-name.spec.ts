@@ -26,7 +26,8 @@ describe("meals of name ", () => {
       description,
       pictures,
       status,
-      provider
+      provider,
+      createdBy: faker.random.word()
     }
 
     const id2 = faker.random.uuid()
@@ -37,7 +38,8 @@ describe("meals of name ", () => {
       description,
       pictures,
       status,
-      provider
+      provider,
+      createdBy: faker.random.word()
     }
 
     await repository.save(smapleMeal)
@@ -68,7 +70,8 @@ describe("meals of name ", () => {
       description,
       pictures,
       status,
-      provider
+      provider,
+      createdBy: faker.random.word()
     }
 
     await repository.save(smapleMeal)

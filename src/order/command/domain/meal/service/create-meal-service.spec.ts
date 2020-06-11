@@ -2,8 +2,8 @@ import { InMemoryMealRepository } from "order/command/intrastructure/persistence
 import { MealEventPublisher } from "../meal-event-publisher"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { MealPrepared } from "event/meal-prepared"
-import { MealId } from "../meal"
 import { CreateMealService } from "./create-meal-service"
+import faker from "faker"
 
 describe("create meal", () => {
   it("should pass", async () => {
@@ -27,7 +27,8 @@ describe("create meal", () => {
       price: 100,
       description: "good",
       pictures: [""],
-      provider: "uber"
+      provider: "uber",
+      createdBy: faker.random.word()
     })
 
     const meal = await mealRepository.ofId(mealId)

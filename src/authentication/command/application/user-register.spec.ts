@@ -10,7 +10,8 @@ describe("user register use case", () => {
       userRepository,
       eventPublisher,
       decrypt: (value: string) => value,
-      encrypt: (value: string) => value
+      encrypt: (value: string) => value,
+      localizeErrorMsg: (value: string) => value
     })
     const userId = await userRegisterUseCase.register({
       name: "ricky",
@@ -30,7 +31,8 @@ describe("user register use case", () => {
       userRepository,
       eventPublisher,
       decrypt: (value: string) => value,
-      encrypt: (value: string) => value
+      encrypt: (value: string) => value,
+      localizeErrorMsg: (value: string) => value
     })
 
     let error
@@ -59,7 +61,8 @@ describe("user register use case", () => {
       userRepository,
       eventPublisher,
       decrypt: (value: string) => value,
-      encrypt: (value: string) => value
+      encrypt: (value: string) => value,
+      localizeErrorMsg: (value: string) => value
     })
 
     let error
@@ -88,7 +91,8 @@ describe("user register use case", () => {
       userRepository,
       eventPublisher,
       decrypt: (value: string) => value,
-      encrypt: (value: string) => value
+      encrypt: (value: string) => value,
+      localizeErrorMsg: (value: string) => value
     })
     let error
     try {
