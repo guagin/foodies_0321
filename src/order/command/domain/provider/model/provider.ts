@@ -30,6 +30,10 @@ export class Provider extends AggregateRoot<ProviderEvent> {
     this.props = props
   }
 
+  get createdBy(): string {
+    return this.props.createdBy
+  }
+
   get name(): string {
     return this.props.name
   }
@@ -66,7 +70,7 @@ export class Provider extends AggregateRoot<ProviderEvent> {
     this.pushEvent(
       new ChangeName({
         id: this.id.toValue(),
-        name: this.name
+        name: value
       })
     )
     this.whenChangeName(value)

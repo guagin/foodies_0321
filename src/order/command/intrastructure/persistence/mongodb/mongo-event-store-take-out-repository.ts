@@ -5,6 +5,7 @@ import {
   TakeOut
 } from "order/command/domain/take-out/model/take-out"
 import { TakeOutEvent } from "order/command/domain/take-out/model/event/take-out-event"
+import { updateIfCurrentPlugin } from "mongoose-update-if-current"
 
 type TakeOutDocument = Document & {
   id: string
@@ -29,7 +30,7 @@ const TakeOutSchema = new Schema(
     events: { type: Schema.Types.Mixed, required: true }
   },
   { timestamps: true, id: false }
-)
+).plugin(updateIfCurrentPlugin)
 
 const domainModelFrom: (doc: TakeOutDocument) => TakeOut = doc => {
   const id = new TakeOutId(doc._id)

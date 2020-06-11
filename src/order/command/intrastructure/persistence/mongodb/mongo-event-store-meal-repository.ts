@@ -2,6 +2,7 @@ import { Document, Schema, Model, Connection } from "mongoose"
 import { MealRepository } from "order/command/domain/meal/meal-repository"
 import { MealEvent } from "order/command/domain/meal/event/meal-event"
 import { MealId, Meal } from "order/command/domain/meal/meal"
+import { updateIfCurrentPlugin } from "mongoose-update-if-current"
 
 type MealDocument = Document & {
   name: string
@@ -26,7 +27,7 @@ const MealSchema = new Schema(
     createdBy: { type: String, required: true, default: "" }
   },
   { timestamps: true, _id: false }
-)
+).plugin(updateIfCurrentPlugin)
 
 const generateDomainModelFromDoc: (doc: MealDocument) => Meal = doc => {
   const id = new MealId(doc._id)

@@ -4,6 +4,7 @@ import { OrderId, Order } from "order/command/domain/order/model/order"
 import { OrderEvent } from "order/command/domain/order/model/event/order-event"
 import { Product } from "order/command/domain/order/model/product"
 import debug from "debug"
+import { updateIfCurrentPlugin } from "mongoose-update-if-current"
 
 const logger = debug("debug:MongoEventStoreOrderRepository")
 
@@ -53,15 +54,21 @@ const ProductSchema = new Schema(
   { _id: false }
 )
 
-const OrderSchema = new Schema({
-  _id: { type: String, required: true },
-  createdBy: { type: String, required: true },
-  products: { type: [ProductSchema], default: [] },
-  status: { type: Number, required: true },
-  note: { type: String },
-  events: { type: Schema.Types.Mixed, required: true },
-  takeOutId: { type: String, required: true }
-})
+const OrderSchema = new Schema(
+  {
+    _id: { type: String, required: true },
+    createdBy: { type: String, required: true },
+    products: { type: [ProductSchema], default: [] },
+    status: { type: Number, required: true },
+    note: { type: String },
+    events: { type: Schema.Types.Mixed, required: true },
+    takeOutId: { type: String, required: true }
+  },
+  {
+    timestamps: true,
+    _id: false
+  }
+).plugin(updateIfCurrentPlugin)
 
 export class MongoEventStoreOrderRepository implements OrderRepository {
   private model: Model<OrderDocument>
