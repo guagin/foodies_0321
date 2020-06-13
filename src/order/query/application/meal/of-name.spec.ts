@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 import { MongoMealViewRepository } from "order/query/infrastructure/mongo-meal-view-repository"
 import faker from "faker"
 import { MealView } from "order/query/domain/meal/meal-view"
-import { MealStatus } from "order/command/domain/meal/meal"
+import { MealStatus } from "order/command/domain/meal/model/meal"
 import { MealViewOfName } from "./of-name"
 
 describe("meals of name ", () => {

@@ -3,9 +3,10 @@ import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publ
 import { Order, OrderStatus } from "order/command/domain/order/model/order"
 import { Product } from "order/command/domain/order/model/product"
 import { RemoveProduct } from "./remove-product"
-import { ProductRemoved } from "event/product-removed"
+
 import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
 import { TakeOut } from "order/command/domain/take-out/model/take-out"
+import { ProductRemoved } from "event/order"
 
 const Day = 1000 * 60 * 60 * 24
 

@@ -1,7 +1,7 @@
-import { MealId } from "order/command/domain/meal/meal"
+import { MealId } from "order/command/domain/meal/model/meal"
 import { CreateMealService } from "order/command/domain/meal/service/create-meal-service"
-import { MealEventPublisher } from "order/command/domain/meal/meal-event-publisher"
-import { DomainEventPublisher } from "domain-event-publisher"
+import { MealEventPublisher } from "event/meal-event-publisher"
+import { DomainEventPublisher } from "event/domain-event-publisher"
 import { MealRepository } from "order/command/domain/meal/meal-repository"
 
 export class CreateMeal {

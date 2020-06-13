@@ -1,7 +1,7 @@
 import { UserLoginService } from "authentication/command/domain/user/service/user-login-service"
 import { UserRepository } from "authentication/command/domain/user/user-repository"
 import { User } from "authentication/command/domain/user/model/user"
-import { DomainEventPublisher } from "domain-event-publisher"
+import { DomainEventPublisher } from "event/domain-event-publisher"
 import { UserEventPublisher } from "authentication/command/domain/user/event/user-event-publisher"
 
 export class UserLoginUseCase {

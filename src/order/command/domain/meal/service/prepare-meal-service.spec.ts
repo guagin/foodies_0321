@@ -1,10 +1,10 @@
-import { MealStatus, Meal } from "../meal"
+import { MealStatus, Meal } from "../model/meal"
 import { InMemoryMealRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-meal-repository"
-import { MealShelved } from "event/meal-shelved"
-import { MealEventPublisher } from "../meal-event-publisher"
+import { MealEventPublisher } from "../../../../../event/meal-event-publisher"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { PrepareMealService } from "./prepare-meal-service"
 import faker from "faker"
+import { MealShelved } from "event/meal"
 
 describe("prepare meal service", () => {
   it("should pass", async () => {

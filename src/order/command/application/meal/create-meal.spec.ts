@@ -1,7 +1,7 @@
 import { InMemoryMealRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-meal-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { CreateMeal } from "./create-meal"
-import { MealStatus } from "order/command/domain/meal/meal"
+import { MealStatus } from "order/command/domain/meal/model/meal"
 import faker from "faker"
 
 describe("create meal", () => {

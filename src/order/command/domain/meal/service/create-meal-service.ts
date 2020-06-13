@@ -1,6 +1,6 @@
 import { MealRepository } from "../meal-repository"
-import { MealEventPublisher } from "../meal-event-publisher"
-import { Meal, MealStatus, MealId } from "../meal"
+import { MealEventPublisher } from "../../../../../event/meal-event-publisher"
+import { Meal, MealStatus, MealId } from "../model/meal"
 
 export class CreateMealService {
   private mealRepository: MealRepository

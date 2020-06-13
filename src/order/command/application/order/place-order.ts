@@ -1,10 +1,7 @@
-
-
-
 import { OrderRepository } from "order/command/domain/order/model/order-repository"
-import { OrderEventPublisher } from "order/command/domain/order/order-event-publisher"
+import { OrderEventPublisher } from "event/order-event-publisher"
 import { PlaceOrderService } from "order/command/domain/order/service/place-order-service"
-import { DomainEventPublisher } from "domain-event-publisher"
+import { DomainEventPublisher } from "event/domain-event-publisher"
 
 export class PlaceOrder {
   private orderRepository: OrderRepository

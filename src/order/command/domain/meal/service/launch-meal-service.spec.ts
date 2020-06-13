@@ -1,10 +1,11 @@
 import { InMemoryMealRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-meal-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
-import { MealEventPublisher } from "../meal-event-publisher"
-import { MealLaunched } from "event/meal-launched"
+import { MealEventPublisher } from "../../../../../event/meal-event-publisher"
+
 import { LaunchMealService } from "./launch-meal-service"
-import { Meal, MealStatus } from "../meal"
+import { Meal, MealStatus } from "../model/meal"
 import faker from "faker"
+import { MealLaunched } from "event/meal"
 
 describe("launch meal", () => {
   it("should pass", async () => {

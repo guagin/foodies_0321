@@ -1,6 +1,6 @@
 import { TakeOut, TakeOutId } from "../model/take-out"
 import { TakeOutRepository } from "../model/take-out-repository"
-import { TakeOutEventPublisher } from "../event/take-out-event-publisher"
+import { TakeOutEventPublisher } from "../../../../../event/take-out-event-publisher"
 
 export class CreateTakeOutService {
   constructor(

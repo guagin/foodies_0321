@@ -1,17 +1,23 @@
 import debug from "debug"
-import { DomainEvent } from "./domain-event"
-import { DomainEventHandler } from "./domain-event-publisher"
+import { DomainEvent } from "./event/domain-event"
+import {
+  DomainEventHandler,
+  DomainEventPublisher
+} from "./event/domain-event-publisher"
 
 // sync event handler, bad for performance.
-export class SynchronizedDomainEventPublisher {
+export class SynchronizedDomainEventPublisher implements DomainEventPublisher {
   private logger = debug("DomainHandler")
   private eventHandlers: {
-    [key: string]: DomainEventHandler<DomainEvent>[]
+    [key: string]: DomainEventHandler<DomainEvent<any>>[]
   }
   constructor() {
     this.eventHandlers = {}
   }
-  register<T extends DomainEvent>(name: string, handler: DomainEventHandler<T>): void {
+  register<T extends DomainEvent<any>>(
+    name: string,
+    handler: DomainEventHandler<T>
+  ): void {
     if (!this.eventHandlers[name]) {
       this.eventHandlers[name] = []
       this.logger(`init ${name} handlers array.`)
@@ -20,7 +26,7 @@ export class SynchronizedDomainEventPublisher {
     this.logger(`append new handlers to ${name}`)
   }
 
-  publish(event: DomainEvent): void {
+  publish(event: DomainEvent<any>): void {
     if (!this.eventHandlers[event.name]) {
       return
     }

@@ -1,8 +1,5 @@
-
-
-
 import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-oder-repository"
-import { OrderEventPublisher } from "../order-event-publisher"
+import { OrderEventPublisher } from "../../../../../event/order-event-publisher"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { Order, OrderStatus } from "../model/order"
 import { Product } from "../model/product"

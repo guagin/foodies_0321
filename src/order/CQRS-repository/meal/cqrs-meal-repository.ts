@@ -1,5 +1,5 @@
 import { MealRepository } from "order/command/domain/meal/meal-repository"
-import { MealId, Meal } from "order/command/domain/meal/meal"
+import { MealId, Meal } from "order/command/domain/meal/model/meal"
 import { RepositoryEventPublisher } from "../repository-event-publisher"
 import { Saved } from "./saved"
 

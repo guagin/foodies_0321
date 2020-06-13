@@ -5,7 +5,7 @@ import { RemoveProductService } from "./remove-product-service"
 import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
 import { TakeOut } from "order/command/domain/take-out/model/take-out"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
-import { OrderEventPublisher } from "../order-event-publisher"
+import { OrderEventPublisher } from "../../../../../event/order-event-publisher"
 
 const Day = 1000 * 60 * 60 * 24
 

@@ -1,5 +1,5 @@
-import { DomainEventPublisher } from "domain-event-publisher"
-import { Meal } from "./meal"
+import { DomainEventPublisher } from "event/domain-event-publisher"
+import { Meal } from "../order/command/domain/meal/model/meal"
 import { MealPrepared, MealLaunched, MealShelved } from "event/meal"
 
 export class MealEventPublisher {

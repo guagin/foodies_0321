@@ -2,7 +2,7 @@ import { UserRepository } from "authentication/command/domain/user/user-reposito
 import { UserId } from "authentication/command/domain/user/model/user"
 import { RegisterService } from "authentication/command/domain/user/service/user-register-service"
 import { UserEventPublisher } from "authentication/command/domain/user/event/user-event-publisher"
-import { DomainEventPublisher } from "domain-event-publisher"
+import { DomainEventPublisher } from "event/domain-event-publisher"
 
 export class UserRegisterUsecase {
   private userRepository: UserRepository

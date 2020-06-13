@@ -1,6 +1,6 @@
 import { OrderRepository } from "order/command/domain/order/model/order-repository"
-import { OrderEventPublisher } from "order/command/domain/order/order-event-publisher"
-import { DomainEventPublisher } from "domain-event-publisher"
+import { OrderEventPublisher } from "event/order-event-publisher"
+import { DomainEventPublisher } from "event/domain-event-publisher"
 import { OrderId } from "order/command/domain/order/model/order"
 import { Product } from "order/command/domain/order/model/product"
 
@@ -27,8 +27,6 @@ export class AppendProduct {
 
     this.productsToAppend.forEach(productToAppend => {
       order.appendProduct(
-
-        
         new Product({
           id: productToAppend.id,
           amount: productToAppend.amount,

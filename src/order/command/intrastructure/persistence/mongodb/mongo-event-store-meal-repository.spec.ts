@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import { MongoEventStoreMealRepository } from "./mongo-event-store-meal-repository"
 import { v4 as UUIDv4 } from "uuid"
-import { Meal, MealStatus } from "order/command/domain/meal/meal"
+import { Meal, MealStatus } from "order/command/domain/meal/model/meal"
 import faker from "faker"
 
 describe("mongo event store meal repository save", () => {

@@ -1,6 +1,6 @@
 import { OrderRepository } from "../model/order-repository"
 import { Order, OrderId, OrderStatus } from "../model/order"
-import { OrderEventPublisher } from "../order-event-publisher"
+import { OrderEventPublisher } from "../../../../../event/order-event-publisher"
 
 export class CreateOrderService {
   private orderRepository: OrderRepository

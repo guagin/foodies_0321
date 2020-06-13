@@ -1,8 +1,15 @@
-import { DomainEvent } from "domain-event"
+import { DomainEvent } from "event/domain-event"
 
-export class TakeOutCreated extends DomainEvent {
+export class TakeOutCreated extends DomainEvent<{
+  id: string
+  createdBy: string
+  title: string
+  description: string
+  startedAt: Date
+  endAt: Date
+}> {
   constructor(
-    public payload: {
+    payload: {
       id: string
       createdBy: string
       title: string
@@ -12,6 +19,6 @@ export class TakeOutCreated extends DomainEvent {
     },
     applicationVersion: string
   ) {
-    super(TakeOutCreated.name, applicationVersion)
+    super(TakeOutCreated.name, applicationVersion, payload)
   }
 }

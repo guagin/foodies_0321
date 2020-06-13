@@ -1,4 +1,4 @@
-import { DomainEventPublisher } from "domain-event-publisher"
+import { DomainEventPublisher } from "event/domain-event-publisher"
 import { UserRegistered, UserLogined } from "event/user"
 
 export class UserEventPublisher {

@@ -1,20 +1,20 @@
-import { MealRepository } from "../meal-repository";
-import { MealEventPublisher } from "../meal-event-publisher";
-import { MealId } from "../meal";
+import { MealRepository } from "../meal-repository"
+import { MealEventPublisher } from "../../../../../event/meal-event-publisher"
+import { MealId } from "../model/meal"
 
-export class LaunchMealService{
+export class LaunchMealService {
+  constructor(
+    private mealRepository: MealRepository,
+    private mealEventPublisher: MealEventPublisher
+  ) {}
 
-    constructor(private mealRepository: MealRepository, private mealEventPublisher: MealEventPublisher){
-        
-    }
+  async launch(id: MealId): Promise<void> {
+    const meal = await this.mealRepository.ofId(id)
 
-    async launch(id: MealId): Promise<void>{
-        const meal = await this.mealRepository.ofId(id)
+    meal.launch()
 
-        meal.launch()
+    await this.mealRepository.save(meal)
 
-        await this.mealRepository.save(meal)
-
-        this.mealEventPublisher.mealLaunched(meal,'uber')
-    }
+    this.mealEventPublisher.mealLaunched(meal, "uber")
+  }
 }

@@ -1,7 +1,7 @@
-import { DomainEventPublisher } from "domain-event-publisher"
+import { DomainEventPublisher } from "event/domain-event-publisher"
 import { MealRepository } from "order/command/domain/meal/meal-repository"
-import { MealId } from "order/command/domain/meal/meal"
-import { MealEventPublisher } from "order/command/domain/meal/meal-event-publisher"
+import { MealId } from "order/command/domain/meal/model/meal"
+import { MealEventPublisher } from "event/meal-event-publisher"
 import { PrepareMealService } from "order/command/domain/meal/service/prepare-meal-service"
 
 export class PrepareMeal {

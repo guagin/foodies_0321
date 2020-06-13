@@ -1,5 +1,5 @@
-import { DomainEventPublisher } from "domain-event-publisher"
-import { TakeOut } from "../model/take-out"
+import { DomainEventPublisher } from "event/domain-event-publisher"
+import { TakeOut } from "../order/command/domain/take-out/model/take-out"
 import { TakeOutCreated } from "event/take-out"
 
 export class TakeOutEventPublisher {

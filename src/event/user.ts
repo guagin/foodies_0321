@@ -1,26 +1,33 @@
-import { DomainEvent } from "domain-event"
+import { DomainEvent } from "event/domain-event"
 
-export class UserLogined extends DomainEvent {
+export class UserLogined extends DomainEvent<{
+  id: string
+  name: string
+}> {
   constructor(
-    public payload: {
+    payload: {
       id: string
       name: string
     },
     applicationVersion: string
   ) {
-    super(UserLogined.name, applicationVersion)
+    super(UserLogined.name, applicationVersion, payload)
   }
 }
 
-export class UserRegistered extends DomainEvent {
+export class UserRegistered extends DomainEvent<{
+  userId: string
+  name: string
+  email: string
+}> {
   constructor(
-    public payload: {
+    payload: {
       userId: string
       name: string
       email: string
     },
     applicationVersion: string
   ) {
-    super(UserRegistered.name, applicationVersion)
+    super(UserRegistered.name, applicationVersion, payload)
   }
 }

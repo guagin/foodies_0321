@@ -1,4 +1,4 @@
-import { Meal, MealId } from "order/command/domain/meal/meal"
+import { Meal, MealId } from "order/command/domain/meal/model/meal"
 import { MealRepository } from "order/command/domain/meal/meal-repository"
 
 export class InMemoryMealRepository implements MealRepository {

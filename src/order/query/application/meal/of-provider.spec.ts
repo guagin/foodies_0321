@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import faker from "faker"
 import { MongoMealViewRepository } from "order/query/infrastructure/mongo-meal-view-repository"
-import { MealStatus } from "order/command/domain/meal/meal"
+import { MealStatus } from "order/command/domain/meal/model/meal"
 import { MealViewOfProvider } from "./of-provider"
 
 describe("meal of provider", () => {

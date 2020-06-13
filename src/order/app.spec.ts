@@ -3,7 +3,7 @@ import faker from "faker"
 import { App } from "./app"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { MealView } from "./query/domain/meal/meal-view"
-import { MealStatus } from "./command/domain/meal/meal"
+import { MealStatus } from "./command/domain/meal/model/meal"
 import moment from "moment"
 
 let app: App

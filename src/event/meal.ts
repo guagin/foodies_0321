@@ -1,4 +1,4 @@
-import { DomainEvent } from "domain-event"
+import { DomainEvent } from "event/domain-event"
 
 interface Meal {
   id: string
@@ -7,9 +7,14 @@ interface Meal {
   description: string
 }
 
-export class MealPrepared extends DomainEvent {
+export class MealPrepared extends DomainEvent<{
+  meal: Meal
+  provider: {
+    name: string
+  }
+}> {
   constructor(
-    public payload: {
+    payload: {
       meal: Meal
       provider: {
         name: string
@@ -17,13 +22,18 @@ export class MealPrepared extends DomainEvent {
     },
     applicationVersion: string
   ) {
-    super(MealPrepared.name, applicationVersion)
+    super(MealPrepared.name, applicationVersion, payload)
   }
 }
 
-export class MealLaunched extends DomainEvent {
+export class MealLaunched extends DomainEvent<{
+  meal: Meal
+  provider: {
+    name: string
+  }
+}> {
   constructor(
-    public payload: {
+    payload: {
       meal: Meal
       provider: {
         name: string
@@ -31,13 +41,18 @@ export class MealLaunched extends DomainEvent {
     },
     applicationVersion: string
   ) {
-    super(MealLaunched.name, applicationVersion)
+    super(MealLaunched.name, applicationVersion, payload)
   }
 }
 
-export class MealShelved extends DomainEvent {
+export class MealShelved extends DomainEvent<{
+  meal: Meal
+  provider: {
+    name: string
+  }
+}> {
   constructor(
-    public payload: {
+    payload: {
       meal: Meal
       provider: {
         name: string
@@ -45,6 +60,6 @@ export class MealShelved extends DomainEvent {
     },
     applicationVersion: string
   ) {
-    super(MealShelved.name, applicationVersion)
+    super(MealShelved.name, applicationVersion, payload)
   }
 }

@@ -1,7 +1,7 @@
 import { Document, Schema, Model, Connection } from "mongoose"
 import { MealRepository } from "order/command/domain/meal/meal-repository"
-import { MealEvent } from "order/command/domain/meal/event/meal-event"
-import { MealId, Meal } from "order/command/domain/meal/meal"
+import { MealEvent } from "order/command/domain/meal/model/event/meal-event"
+import { MealId, Meal } from "order/command/domain/meal/model/meal"
 import { updateIfCurrentPlugin } from "mongoose-update-if-current"
 
 type MealDocument = Document & {

@@ -1,7 +1,8 @@
 import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
-import { TakeOutCreated } from "event/take-out-created"
+
 import { CreateTakeOut } from "./create-take-out"
+import { TakeOutCreated } from "event/take-out"
 
 const oneDay = 60 * 60 * 24 * 1000
 

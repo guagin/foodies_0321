@@ -1,6 +1,6 @@
 import { InMemoryMealRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-meal-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
-import { Meal, MealStatus } from "order/command/domain/meal/meal"
+import { Meal, MealStatus } from "order/command/domain/meal/model/meal"
 import { PrepareMeal } from "./prepare-meal"
 import faker from "faker"
 
