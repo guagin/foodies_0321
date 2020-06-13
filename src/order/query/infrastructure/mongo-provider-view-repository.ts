@@ -2,7 +2,7 @@ import { Document, Connection, Schema, PaginateModel } from "mongoose"
 import { ProviderView } from "../domain/provider/model/provider-view"
 import { updateIfCurrentPlugin } from "mongoose-update-if-current"
 import mognoosePaginate from "mongoose-paginate-v2"
-import { ProviderViewRepository } from "../domain/provider/model/provider-view-repository"
+import { ProviderViewRepository } from "../domain/provider/provider-view-repository"
 
 type ProviderDocument = Document & ProviderView
 

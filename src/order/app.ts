@@ -37,6 +37,14 @@ import { PrepareMeal } from "./command/application/meal/prepare-meal"
 import { ShelveMeal } from "./command/application/meal/shelve-meal"
 import { TakeOutViewOfUserId } from "./query/application/take-out/of-user-id"
 import { MealViewsOfPage } from "./query/application/meal/of-page"
+import { ProviderView } from "./query/domain/provider/model/provider-view"
+import { makeProviderOfId } from "./query/application/provider"
+import { ProviderRepository } from "./command/domain/provider/provider-repository"
+import { ProviderViewRepository } from "./query/domain/provider/provider-view-repository"
+import { CQRSProviderRepository } from "./CQRS-repository/provider/cqrs-provider-repository"
+import { MongoEventStoreProviderRepository } from "./command/intrastructure/persistence/mongodb/mongo-event-store-provider-repository"
+import { CQRSProviderViewRepository } from "./CQRS-repository/provider/cqrs-provider-view-repository"
+import { MongoProviderViewRepository } from "./query/infrastructure/mongo-provider-view-repository"
 
 export class App {
   private mongoConnection: Connection
@@ -47,6 +55,8 @@ export class App {
   private mealViewRepository: CQRSMealViewRepository
   private orderRepository: OrderRepository
   private orderViewRepository: CQRSOrderViewRepository
+  private providerRepository: ProviderRepository
+  private providerViewRepository: CQRSProviderViewRepository
 
   constructor(depends: {
     mongoConnection: Connection
@@ -62,6 +72,7 @@ export class App {
     this.initOrderRepositories()
     this.initTakeOutRepositories()
     this.initMealRepositories()
+    this.initProviderRepositories()
   }
 
   private initOrderRepositories(): void {
@@ -106,6 +117,22 @@ export class App {
     )
 
     this.mealViewRepository.listenTo(eventPublisher)
+  }
+
+  private initProviderRepositories(): void {
+    const eventPublisher = new LocalRepositoryEventPublisher()
+    this.providerRepository = new CQRSProviderRepository(
+      new MongoEventStoreProviderRepository(this.mongoConnection, () =>
+        UUIDV4()
+      ),
+      eventPublisher
+    )
+
+    this.providerViewRepository = new CQRSProviderViewRepository(
+      new MongoProviderViewRepository(this.mongoConnection)
+    )
+
+    this.providerViewRepository.listenTo(eventPublisher)
   }
 
   public async createTakeOut(input: {

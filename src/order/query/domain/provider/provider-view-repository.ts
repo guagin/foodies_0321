@@ -1,4 +1,4 @@
-import { ProviderView } from "./provider-view"
+import { ProviderView } from "./model/provider-view"
 
 export interface ProviderViewRepository {
   ofId(id: string): Promise<ProviderView | null>
