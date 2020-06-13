@@ -21,7 +21,7 @@ describe("create order", () => {
 
   it("shoul fail for empty createdBy", () => {
     expect(() => {
-      const order = new Order(new OrderId("12345"), {
+      new Order(new OrderId("12345"), {
         createdBy: "",
         products: [
           new Product({
@@ -52,6 +52,7 @@ describe("place order", () => {
       takeOutId: ""
     })
     order.place()
+    expect(order.status).toBe(OrderStatus.placed)
   })
 
   it("should fail for status not pended or placed", () => {
@@ -102,6 +103,7 @@ describe("cancel order", () => {
       takeOutId: ""
     })
     order.cancel()
+    expect(order.status).toBe(OrderStatus.canceled)
   })
 
   it("should fail for order status is not canceled or place", () => {

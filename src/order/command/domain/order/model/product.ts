@@ -41,7 +41,7 @@ export class Product {
     return this.props.note
   }
 
-  increase(amount: number) {
+  increase(amount: number): void {
     checkAmount(amount)
     this.props = {
       ...this.props,
@@ -49,7 +49,7 @@ export class Product {
     }
   }
 
-  decrease(amount: number) {
+  decrease(amount: number): void {
     checkAmount(amount)
     if (this.props.amount - amount <= 0) {
       throw new AmountIsGreaterThanProductAmount("")

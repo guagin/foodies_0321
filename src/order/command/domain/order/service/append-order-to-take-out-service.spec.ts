@@ -1,17 +1,17 @@
 import { InMemoryOrderRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-oder-repository"
 import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
-import { OrderAppended } from "event/order-appended"
 import { CreateTakeOutService } from "order/command/domain/take-out/service/create-take-out-service"
 import { TakeOutEventPublisher } from "order/command/domain/take-out/event/take-out-event-publisher"
 import { CreateOrderService } from "./create-order-service"
 import { OrderEventPublisher } from "../event/order-event-publisher"
 import { AppendOrderToTakeOutService } from "./append-order-to-take-out-service"
+import { OrderAppended } from "event/order"
 
 const oneDay = 60 * 60 * 24 * 1000
 
 describe("append order service", () => {
-  it("should pass", async () => {
+  it("should pass, without time limit", async () => {
     const orderRepository = new InMemoryOrderRepository()
     const takeOutRepository = new InMemoryTakeOutRepository()
     const eventPublisher = new SynchronizedDomainEventPublisher()
@@ -56,16 +56,10 @@ describe("append order service", () => {
     expect(await eventPromise).toBe(takeOutId.toValue())
   })
 
-  it("should pass", async () => {
+  it("should pass, with time limit", async () => {
     const orderRepository = new InMemoryOrderRepository()
     const takeOutRepository = new InMemoryTakeOutRepository()
     const eventPublisher = new SynchronizedDomainEventPublisher()
-
-    const eventPromise = new Promise<string>(resolve => {
-      eventPublisher.register<OrderAppended>("OrderAppended", e => {
-        resolve(e.payload.takeOutId)
-      })
-    })
 
     // create take out
     const createTakeOut = new CreateTakeOutService(

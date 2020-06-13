@@ -7,7 +7,7 @@ import { RepositoryEventPublisher } from "../repository-event-publisher"
 export class CQRSTakeOutViewRepository implements TakeOutViewRepository {
   constructor(private repository: TakeOutViewRepository) {}
 
-  listenTo(eventPublisher: RepositoryEventPublisher) {
+  listenTo(eventPublisher: RepositoryEventPublisher): void {
     eventPublisher.register<Saved>(Saved.name, async event => {
       const { takeOut } = event
 

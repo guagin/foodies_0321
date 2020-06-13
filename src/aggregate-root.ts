@@ -16,11 +16,11 @@ export abstract class AggregateRoot<EventType> extends Entity {
     }
   }
 
-  protected assignEvents(events: EventType[]) {
+  protected assignEvents(events: EventType[]): void {
     this.aggregateProps.events = events
   }
 
-  protected pushEvent(event: EventType) {
+  protected pushEvent(event: EventType): void {
     this.aggregateProps.events.push(event)
   }
 

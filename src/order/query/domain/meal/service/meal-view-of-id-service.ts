@@ -1,4 +1,3 @@
-import { MongoMealViewRepository } from "order/query/infrastructure/mongo-meal-view-repository"
 import { MealView } from "../meal-view"
 import { MealViewRepository } from "../meal-view-repository"
 

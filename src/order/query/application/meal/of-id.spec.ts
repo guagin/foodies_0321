@@ -37,7 +37,7 @@ describe("mealView of id", () => {
     const mealOfIdUseCase = new MealViewOfIdUseCase(repository)
     let error: Error
     try {
-      const mealView = await mealOfIdUseCase.ofId(mealId)
+      await mealOfIdUseCase.ofId(mealId)
     } catch (e) {
       error = e
     }

@@ -4,7 +4,7 @@ import mongoose from "mongoose"
 import { MongoEventStoreUserRepository } from "./event-store-user-repository"
 import faker from "faker"
 
-let mongoConnection = mongoose.connection
+const mongoConnection = mongoose.connection
 
 describe("event store user repository save", () => {
   beforeAll(async () => {

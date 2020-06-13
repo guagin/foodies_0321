@@ -11,7 +11,7 @@ describe("prepare meal service", () => {
     const mealRepository = new InMemoryMealRepository()
     const eventPublisher = new SynchronizedDomainEventPublisher()
 
-    const eventPromise = new Promise<String>(resolve => {
+    const eventPromise = new Promise<string>(resolve => {
       eventPublisher.register<MealShelved>("MealPrepared", e => {
         resolve(e.payload.meal.id)
       })

@@ -2,7 +2,7 @@ import { RegisterService } from "./user-register-service"
 import { InMemoryUserRepository } from "authentication/command/infrastructure/persistence/in-memory/user-repository"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { UserEventPublisher } from "../event/user-event-publisher"
-import { UserRegistered } from "event/user-registered"
+import { UserRegistered } from "event/user"
 
 describe("user register service", () => {
   it("should pass", async () => {
@@ -21,7 +21,7 @@ describe("user register service", () => {
       decrypt: (value: string) => value,
       encrypt: (value: string) => value,
       localizeErrorMsg: (value: string) => {
-        return ""
+        return value
       }
     })
 

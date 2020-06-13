@@ -1,6 +1,5 @@
 import { InMemoryUserRepository } from "authentication/command/infrastructure/persistence/in-memory/user-repository"
 import { UserLoginUseCase } from "./user-login"
-import { UserLoginService } from "authentication/command/domain/user/service/user-login-service"
 import jwt from "jsonwebtoken"
 import { User } from "authentication/command/domain/user/model/user"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
@@ -64,7 +63,7 @@ describe("user login use case", () => {
 
     let error
     try {
-      const token = await userLoginUseCase.login({
+      await userLoginUseCase.login({
         name: "ricky",
         password: ""
       })

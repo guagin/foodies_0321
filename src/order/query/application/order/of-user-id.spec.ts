@@ -41,16 +41,4 @@ describe("order of name", () => {
 
     expect(orders.length).toBeGreaterThan(0)
   })
-
-  it("should pass", async () => {
-    await mongoose.connect(process.env.mongo_url)
-
-    const repository = new MongoOrderViewRepository(mongoose.connection)
-
-    const orderOfUserId = new OrderViewOfUserId(repository)
-
-    const order = await orderOfUserId.ofUserId("123123")
-
-    expect(order.length).toBe(0)
-  })
 })

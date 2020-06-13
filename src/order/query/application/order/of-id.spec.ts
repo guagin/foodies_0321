@@ -73,7 +73,7 @@ describe("order view of id", () => {
 
     let error: Error
     try {
-      const orderView = await orderViewOfId.ofId("123")
+      await orderViewOfId.ofId("123")
     } catch (e) {
       error = e
     }

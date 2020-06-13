@@ -3,7 +3,6 @@ import { MongoMealViewRepository } from "order/query/infrastructure/mongo-meal-v
 import faker from "faker"
 import { MealView } from "order/query/domain/meal/meal-view"
 import { MealStatus } from "order/command/domain/meal/meal"
-import { MealViewOfNameService } from "order/query/domain/meal/service/meal-view-of-name-service"
 import { MealViewOfName } from "./of-name"
 
 describe("meals of name ", () => {

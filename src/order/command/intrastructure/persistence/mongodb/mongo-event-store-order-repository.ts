@@ -3,10 +3,7 @@ import { OrderRepository } from "order/command/domain/order/model/order-reposito
 import { OrderId, Order } from "order/command/domain/order/model/order"
 import { OrderEvent } from "order/command/domain/order/model/event/order-event"
 import { Product } from "order/command/domain/order/model/product"
-import debug from "debug"
 import { updateIfCurrentPlugin } from "mongoose-update-if-current"
-
-const logger = debug("debug:MongoEventStoreOrderRepository")
 
 interface ProductDocument {
   id: string

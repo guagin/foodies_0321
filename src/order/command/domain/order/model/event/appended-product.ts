@@ -1,5 +1,4 @@
 import { OrderEvent } from "./order-event"
-import { Product } from "../product"
 
 interface ProductProps {
   id: string

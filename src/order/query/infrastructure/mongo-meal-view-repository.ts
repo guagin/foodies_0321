@@ -50,7 +50,7 @@ export class MongoMealViewRepository implements MealViewRepository {
     ) as PaginateModel<MealDocument>
   }
 
-  async ofId(id: String): Promise<MealView | undefined> {
+  async ofId(id: string): Promise<MealView | undefined> {
     const doc = await this.model.findById(id)
 
     if (!doc) {

@@ -8,7 +8,6 @@ import moment from "moment"
 
 let app: App
 
-const oneHour = 1000 * 60 * 60
 describe("order app, create take out", () => {
   beforeAll(async () => {
     await mongoose.connect(process.env.mongo_url)
@@ -172,7 +171,7 @@ describe("order app, append product", () => {
 })
 
 describe("order app remove product", () => {
-  it("should pass", async () => {
+  it("should pass, remove single product", async () => {
     const takeOutId = await app.createTakeOut({
       createdBy: faker.random.uuid(),
       title: faker.random.words(10),
@@ -227,7 +226,7 @@ describe("order app remove product", () => {
     expect(order.products.length).toEqual(1)
   })
 
-  it("should pass", async () => {
+  it("should pass,  remove multiple products", async () => {
     const takeOutId = await app.createTakeOut({
       createdBy: faker.random.uuid(),
       title: faker.random.words(10),
@@ -374,7 +373,7 @@ describe("launch meal", () => {
 })
 
 describe("prepare meal", () => {
-  it("should pass, idempotent", async () => {
+  it("should pass, single meal", async () => {
     const mealIds = await app.createMeals({
       meals: [
         {
@@ -411,7 +410,7 @@ describe("prepare meal", () => {
     expect(launchedMeal.status).toBe(MealStatus.preparing)
   })
 
-  it("should pass, idempotent", async () => {
+  it("should pass, multiple meals", async () => {
     const mealIds = await app.createMeals({
       meals: [
         {

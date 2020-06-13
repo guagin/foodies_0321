@@ -19,7 +19,7 @@ describe("create user instance ", () => {
 
   it("should failed for the empty name", () => {
     expect(() => {
-      const user = new User(
+      new User(
         new UserId("0"),
         {
           name: "",
@@ -34,7 +34,7 @@ describe("create user instance ", () => {
 
   it("should failed for the empty password", () => {
     expect(() => {
-      const user = new User(
+      new User(
         new UserId("0"),
         {
           name: "ricky",
@@ -49,7 +49,7 @@ describe("create user instance ", () => {
 
   it("should failed for the empty email", () => {
     expect(() => {
-      const user = new User(
+      new User(
         new UserId("0"),
         {
           name: "ricky",

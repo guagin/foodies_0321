@@ -21,7 +21,7 @@ const convertToProductView: (product: Product) => ProductView = product => {
 export class CQRSOrderViewRepository implements OrderViewRepository {
   constructor(private repository: OrderViewRepository) {}
 
-  listenTo(eventPublisher: RepositoryEventPublisher) {
+  listenTo(eventPublisher: RepositoryEventPublisher): void {
     eventPublisher.register<Saved>(Saved.name, async event => {
       const { order } = event
       logger(`recevied event: ${JSON.stringify(order)}`)

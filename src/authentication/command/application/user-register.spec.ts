@@ -38,7 +38,7 @@ describe("user register use case", () => {
     let error
 
     try {
-      const userId = await userRegisterUseCase.register({
+      await userRegisterUseCase.register({
         name: "",
         password: "123456",
         email: "guagin0972@gmail.com"
@@ -68,7 +68,7 @@ describe("user register use case", () => {
     let error
 
     try {
-      const userId = await userRegisterUseCase.register({
+      await userRegisterUseCase.register({
         name: "ricky",
         password: "",
         email: "guagin0972@gmail.com"
@@ -96,7 +96,7 @@ describe("user register use case", () => {
     })
     let error
     try {
-      const userId = await userRegisterUseCase.register({
+      await userRegisterUseCase.register({
         name: "ricky",
         password: "123456",
         email: ""

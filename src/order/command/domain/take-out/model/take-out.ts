@@ -1,5 +1,4 @@
 import { EntityId } from "entity-id"
-import { Entity } from "entity"
 import { AggregateRoot } from "aggregate-root"
 import { TakeOutEvent } from "./event/take-out-event"
 import { Disabled } from "./event/disabled"

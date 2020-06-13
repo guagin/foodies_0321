@@ -1,5 +1,4 @@
 import { EntityId } from "entity-id"
-import { Entity } from "entity"
 import { UserEvent } from "./event/user-event"
 import { ChangedEmail } from "./event/changed-email"
 import { ChangedPassword } from "./event/changed-password"
@@ -101,26 +100,26 @@ export class User extends AggregateRoot<UserEvent> {
     return this.props.password === this.decryptor(value)
   }
 
-  changeEmail(value: string) {
+  changeEmail(value: string): void {
     const event = new ChangedEmail(value)
     this.pushEvent(event)
     this.whenChangedEmail(value)
   }
 
-  whenChangedEmail(email: string) {
+  whenChangedEmail(email: string): void {
     this.props = new UserProps({
       ...this.props,
       email
     })
   }
 
-  changePassword(value: string) {
+  changePassword(value: string): void {
     const event = new ChangedPassword(value)
     this.pushEvent(event)
     this.whenChangedPassword(value)
   }
 
-  whenChangedPassword(password: string) {
+  whenChangedPassword(password: string): void {
     this.props = new UserProps({
       ...this.props,
       password

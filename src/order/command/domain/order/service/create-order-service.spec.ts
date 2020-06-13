@@ -21,24 +21,4 @@ describe("create order service", () => {
 
     expect(orderId).toBeDefined()
   })
-
-  it("should fail for empty userId", async () => {
-    try {
-      const orderRepository = new InMemoryOrderRepository()
-      const orderEventPublisher = new OrderEventPublisher(
-        new SynchronizedDomainEventPublisher()
-      )
-      const createOrderService = new CreateOrderService({
-        orderRepository,
-        eventPublisher: orderEventPublisher
-      })
-
-      const orderId = await createOrderService.create({
-        userId: "",
-        takeOutId: "0"
-      })
-    } catch (e) {
-      expect(e).toBeDefined()
-    }
-  })
 })

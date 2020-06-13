@@ -39,7 +39,7 @@ describe("take out view of id", () => {
     let error: Error
 
     try {
-      const takeOutView = await takeOutViewOfId.ofId("12345")
+      await takeOutViewOfId.ofId("12345")
     } catch (e) {
       error = e
     }

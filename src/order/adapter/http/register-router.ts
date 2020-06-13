@@ -1,19 +1,16 @@
 import { FastifyInstance, FastifyError, FastifyRequest } from "fastify"
 import jwt from "jsonwebtoken"
-import { createTakeOut } from "./create-take-out"
 import { App } from "order/app"
-import { createOrder } from "./create-order"
-import { orderOfId } from "./order-of-id"
-import { appendProduct } from "./append-product"
-import { createMeal } from "./create-meal"
-import { launchMeal } from "./launch-meal"
-import { mealOfId } from "./meal-of-id"
-import { prepareMeal } from "./prepare-meal"
-import { removeProduct } from "./remove-product"
-import { shelveMeal } from "./shelve-meal"
-import { takeOutOfId } from "./take-out-of-id"
-import { takeOutOfUserId } from "./take-out-of-user-id"
-import { mealsOfPage } from "./meals-of-page"
+import { appendProduct, createOrder, orderOfId, removeProduct } from "./order"
+import {
+  createMeal,
+  launchMeal,
+  mealOfId,
+  prepareMeal,
+  shelveMeal,
+  mealsOfPage
+} from "./meal"
+import { createTakeOut, takeOutOfId, takeOutOfUserId } from "./take-out"
 
 const verifyToken = (handler: (request: FastifyRequest) => void) => {
   return async (request: FastifyRequest) => {
@@ -24,7 +21,7 @@ const verifyToken = (handler: (request: FastifyRequest) => void) => {
   }
 }
 
-export const registerOrderRouter = (
+export const registerOrderRouter: (
   app: App,
   logger: (value: string) => void
 ) => (
@@ -33,7 +30,7 @@ export const registerOrderRouter = (
     prefix: string
   },
   next: (err?: FastifyError) => void
-) => {
+) => void = (app, logger) => (fastify, opt, next) => {
   fastify.post("/order/appendProduct", verifyToken(appendProduct(app, logger)))
   fastify.post("/meal/create", verifyToken(createMeal(app, logger)))
   fastify.post("/order/create", verifyToken(createOrder(app, logger)))

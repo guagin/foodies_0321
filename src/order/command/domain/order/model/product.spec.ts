@@ -13,7 +13,7 @@ describe("create product", () => {
 
   it("should fail for that  the amount is 0", () => {
     expect(() => {
-      const product = new Product({
+      new Product({
         id: "p0",
         amount: 0,
         note: ""
@@ -23,7 +23,7 @@ describe("create product", () => {
 
   it("should fail for that amount is float number", () => {
     expect(() => {
-      const product = new Product({
+      new Product({
         id: "p0",
         amount: 0.1,
         note: ""
@@ -33,7 +33,7 @@ describe("create product", () => {
 
   it("should fail for that amount is negative interger", () => {
     expect(() => {
-      const product = new Product({
+      new Product({
         id: "p0",
         amount: -1,
         note: ""

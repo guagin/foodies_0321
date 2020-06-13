@@ -1,15 +1,17 @@
 import { FastifyInstance, FastifyError } from "fastify"
-import { userOfName } from "./user-of-name"
-import { userOfId } from "./user-of-id"
-import { registerUser } from "./user-register"
+import {
+  userOfName,
+  userOfId,
+  registerUser,
+  userLogin,
+  userOfToken
+} from "./user"
 import { App } from "authentication/app"
-import { userLogin } from "./user-login"
-import { userOfToken } from "./user-of-token"
 
-export const registerAuthenticationRouter = (
+export const registerAuthenticationRouter: (
   app: App,
   logger: (value: string) => void
-) => (
+) => void = (app, logger) => (
   fastify: FastifyInstance,
   opts: {
     prefix: string

@@ -4,7 +4,7 @@ import { UserLoginService } from "./user-login-service"
 import jwt from "jsonwebtoken"
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { UserEventPublisher } from "../event/user-event-publisher"
-import { UserLogined } from "event/user-logined"
+import { UserLogined } from "event/user"
 
 describe("user login service", () => {
   const userRepository = new InMemoryUserRepository()
@@ -58,7 +58,7 @@ describe("user login service", () => {
     let error
 
     try {
-      const token = await userLoginService.login("ricky", "")
+      await userLoginService.login("ricky", "")
     } catch (e) {
       error = e
     }
@@ -70,7 +70,7 @@ describe("user login service", () => {
     let error
 
     try {
-      const token = await userLoginService.login("ricky123", "123456")
+      await userLoginService.login("ricky123", "123456")
     } catch (e) {
       error = e
     }

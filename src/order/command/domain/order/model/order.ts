@@ -205,7 +205,7 @@ export class Order extends AggregateRoot<OrderEvent> {
     return index > -1
   }
 
-  appendTo(takeOutId: string) {
+  appendTo(takeOutId: string): void {
     this.props = {
       ...this.props,
       takeOutId

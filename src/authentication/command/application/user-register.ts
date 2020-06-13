@@ -1,5 +1,5 @@
 import { UserRepository } from "authentication/command/domain/user/user-repository"
-import { User, UserId } from "authentication/command/domain/user/model/user"
+import { UserId } from "authentication/command/domain/user/model/user"
 import { RegisterService } from "authentication/command/domain/user/service/user-register-service"
 import { UserEventPublisher } from "authentication/command/domain/user/event/user-event-publisher"
 import { DomainEventPublisher } from "domain-event-publisher"

@@ -75,7 +75,7 @@ export class MongoEventStoreProviderRepository implements ProviderRepository {
   }
 
   async save(provider: Provider): Promise<void> {
-    let foundDoc = await this.model.findById(provider.id.toValue())
+    const foundDoc = await this.model.findById(provider.id.toValue())
 
     if (foundDoc) {
       foundDoc.events = provider.events

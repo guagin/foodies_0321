@@ -13,6 +13,8 @@ describe("meal model construct", () => {
       provider: "uber_001",
       createdBy: faker.random.word()
     })
+
+    expect(meal).toBeDefined()
   })
 })
 
@@ -29,6 +31,8 @@ describe("prepare", () => {
       createdBy: faker.random.word()
     })
     meal.prepare()
+
+    expect(meal).toBeDefined()
   })
 
   it("should failed for that meal is not launched", () => {
@@ -61,6 +65,8 @@ describe("launch", () => {
       createdBy: faker.random.word()
     })
     meal.launch()
+
+    expect(meal).toBeDefined()
   })
 
   it("should failed for that meal is not preparing", () => {
@@ -93,6 +99,8 @@ describe("shelve", () => {
       createdBy: faker.random.word()
     })
     meal.shelve()
+
+    expect(meal).toBeDefined()
   })
 
   it("should failed for that meal is not launched", () => {
