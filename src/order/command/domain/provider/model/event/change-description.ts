@@ -1,7 +1,7 @@
 import { ProviderEvent } from "./provider-event"
 
-export class ChangeDescrition extends ProviderEvent {
+export class ChangeDescription extends ProviderEvent {
   constructor(public payload: { description: string }) {
-    super(ChangeDescrition.name)
+    super(ChangeDescription.name)
   }
 }

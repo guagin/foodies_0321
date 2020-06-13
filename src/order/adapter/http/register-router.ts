@@ -11,6 +11,12 @@ import {
   mealsOfPage
 } from "./meal"
 import { createTakeOut, takeOutOfId, takeOutOfUserId } from "./take-out"
+import {
+  createProvider,
+  changeProviderName,
+  changeProviderDescription,
+  changeProviderPhone
+} from "./provider"
 
 const verifyToken = (handler: (request: FastifyRequest) => void) => {
   return async (request: FastifyRequest) => {
@@ -47,6 +53,24 @@ export const registerOrderRouter: (
     verifyToken(takeOutOfUserId(app, logger))
   )
   fastify.get("/meal/ofPage", verifyToken(mealsOfPage(app, logger)))
+
+  fastify.post("/provider/create", verifyToken(createProvider(app, logger)))
+  fastify.post(
+    "/provider/changeName",
+    verifyToken(changeProviderName(app, logger))
+  )
+  fastify.post(
+    "/provider/changeDescription",
+    verifyToken(changeProviderDescription(app, logger))
+  )
+  fastify.post(
+    "/provider/changePhone",
+    verifyToken(changeProviderPhone(app, logger))
+  )
+  fastify.post(
+    "/provider/changeName",
+    verifyToken(changeProviderName(app, logger))
+  )
 
   next()
 }

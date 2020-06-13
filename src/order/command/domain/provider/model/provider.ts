@@ -2,7 +2,7 @@ import { EntityId } from "entity-id"
 import { AggregateRoot } from "aggregate-root"
 import { ProviderEvent } from "./event/provider-event"
 import { ChangeName } from "./event/change-name"
-import { ChangeDescrition } from "./event/change-description"
+import { ChangeDescription } from "./event/change-description"
 import { ChangePhone } from "./event/change-phone"
 
 export class ProviderId extends EntityId {}
@@ -51,9 +51,9 @@ export class Provider extends AggregateRoot<ProviderEvent> {
     this.assignVersion(version)
     events.forEach(e => {
       switch (e.name) {
-        case ChangeDescrition.name:
+        case ChangeDescription.name:
           this.whenChangeDescription(
-            (e as ChangeDescrition).payload.description
+            (e as ChangeDescription).payload.description
           )
           break
         case ChangeName.name:
@@ -84,7 +84,7 @@ export class Provider extends AggregateRoot<ProviderEvent> {
   }
 
   changeDescription(value: string): void {
-    this.pushEvent(new ChangeDescrition({ description: value }))
+    this.pushEvent(new ChangeDescription({ description: value }))
     this.whenChangeDescription(value)
   }
 

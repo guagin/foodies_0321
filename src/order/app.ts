@@ -38,7 +38,12 @@ import { ShelveMeal } from "./command/application/meal/shelve-meal"
 import { TakeOutViewOfUserId } from "./query/application/take-out/of-user-id"
 import { MealViewsOfPage } from "./query/application/meal/of-page"
 import { ProviderView } from "./query/domain/provider/model/provider-view"
-import { makeProviderOfId } from "./query/application/provider"
+import {
+  makeProviderOfId,
+  makeProviderOfIds,
+  makeProviderOfCreatedBy,
+  makeProviderOfPage
+} from "./query/application/provider"
 import { ProviderRepository } from "./command/domain/provider/provider-repository"
 import { ProviderViewRepository } from "./query/domain/provider/provider-view-repository"
 import { CQRSProviderRepository } from "./CQRS-repository/provider/cqrs-provider-repository"
@@ -369,5 +374,57 @@ export class App {
     })
 
     return changeProviderDescription.changeDescription(id, description)
+  }
+
+  public async providerOfId({ id }: { id: string }): Promise<ProviderView> {
+    const providerOfId = makeProviderOfId({
+      providerViewRepository: this.providerViewRepository
+    })
+
+    return providerOfId(id)
+  }
+
+  public async providerOfIds({
+    ids
+  }: {
+    ids: string[]
+  }): Promise<ProviderView[]> {
+    const providerOfIds = makeProviderOfIds({
+      providerViewRepository: this.providerViewRepository
+    })
+    return providerOfIds(ids)
+  }
+
+  public async providerOfCreatedBy({
+    userId
+  }: {
+    userId: string
+  }): Promise<ProviderView[]> {
+    const providerOfCreatedBy = makeProviderOfCreatedBy({
+      providerViewRepository: this.providerViewRepository
+    })
+
+    return providerOfCreatedBy(userId)
+  }
+
+  public async providerOfPage({
+    toPage,
+    count
+  }: {
+    toPage: number
+    count: number
+  }): Promise<{
+    providers: ProviderView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+    totalCount: number
+  }> {
+    const providerOfPage = makeProviderOfPage({
+      providerViewRepository: this.providerViewRepository
+    })
+
+    return providerOfPage({ toPage, count })
   }
 }
