@@ -45,6 +45,10 @@ import { CQRSProviderRepository } from "./CQRS-repository/provider/cqrs-provider
 import { MongoEventStoreProviderRepository } from "./command/intrastructure/persistence/mongodb/mongo-event-store-provider-repository"
 import { CQRSProviderViewRepository } from "./CQRS-repository/provider/cqrs-provider-view-repository"
 import { MongoProviderViewRepository } from "./query/infrastructure/mongo-provider-view-repository"
+import { CraeteProvider } from "./command/application/provider/create-provider"
+import { ChangeProviderPhone } from "./command/application/provider/change-provider-phone"
+import { ChangeProviderName } from "./command/application/provider/change-provider-name"
+import { ChangeProviderDescription } from "./command/application/provider/chagne-provider-description"
 
 export class App {
   private mongoConnection: Connection
@@ -307,5 +311,63 @@ export class App {
     const mealsOfPage = new MealViewsOfPage(this.mealViewRepository)
 
     return mealsOfPage.ofPage({ page, count })
+  }
+
+  public async createProvider(props: {
+    createdBy: string
+    name: string
+    description: string
+    phone: string
+  }): Promise<string> {
+    const createProvider = new CraeteProvider({
+      providerRepository: this.providerRepository
+    })
+
+    return createProvider.create(props)
+  }
+
+  public async changeProviderPhone({
+    id,
+    phone
+  }: {
+    id: string
+    phone: string
+  }): Promise<void> {
+    const changeProviderPhone = new ChangeProviderPhone({
+      providerRepository: this.providerRepository,
+      eventPublisher: this.crossContextEventPublisher
+    })
+
+    return changeProviderPhone.changePhone(id, phone)
+  }
+
+  public async changeProviderName({
+    id,
+    name
+  }: {
+    id: string
+    name: string
+  }): Promise<void> {
+    const changeProviderName = new ChangeProviderName({
+      providerRepository: this.providerRepository,
+      eventPublisher: this.crossContextEventPublisher
+    })
+
+    return changeProviderName.changeName({ id, name })
+  }
+
+  public async changeProviderDescription({
+    id,
+    description
+  }: {
+    id: string
+    description: string
+  }): Promise<void> {
+    const changeProviderDescription = new ChangeProviderDescription({
+      providerRepository: this.providerRepository,
+      eventPublisher: this.crossContextEventPublisher
+    })
+
+    return changeProviderDescription.changeDescription(id, description)
   }
 }
