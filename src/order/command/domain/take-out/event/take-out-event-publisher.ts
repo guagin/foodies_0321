@@ -1,6 +1,6 @@
 import { DomainEventPublisher } from "domain-event-publisher"
 import { TakeOut } from "../model/take-out"
-import { TakeOutCreated } from "event/take-out-created"
+import { TakeOutCreated } from "event/take-out"
 
 export class TakeOutEventPublisher {
   private applicationVersion = process.env.applicationVersion || "0.0.0.0"

@@ -2,7 +2,7 @@ import { InMemoryOrderRepository } from "order/command/intrastructure/persistenc
 import { SynchronizedDomainEventPublisher } from "synchronized-domain-event-publisher"
 import { Order, OrderStatus } from "order/command/domain/order/model/order"
 import { Product } from "order/command/domain/order/model/product"
-import { OrderEventPublisher } from "../event/order-event-publisher"
+import { OrderEventPublisher } from "../order-event-publisher"
 import { PlaceOrderService } from "./place-order-service"
 import { OrderPlaced } from "event/order-placed"
 import { InMemoryTakeOutRepository } from "order/command/intrastructure/persistence/in-memory/in-memory-take-out-repository"

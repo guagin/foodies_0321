@@ -1,6 +1,6 @@
 import { OrderRepository } from "../model/order-repository"
 import { OrderId } from "../model/order"
-import { OrderEventPublisher } from "../event/order-event-publisher"
+import { OrderEventPublisher } from "../order-event-publisher"
 import { OrderNotFound } from "../error/order-not-found"
 
 export class RemoveProductService {

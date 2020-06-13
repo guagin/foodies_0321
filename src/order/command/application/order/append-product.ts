@@ -1,5 +1,5 @@
 import { OrderRepository } from "order/command/domain/order/model/order-repository"
-import { OrderEventPublisher } from "order/command/domain/order/event/order-event-publisher"
+import { OrderEventPublisher } from "order/command/domain/order/order-event-publisher"
 import { DomainEventPublisher } from "domain-event-publisher"
 import { OrderId } from "order/command/domain/order/model/order"
 import { Product } from "order/command/domain/order/model/product"
@@ -7,7 +7,6 @@ import { Product } from "order/command/domain/order/model/product"
 export class AppendProduct {
   private orderRepository: OrderRepository
   private orderEventPublisher: OrderEventPublisher
-
   private productsToAppend: { id: string; amount: number }[]
 
   constructor(depends: {
@@ -28,6 +27,8 @@ export class AppendProduct {
 
     this.productsToAppend.forEach(productToAppend => {
       order.appendProduct(
+
+        
         new Product({
           id: productToAppend.id,
           amount: productToAppend.amount,

@@ -1,11 +1,12 @@
-import { Order } from "../model/order"
+import { Order } from "./model/order"
 import { DomainEventPublisher } from "domain-event-publisher"
-import { OrderCreated } from "event/order-created"
-import { ProductAppended } from "event/product-appended"
-import { ProductRemoved } from "event/product-removed"
-import { OrderPlaced } from "event/order-placed"
-import { OrderCanceled } from "event/order-cancel"
-import { OrderAppended } from "event/order-appended"
+import {
+  OrderCreated,
+  OrderPlaced,
+  OrderCanceled,
+  OrderAppended
+} from "event/order"
+import { ProductAppended, ProductRemoved } from "event/product"
 
 export class OrderEventPublisher {
   private applicationVeriosn = process.env.applicationVeriosn || "0.0.0.0"

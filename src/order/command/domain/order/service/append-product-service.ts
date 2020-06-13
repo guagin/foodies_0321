@@ -2,7 +2,7 @@ import { OrderRepository } from "../model/order-repository"
 import { Product } from "../model/product"
 import { OrderId } from "../model/order"
 import { OrderNotFound } from "../error/order-not-found"
-import { OrderEventPublisher } from "../event/order-event-publisher"
+import { OrderEventPublisher } from "../order-event-publisher"
 
 export class AppendProductService {
   private orderRepository: OrderRepository

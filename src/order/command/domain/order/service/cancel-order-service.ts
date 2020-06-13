@@ -1,5 +1,5 @@
 import { OrderRepository } from "../model/order-repository"
-import { OrderEventPublisher } from "../event/order-event-publisher"
+import { OrderEventPublisher } from "../order-event-publisher"
 import { OrderId } from "../model/order"
 
 export class CancelOrderService {
