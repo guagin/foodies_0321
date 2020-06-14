@@ -14,7 +14,11 @@ import {
   createProvider,
   changeProviderName,
   changeProviderDescription,
-  changeProviderPhone
+  changeProviderPhone,
+  providerOfId,
+  providerOfIds,
+  providerOfCreatedBy,
+  providerOfPage
 } from "./provider"
 import { OrderDependencies } from "order/dependencies"
 import debug from "debug"
@@ -186,6 +190,36 @@ export const registerOrderRouter: (
     ])
   )
   //TODO: provider queries.
+  fastify.get(
+    "/provider/ofId/:id",
+    applyMiddlewares(providerOfId(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+
+  fastify.post(
+    "/provider/ofIds",
+    applyMiddlewares(providerOfIds(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+  fastify.get(
+    "/provider/ofCreatedBy/:userId",
+    applyMiddlewares(providerOfCreatedBy(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+
+  fastify.post(
+    "/provider/ofPage",
+    applyMiddlewares(providerOfPage(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
 
   next()
 }

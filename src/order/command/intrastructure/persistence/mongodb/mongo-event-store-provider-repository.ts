@@ -20,8 +20,8 @@ const ProviderSchema = new Schema(
     _id: { type: String, required: true },
     createdBy: { type: String, required: true },
     name: { type: String, required: true },
-    description: { type: String, required: true },
-    phone: { type: String, required: true },
+    description: { type: String },
+    phone: { type: String },
     events: { type: Schema.Types.Mixed, required: true }
   },
   {

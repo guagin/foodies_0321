@@ -67,6 +67,9 @@ export class Provider extends AggregateRoot<ProviderEvent> {
   }
 
   changeName(value: string): void {
+    if (!value) {
+      throw new Error(`name not valid: ${name}`)
+    }
     this.pushEvent(
       new ChangeName({
         id: this.id.toValue(),

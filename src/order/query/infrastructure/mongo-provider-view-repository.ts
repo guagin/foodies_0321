@@ -10,8 +10,9 @@ const ProviderViewSchema = new Schema(
   {
     _id: { type: String, required: true },
     name: { type: String, required: true },
-    description: { type: String, required: true },
-    phone: { type: String, required: true },
+    description: { type: String },
+    phone: { type: String },
+    createdBy: { type: String, required: true },
     version: { type: Number }
   },
   {
@@ -20,8 +21,8 @@ const ProviderViewSchema = new Schema(
     versionKey: "version"
   }
 )
-  .plugin(updateIfCurrentPlugin)
   .plugin(mognoosePaginate)
+  .plugin(updateIfCurrentPlugin)
 
 export class MongoProviderViewRepository implements ProviderViewRepository {
   private model: PaginateModel<ProviderDocument>
@@ -29,8 +30,7 @@ export class MongoProviderViewRepository implements ProviderViewRepository {
   constructor(connection: Connection) {
     this.model = connection.model<ProviderDocument>(
       "ProviderView",
-      ProviderViewSchema,
-      "ProviderView"
+      ProviderViewSchema
     ) as PaginateModel<ProviderDocument>
   }
 
@@ -46,7 +46,7 @@ export class MongoProviderViewRepository implements ProviderViewRepository {
   }
 
   async ofIds(ids: string[]): Promise<ProviderView[]> {
-    const docs = await this.model.find({ id: { $in: ids } })
+    const docs = await this.model.find({ _id: { $in: ids } })
     if (docs.length === 0) {
       return []
     }
@@ -114,6 +114,7 @@ export class MongoProviderViewRepository implements ProviderViewRepository {
     if (!found) {
       const toSave = new this.model({
         _id: providerView.id,
+        createdBy: providerView.createdBy,
         name: providerView.name,
         description: providerView.description,
         phone: providerView.phone
