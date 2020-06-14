@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyError, FastifyRequest } from "fastify"
 import jwt from "jsonwebtoken"
-import { App } from "order/app"
 import { appendProduct, createOrder, orderOfId, removeProduct } from "./order"
 import {
   createMeal,
@@ -17,8 +16,17 @@ import {
   changeProviderDescription,
   changeProviderPhone
 } from "./provider"
+import { OrderDependencies } from "order/dependencies"
+import debug from "debug"
 
-const verifyToken = (handler: (request: FastifyRequest) => void) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type HttpHandler = (request: FastifyRequest) => Promise<any>
+type Middleware = (
+  handler: HttpHandler
+) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
+(request: FastifyRequest) => Promise<any>
+
+const VerifyToken: Middleware = (handler: HttpHandler) => {
   return async (request: FastifyRequest) => {
     const { token } = request.headers
     const user = jwt.verify(token, "imRicky")
@@ -27,8 +35,43 @@ const verifyToken = (handler: (request: FastifyRequest) => void) => {
   }
 }
 
+const WrappedHandler: Middleware = handler => {
+  const middlewareLog = debug("debug:middleware: ")
+  return async (request: FastifyRequest) => {
+    try {
+      const data = await handler(request)
+      return {
+        status: {
+          code: "SUCCESS",
+          msg: ""
+        },
+        data
+      }
+    } catch (e) {
+      middlewareLog(e.message)
+      return {
+        status: {
+          code: "ERROR",
+          msg: e.message
+        }
+      }
+    }
+  }
+}
+
+const applyMiddlewares: (
+  handler: HttpHandler,
+  middlewares: Middleware[]
+) => HttpHandler = (handler, middlewares) => {
+  const finalHandler = middlewares.reduceRight((result, middleware) => {
+    return middleware(result)
+  }, handler)
+
+  return finalHandler
+}
+
 export const registerOrderRouter: (
-  app: App,
+  depends: OrderDependencies,
   logger: (value: string) => void
 ) => (
   fastify: FastifyInstance,
@@ -36,41 +79,113 @@ export const registerOrderRouter: (
     prefix: string
   },
   next: (err?: FastifyError) => void
-) => void = (app, logger) => (fastify, opt, next) => {
-  fastify.post("/order/appendProduct", verifyToken(appendProduct(app, logger)))
-  fastify.post("/meal/create", verifyToken(createMeal(app, logger)))
-  fastify.post("/order/create", verifyToken(createOrder(app, logger)))
-  fastify.post("/takeout/create", verifyToken(createTakeOut(app, logger)))
-  fastify.post("/meal/launch", verifyToken(launchMeal(app, logger)))
-  fastify.get("/meal/ofId/:id", verifyToken(mealOfId(app, logger)))
-  fastify.get("/order/ofId/:id", verifyToken(orderOfId(app, logger)))
-  fastify.post("/meal/prepare", verifyToken(prepareMeal(app, logger)))
-  fastify.post("/order/removeProduct", verifyToken(removeProduct(app, logger)))
-  fastify.post("/meal/shelve", verifyToken(shelveMeal(app, logger)))
-  fastify.get("/takeout/ofId/:id", verifyToken(takeOutOfId(app, logger)))
+) => void = (depends, logger) => (fastify, opt, next) => {
+  fastify.post(
+    "/order/appendProduct",
+    applyMiddlewares(appendProduct(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+  fastify.post(
+    "/meal/create",
+    applyMiddlewares(createMeal(depends, logger), [WrappedHandler, VerifyToken])
+  )
+  fastify.post(
+    "/order/create",
+    applyMiddlewares(createOrder(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+  fastify.post(
+    "/takeout/create",
+    applyMiddlewares(createTakeOut(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+  fastify.post(
+    "/meal/launch",
+    applyMiddlewares(launchMeal(depends, logger), [WrappedHandler, VerifyToken])
+  )
+  fastify.get(
+    "/meal/ofId/:id",
+    applyMiddlewares(mealOfId(depends, logger), [WrappedHandler, VerifyToken])
+  )
+  fastify.get(
+    "/order/ofId/:id",
+    applyMiddlewares(orderOfId(depends, logger), [WrappedHandler, VerifyToken])
+  )
+  fastify.post(
+    "/meal/prepare",
+    applyMiddlewares(prepareMeal(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+  fastify.post(
+    "/order/removeProduct",
+    applyMiddlewares(removeProduct(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+  fastify.post(
+    "/meal/shelve",
+    applyMiddlewares(shelveMeal(depends, logger), [WrappedHandler, VerifyToken])
+  )
+  fastify.get(
+    "/takeout/ofId/:id",
+    applyMiddlewares(takeOutOfId(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
   fastify.get(
     "/takeout/ofUserId/:userId",
-    verifyToken(takeOutOfUserId(app, logger))
+    applyMiddlewares(takeOutOfUserId(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
   )
-  fastify.get("/meal/ofPage", verifyToken(mealsOfPage(app, logger)))
+  fastify.get(
+    "/meal/ofPage",
+    applyMiddlewares(mealsOfPage(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
 
-  fastify.post("/provider/create", verifyToken(createProvider(app, logger)))
+  fastify.post(
+    "/provider/create",
+    applyMiddlewares(createProvider(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
   fastify.post(
     "/provider/changeName",
-    verifyToken(changeProviderName(app, logger))
+    applyMiddlewares(changeProviderName(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
   )
   fastify.post(
     "/provider/changeDescription",
-    verifyToken(changeProviderDescription(app, logger))
+    applyMiddlewares(changeProviderDescription(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
   )
   fastify.post(
     "/provider/changePhone",
-    verifyToken(changeProviderPhone(app, logger))
+    applyMiddlewares(changeProviderPhone(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
   )
-  fastify.post(
-    "/provider/changeName",
-    verifyToken(changeProviderName(app, logger))
-  )
+  //TODO: provider queries.
 
   next()
 }

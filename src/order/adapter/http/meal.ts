@@ -1,11 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { App } from "order/app"
 import { FastifyRequest } from "fastify"
 import { BaseHttpResponse } from "authentication/adapter/http/base-response"
 import { MealView } from "order/query/domain/meal/meal-view"
+import { CreateMeal } from "order/command/application/meal/create-meal"
+import { MealId } from "order/command/domain/meal/model/meal"
+import { OrderDependencies } from "order/dependencies"
+import { MealViewOfIdUseCase } from "order/query/application/meal/of-id"
+import { LaunchMeal } from "order/command/application/meal/launch-meal"
+import { MealViewsOfPage } from "order/query/application/meal/of-page"
+import { PrepareMeal } from "order/command/application/meal/prepare-meal"
+import { ShelveMeal } from "order/command/application/meal/shelve-meal"
 
 export const createMeal: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
@@ -13,18 +20,40 @@ export const createMeal: (
   BaseHttpResponse<{
     ids: string[]
   }>
-> = app => {
+> = ({ mealRepository, crossContextEventPublisher }) => {
   return async (request: FastifyRequest) => {
     const { body } = request
-    const { meals } = body
+    const {
+      meals
+    }: {
+      meals: {
+        name: string
+        price: number
+        description: string
+        pictures: string[]
+        provider: string
+        createdBy: string
+      }[]
+    } = body
 
-    const mealIds = await app.createMeals({
-      meals,
-      createdBy: request.headers.user.id
+    const createMeal = new CreateMeal(
+      mealRepository,
+      crossContextEventPublisher
+    )
+
+    const promiseToCreateMeals: Promise<MealId>[] = []
+
+    meals.forEach(meal => {
+      promiseToCreateMeals.push(
+        createMeal.create({ ...meal, createdBy: request.headers.user.id })
+      )
     })
+
+    const mealIds = await Promise.all(promiseToCreateMeals)
+
     return {
       data: {
-        ids: mealIds
+        ids: mealIds.map(mealId => mealId.toValue())
       },
       status: {
         code: "SUCCESS",
@@ -35,13 +64,17 @@ export const createMeal: (
 }
 
 export const mealOfId: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<BaseHttpResponse<{ meal: MealView }>> = app => {
+) => Promise<BaseHttpResponse<{ meal: MealView }>> = ({
+  mealViewRepository
+}) => {
   return async (request: FastifyRequest) => {
-    const meal = await app.mealOfId({ mealId: request.params.id })
+    const mealOfId = new MealViewOfIdUseCase(mealViewRepository)
+    const meal = await mealOfId.ofId(request.params.id)
+
     return {
       status: {
         code: "SUCCESS",
@@ -53,15 +86,23 @@ export const mealOfId: (
 }
 
 export const launchMeal: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = (
-  app: App
-) => {
+) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = ({
+  mealRepository,
+  crossContextEventPublisher
+}) => {
   return async (request: FastifyRequest) => {
     const { body } = request
     const { id } = body
-    await app.launchMeal({ mealId: id })
+
+    const launchMeal = new LaunchMeal(
+      mealRepository,
+      crossContextEventPublisher
+    )
+
+    await launchMeal.launch(id)
+
     return {
       status: {
         code: "SUCCESS",
@@ -72,7 +113,7 @@ export const launchMeal: (
 }
 
 export const mealsOfPage: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
@@ -85,22 +126,22 @@ export const mealsOfPage: (
     page: number
     totalCount: number
   }>
-> = (app, logger) => {
+> = ({ mealViewRepository }, logger) => {
   return async request => {
     const { page: pageInput, count } = request.query
 
     logger(`page: ${pageInput} count: ${count}`)
+
+    const mealsOfPage = new MealViewsOfPage(mealViewRepository)
+
     const {
-      meals,
       hasNext,
       hasPrevious,
       totalPages,
       page,
-      totalCount
-    } = await app.mealOfPage({
-      page: pageInput,
-      count
-    })
+      totalCount,
+      meals
+    } = await mealsOfPage.ofPage({ page: pageInput, count })
 
     return {
       status: {
@@ -120,14 +161,22 @@ export const mealsOfPage: (
 }
 
 export const prepareMeal: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = app => {
+) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = ({
+  mealRepository,
+  crossContextEventPublisher
+}) => {
   return async (request: FastifyRequest) => {
     const { body } = request
     const { id } = body
 
-    await app.prepareMeal(id)
+    const prepareMeal = new PrepareMeal(
+      mealRepository,
+      crossContextEventPublisher
+    )
+
+    await prepareMeal.prepare(id)
 
     return {
       status: {
@@ -139,14 +188,22 @@ export const prepareMeal: (
 }
 
 export const shelveMeal: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = app => {
+) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = ({
+  mealRepository,
+  crossContextEventPublisher
+}) => {
   return async (request: FastifyRequest) => {
     const { body } = request
     const { id } = body
 
-    await app.shelveMeal({ mealId: id })
+    const shelveMeal = new ShelveMeal(
+      mealRepository,
+      crossContextEventPublisher
+    )
+
+    await shelveMeal.shelve(id)
 
     return {
       status: {

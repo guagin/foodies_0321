@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FastifyRequest } from "fastify"
-import { App } from "order/app"
 import { BaseHttpResponse } from "authentication/adapter/http/base-response"
 import { ProductView } from "order/query/domain/order/model/product"
+import { OrderDependencies } from "order/dependencies"
+import { CreateOrder } from "order/command/application/order/create-order"
+import { OrderViewOfId } from "order/query/application/order/of-id"
+import { AppendProduct } from "order/command/application/order/append-product"
+import { RemoveProduct } from "order/command/application/order/remove-product"
 
 export const createOrder: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
@@ -13,27 +17,38 @@ export const createOrder: (
   BaseHttpResponse<{
     id: string
   }>
-> = app => {
+> = ({
+  orderRepository,
+  takeOutRepository,
+  crossContextEventPublisher: eventPublisher
+}) => {
   return async (request: FastifyRequest) => {
     const { body } = request
-    const id = await app.createOrder({
-      ...body,
-      createdBy: request.headers.user.id
+
+    const { createdBy, takeOutId } = body
+
+    const createOrder = new CreateOrder({
+      orderRepository,
+      takeOutRepository,
+      eventPublisher
     })
+
+    const orderId = await createOrder.createBy(createdBy).appendTo(takeOutId)
+
     return {
       status: {
         code: "SUCCESS",
         msg: ""
       },
       data: {
-        id
+        id: orderId.toValue()
       }
     }
   }
 }
 
 export const orderOfId: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
@@ -47,9 +62,13 @@ export const orderOfId: (
       takeOutId: string
     }
   }>
-> = app => {
+> = ({ orderViewRepository }) => {
   return async (request: FastifyRequest) => {
-    const order = await app.orderOfId(request.params.id)
+    const id = request.params.id
+
+    const orderOfId = new OrderViewOfId(orderViewRepository)
+    const order = await orderOfId.ofId(id)
+
     return {
       status: {
         code: "SUCCESS",
@@ -63,16 +82,22 @@ export const orderOfId: (
 }
 
 export const appendProduct: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = app => {
+) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = ({
+  orderRepository,
+  crossContextEventPublisher
+}) => {
   return async request => {
     const { body } = request
     const { orderId, products } = body
-    await app.appendProduct({
-      products,
-      orderId
+
+    const appendProduct = new AppendProduct({
+      orderRepository: orderRepository,
+      eventPublisher: crossContextEventPublisher
     })
+
+    await appendProduct.append(products).to(orderId)
 
     return {
       status: {
@@ -84,16 +109,22 @@ export const appendProduct: (
 }
 
 export const removeProduct: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = app => {
+) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = ({
+  orderRepository,
+  crossContextEventPublisher: eventPublisher
+}) => {
   return async (request: FastifyRequest) => {
     const { body } = request
     const { products, orderId } = body
-    await app.removeProduct({
-      orderId,
-      products
+
+    const removeProduct = new RemoveProduct({
+      orderRepository,
+      eventPublisher
     })
+
+    await removeProduct.remove(products).from(orderId)
 
     return {
       status: {

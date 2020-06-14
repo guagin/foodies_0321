@@ -9,7 +9,7 @@ export type registerRouter = (
   next: (err?: FastifyError) => void
 ) => void
 
-interface Router {
+export interface Router {
   register: registerRouter
   prefix: string
 }

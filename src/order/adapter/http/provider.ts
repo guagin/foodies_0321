@@ -1,259 +1,207 @@
-import { App } from "order/app"
 import { FastifyRequest } from "fastify"
-import { BaseHttpResponse } from "./base-response"
 import { ProviderView } from "order/query/domain/provider/model/provider-view"
+import { CraeteProvider } from "order/command/application/provider/create-provider"
+import { OrderDependencies } from "order/dependencies"
+import { ChangeProviderPhone } from "order/command/application/provider/change-provider-phone"
+import { ChangeProviderName } from "order/command/application/provider/change-provider-name"
+import { ChangeProviderDescription } from "order/command/application/provider/chagne-provider-description"
+import {
+  makeProviderOfId,
+  makeProviderOfIds,
+  makeProviderOfCreatedBy,
+  makeProviderOfPage
+} from "order/query/application/provider"
 
 export const createProvider: (
-  app: App,
+  depends: OrderDependencies,
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<
-  BaseHttpResponse<{
-    id: string
-  }>
-> = app => {
+) => Promise<{
+  id: string
+}> = ({ providerRepository }) => {
   return async request => {
     const { body } = request
-    try {
-      const id = await app.createProvider({ ...body })
-      return {
-        status: {
-          code: "SUCCESS",
-          msg: ""
-        },
-        data: {
-          id
-        }
-      }
-    } catch (e) {
-      return {
-        status: {
-          code: "ERROR",
-          msg: e.message
-        }
-      }
+
+    const createProvider = new CraeteProvider({
+      providerRepository
+    })
+
+    const id = await createProvider.create({ ...body })
+
+    return {
+      id
     }
   }
 }
 
 export const changeProviderName: (
-  app: App,
+  depends: OrderDependencies,
   logger: (value: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = app => {
+) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
+(request: FastifyRequest) => Promise<any> = ({
+  providerRepository,
+  crossContextEventPublisher
+}) => {
   return async request => {
     const { body } = request
-    try {
-      await app.changeProviderName({ ...body })
-      return {
-        status: {
-          code: "SUCCESS",
-          msg: ""
-        }
-      }
-    } catch (e) {
-      return {
-        status: {
-          code: "ERROR",
-          msg: e.message
-        }
-      }
-    }
+    const { id, name }: { id: string; name: string } = body
+
+    const changeProviderName = new ChangeProviderName({
+      providerRepository: providerRepository,
+      eventPublisher: crossContextEventPublisher
+    })
+
+    await changeProviderName.changeName({ id, name })
+
+    return {}
   }
 }
 
 export const changeProviderDescription: (
-  app: App,
+  depends: OrderDependencies,
   logger: (value: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = app => {
+) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
+(request: FastifyRequest) => Promise<any> = ({
+  providerRepository,
+  crossContextEventPublisher
+}) => {
   return async request => {
     const { body } = request
-    try {
-      await app.changeProviderDescription({ ...body })
-      return {
-        status: {
-          code: "SUCCESS",
-          msg: ""
-        }
-      }
-    } catch (e) {
-      return {
-        status: {
-          code: "ERROR",
-          msg: e.messsage
-        }
-      }
-    }
+    const { id, description }: { id: string; description: string } = body
+
+    const changeProviderDescription = new ChangeProviderDescription({
+      providerRepository: providerRepository,
+      eventPublisher: crossContextEventPublisher
+    })
+
+    await changeProviderDescription.changeDescription(id, description)
+
+    return {}
   }
 }
 
 export const changeProviderPhone: (
-  app: App,
+  depends: OrderDependencies,
   logger: (value: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = app => {
+) => // eslint-disable-next-line @typescript-eslint/no-explicit-any
+(request: FastifyRequest) => Promise<any> = ({
+  providerRepository,
+  crossContextEventPublisher
+}) => {
   return async request => {
     const { body } = request
-    try {
-      await app.changeProviderPhone({ ...body })
 
-      return {
-        status: {
-          code: "SUCCESS",
-          msg: ""
-        }
-      }
-    } catch (e) {
-      return {
-        status: {
-          code: "ERROR",
-          msg: e.message
-        }
-      }
-    }
+    const { id, phone }: { id: string; phone: string } = body
+
+    const changeProviderPhone = new ChangeProviderPhone({
+      providerRepository: providerRepository,
+      eventPublisher: crossContextEventPublisher
+    })
+
+    await changeProviderPhone.changePhone(id, phone)
+
+    return {}
   }
 }
 
 export const providerOfId: (
-  app: App,
+  depends: OrderDependencies,
   logger: (value: string) => void
-) => (
-  request: FastifyRequest
-) => Promise<BaseHttpResponse<{ provider: ProviderView }>> = app => {
+) => (request: FastifyRequest) => Promise<{ provider: ProviderView }> = ({
+  providerViewRepository
+}) => {
   return async request => {
-    try {
-      const provider = await app.providerOfId({ id: request.params.id })
-      return {
-        status: {
-          code: "SUCCESS",
-          msg: ""
-        },
-        data: { provider }
-      }
-    } catch (e) {
-      return {
-        status: {
-          code: "SUCCESS",
-          msg: e.message
-        }
-      }
+    const providerOfId = makeProviderOfId({
+      providerViewRepository
+    })
+
+    const provider = await providerOfId(request.params.id)
+
+    return {
+      provider
     }
   }
 }
 
 export const providerOfIds: (
-  app: App,
+  depends: OrderDependencies,
   logger: (value: string) => void
-) => (
-  request: FastifyRequest
-) => Promise<BaseHttpResponse<{ providers: ProviderView[] }>> = app => {
+) => (request: FastifyRequest) => Promise<{ providers: ProviderView[] }> = ({
+  providerViewRepository
+}) => {
   return async request => {
     const { body } = request
-    try {
-      const providers = await app.providerOfIds({ ...body })
-      return {
-        status: {
-          code: "SUCCESS",
-          msg: ""
-        },
-        data: {
-          providers
-        }
-      }
-    } catch (e) {
-      return {
-        status: {
-          code: "ERROR",
-          msg: e.message
-        }
-      }
+    const { ids }: { ids: string[] } = body
+
+    const providerOfIds = makeProviderOfIds({
+      providerViewRepository
+    })
+
+    const providers = await providerOfIds(ids)
+    return {
+      providers
     }
   }
 }
 
 export const providerOfCreatedBy: (
-  app: App,
+  depends: OrderDependencies,
   logger: (value: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<
-  BaseHttpResponse<{
-    providers: ProviderView[]
-  }>
-> = app => {
+) => Promise<{
+  providers: ProviderView[]
+}> = ({ providerViewRepository }) => {
   return async request => {
-    try {
-      const providers = await app.providerOfCreatedBy({
-        userId: request.params.userId
-      })
+    const providerOfCreatedBy = makeProviderOfCreatedBy({
+      providerViewRepository
+    })
+    const providers = await providerOfCreatedBy(request.params.userId)
 
-      return {
-        status: {
-          code: "SUCCESS",
-          msg: ""
-        },
-        data: {
-          providers
-        }
-      }
-    } catch (e) {
-      return {
-        status: {
-          code: "SUCCESS",
-          msg: e.message
-        }
-      }
+    return {
+      providers
     }
   }
 }
 
 export const providerOfPage: (
-  app: App,
+  depends: OrderDependencies,
   logger: (value: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<
-  BaseHttpResponse<{
-    providers: ProviderView[]
-    totalCount: number
-    totalPages: number
-    hasNext: boolean
-    hasPrevious: boolean
-    page: number
-  }>
-> = app => {
+) => Promise<{
+  providers: ProviderView[]
+  totalCount: number
+  totalPages: number
+  hasNext: boolean
+  hasPrevious: boolean
+  page: number
+}> = ({ providerViewRepository }) => {
   return async request => {
     const { body } = request
-    try {
-      const {
-        providers,
-        hasNext,
-        hasPrevious,
-        totalPages,
-        page,
-        totalCount
-      } = await app.providerOfPage({ ...body })
 
-      return {
-        status: {
-          code: "SUCCESS",
-          msg: ""
-        },
-        data: {
-          providers,
-          hasNext,
-          hasPrevious,
-          totalPages,
-          page,
-          totalCount
-        }
-      }
-    } catch (e) {
-      return {
-        status: {
-          code: "ERROR",
-          msg: e.message
-        }
-      }
+    const { toPage, count }: { toPage: number; count: number } = body
+    const providerOfPage = makeProviderOfPage({
+      providerViewRepository
+    })
+
+    const {
+      providers,
+      hasNext,
+      hasPrevious,
+      totalPages,
+      page,
+      totalCount
+    } = await providerOfPage({ toPage, count })
+
+    return {
+      providers,
+      hasNext,
+      hasPrevious,
+      totalPages,
+      page,
+      totalCount
     }
   }
 }

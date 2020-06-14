@@ -9,11 +9,13 @@ import {
 export class SynchronizedDomainEventPublisher implements DomainEventPublisher {
   private logger = debug("DomainHandler")
   private eventHandlers: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: DomainEventHandler<DomainEvent<any>>[]
   }
   constructor() {
     this.eventHandlers = {}
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register<T extends DomainEvent<any>>(
     name: string,
     handler: DomainEventHandler<T>

@@ -1,5 +1,6 @@
 import { DomainEvent } from "./domain-event"
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DomainEventHandler<T extends DomainEvent<any>> = (event: T) => void
 
 export interface DomainEventPublisher {
