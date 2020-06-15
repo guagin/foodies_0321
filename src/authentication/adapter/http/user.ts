@@ -28,10 +28,11 @@ export const userLogin: (
         }
       }
     } catch (e) {
+      console.log(e)
       return {
         status: {
           code: "ERROR",
-          msg: e.message
+          msg: e.message || ""
         }
       }
     }
@@ -101,7 +102,7 @@ export const userOfName: (
       return {
         status: {
           code: "SUCCESS",
-          msg: ""
+          msg: e.message || ""
         }
       }
     }
@@ -176,7 +177,7 @@ export const userOfToken: (
       return {
         status: {
           code: "ERROR",
-          msg: ""
+          msg: e.message || ""
         }
       }
     }

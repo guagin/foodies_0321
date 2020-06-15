@@ -144,18 +144,12 @@ export const mealsOfPage: (
     } = await mealsOfPage.ofPage({ page: pageInput, count })
 
     return {
-      status: {
-        code: "SUCCESS",
-        msg: ""
-      },
-      data: {
-        hasNext,
-        hasPrevious,
-        totalPages,
-        page,
-        totalCount,
-        meals
-      }
+      hasNext,
+      hasPrevious,
+      totalPages,
+      page,
+      totalCount,
+      meals
     }
   }
 }
