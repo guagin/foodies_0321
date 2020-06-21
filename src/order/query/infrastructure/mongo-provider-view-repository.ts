@@ -52,7 +52,8 @@ export class MongoProviderViewRepository implements ProviderViewRepository {
     }
 
     return docs.map(doc => ({
-      ...doc.toObject()
+      ...doc.toObject(),
+      id: doc.id
     }))
   }
 
@@ -63,7 +64,8 @@ export class MongoProviderViewRepository implements ProviderViewRepository {
     }
 
     return docs.map(doc => ({
-      ...doc.toObject()
+      ...doc.toObject(),
+      id: doc.id
     }))
   }
 
@@ -98,7 +100,8 @@ export class MongoProviderViewRepository implements ProviderViewRepository {
 
     return {
       providers: docs.map(doc => ({
-        ...doc.toObject()
+        ...doc.toObject(),
+        id: doc.id
       })),
       hasNext,
       hasPrevious,

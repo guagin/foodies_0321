@@ -179,9 +179,8 @@ export const providerOfPage: (
   page: number
 }> = ({ providerViewRepository }) => {
   return async request => {
-    const { body } = request
+    const { page: toPage, count } = request.query
 
-    const { page: toPage, count }: { page: number; count: number } = body
     const providerOfPage = makeProviderOfPage({
       providerViewRepository
     })

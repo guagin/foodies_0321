@@ -213,7 +213,7 @@ export const registerOrderRouter: (
     ])
   )
 
-  fastify.post(
+  fastify.get(
     "/provider/ofPage",
     applyMiddlewares(providerOfPage(depends, logger), [
       WrappedHandler,

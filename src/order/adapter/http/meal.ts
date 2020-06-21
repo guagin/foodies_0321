@@ -117,16 +117,14 @@ export const mealsOfPage: (
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<
-  BaseHttpResponse<{
-    meals: MealView[]
-    hasNext: boolean
-    hasPrevious: boolean
-    totalPages: number
-    page: number
-    totalCount: number
-  }>
-> = ({ mealViewRepository }, logger) => {
+) => Promise<{
+  meals: MealView[]
+  hasNext: boolean
+  hasPrevious: boolean
+  totalPages: number
+  page: number
+  totalCount: number
+}> = ({ mealViewRepository }, logger) => {
   return async request => {
     const { page: pageInput, count } = request.query
 
