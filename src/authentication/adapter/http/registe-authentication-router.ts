@@ -4,7 +4,8 @@ import {
   userOfId,
   registerUser,
   userLogin,
-  userOfToken
+  userOfToken,
+  userOfIds
 } from "./user"
 import { App } from "authentication/app"
 
@@ -23,6 +24,7 @@ export const registerAuthenticationRouter: (
   fastify.post("/user/register", registerUser(app, logger))
   fastify.post("/user/login", userLogin(app, logger))
   fastify.get("/user/ofToken", userOfToken(app, logger))
+  fastify.post("/user/ofIds", userOfIds(app, logger))
   next()
 }
 

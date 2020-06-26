@@ -125,7 +125,13 @@ export class App {
   }
 
   async ofName(name: string): Promise<UserView> {
-    const ofNameuse = new UserOfNameUsaeCase(this.userViewRepository)
-    return ofNameuse.ofName(name)
+    const ofNameUsecase = new UserOfNameUsaeCase(this.userViewRepository)
+    return ofNameUsecase.ofName(name)
+  }
+
+  async ofIds(ids: string[]): Promise<UserView[]> {
+    const users = await this.userViewRepository.ofIds(ids)
+
+    return users
   }
 }

@@ -2,6 +2,7 @@ import { App } from "authentication/app"
 import { FastifyRequest } from "fastify"
 import { BaseHttpResponse } from "./base-response"
 import jwt from "jsonwebtoken"
+import { UserView } from "authentication/query/domain/user/model/user"
 
 export const userLogin: (
   app: App,
@@ -167,6 +168,41 @@ export const userOfToken: (
           id: user.id,
           name: user.name,
           email: user.email
+        },
+        status: {
+          code: "SUCCESS",
+          msg: ""
+        }
+      }
+    } catch (e) {
+      return {
+        status: {
+          code: "ERROR",
+          msg: e.message || ""
+        }
+      }
+    }
+  }
+}
+
+export const userOfIds: (
+  app: App,
+  logger: (msg: string) => void
+) => (
+  request: FastifyRequest
+) => Promise<
+  BaseHttpResponse<{
+    users: UserView[]
+  }>
+> = app => {
+  return async request => {
+    try {
+      const { ids } = request.body
+      const users = await app.ofIds(ids)
+
+      return {
+        data: {
+          users
         },
         status: {
           code: "SUCCESS",

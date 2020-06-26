@@ -33,6 +33,10 @@ export class MongoUserViewRepository implements UserViewRepository {
     return this.userViewMocdel.findOne({ _id: id })
   }
 
+  async ofIds(ids: string[]): Promise<UserView[]> {
+    return this.userViewMocdel.find({ _id: { $in: ids } })
+  }
+
   async ofName(name: string): Promise<UserView | undefined> {
     return this.userViewMocdel.findOne({ name: name })
   }

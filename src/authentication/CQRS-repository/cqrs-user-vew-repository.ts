@@ -28,4 +28,8 @@ export class CQRSUserViewRepository implements UserViewRepository {
   ofName(name: string): Promise<UserView | undefined> {
     return this.userViewRepository.ofName(name)
   }
+
+  ofIds(ids: string[]): Promise<UserView[]> {
+    return this.userViewRepository.ofIds(ids)
+  }
 }
