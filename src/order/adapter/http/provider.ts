@@ -27,7 +27,10 @@ export const createProvider: (
       providerRepository
     })
 
-    const id = await createProvider.create({ ...body })
+    const id = await createProvider.create({
+      ...body,
+      createdBy: request.headers.user.id
+    })
 
     return {
       id
