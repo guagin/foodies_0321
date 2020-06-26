@@ -1,7 +1,8 @@
 import { OrderViewRepository } from "../domain/order/model/order-view-repository"
-import { Connection, Document, Model, Schema } from "mongoose"
+import { Connection, Document, Model, Schema, PaginateModel } from "mongoose"
 import { OrderView } from "../domain/order/model/order-view"
 import { ProductView } from "../domain/order/model/product"
+import mognoosePaginate from "mongoose-paginate-v2"
 
 type OrderViewDocument = Document & {
   id: string
@@ -26,7 +27,7 @@ const OrderViewSchema = new Schema({
   products: { type: [ProductViewSchema] },
   status: { type: Number, required: true },
   takeOutId: { type: String, required: true }
-})
+}).plugin(mognoosePaginate)
 
 const generateOrderViewFrom = (doc: OrderViewDocument) => {
   return {
@@ -39,13 +40,13 @@ const generateOrderViewFrom = (doc: OrderViewDocument) => {
 }
 
 export class MongoOrderViewRepository implements OrderViewRepository {
-  private model: Model<OrderViewDocument>
+  private model: PaginateModel<OrderViewDocument>
 
   constructor(connection: Connection) {
     this.model = connection.model<OrderViewDocument>(
       "orderview",
       OrderViewSchema
-    )
+    ) as PaginateModel<OrderViewDocument>
   }
 
   async ofId(id: string): Promise<OrderView | undefined> {
@@ -86,6 +87,45 @@ export class MongoOrderViewRepository implements OrderViewRepository {
       })
 
       await docToSave.save()
+    }
+  }
+
+  async ofPage({
+    page: pageInput,
+    count
+  }: {
+    page: number
+    count: number
+  }): Promise<{
+    orders: OrderView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+    totalCount: number
+  }> {
+    const {
+      docs,
+      totalPages,
+      hasNextPage,
+      hasPrevPage,
+      page,
+      totalDocs
+    } = await this.model.paginate(
+      {},
+      {
+        page: pageInput,
+        limit: count
+      }
+    )
+
+    return {
+      totalPages,
+      orders: docs.map(doc => generateOrderViewFrom(doc)),
+      hasNext: hasNextPage,
+      hasPrevious: hasPrevPage,
+      page,
+      totalCount: totalDocs
     }
   }
 }

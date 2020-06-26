@@ -1,6 +1,12 @@
 import { FastifyInstance, FastifyError, FastifyRequest } from "fastify"
 import jwt from "jsonwebtoken"
-import { appendProduct, createOrder, orderOfId, removeProduct } from "./order"
+import {
+  appendProduct,
+  createOrder,
+  orderOfId,
+  removeProduct,
+  orderOfPage
+} from "./order"
 import {
   createMeal,
   launchMeal,
@@ -220,7 +226,13 @@ export const registerOrderRouter: (
       VerifyToken
     ])
   )
-
+  fastify.get(
+    "/order/ofPage",
+    applyMiddlewares(orderOfPage(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
   next()
 }
 

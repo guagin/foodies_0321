@@ -7,6 +7,8 @@ import { CreateOrder } from "order/command/application/order/create-order"
 import { OrderViewOfId } from "order/query/application/order/of-id"
 import { AppendProduct } from "order/command/application/order/append-product"
 import { RemoveProduct } from "order/command/application/order/remove-product"
+import { makeOrderOfPage } from "order/query/application/order/of-page"
+import { OrderView } from "order/query/domain/order/model/order-view"
 
 export const createOrder: (
   depends: OrderDependencies,
@@ -131,6 +133,37 @@ export const removeProduct: (
         code: "SUCCESS",
         msg: ""
       }
+    }
+  }
+}
+
+export const orderOfPage: (
+  depends: OrderDependencies,
+  logger: (msg: string) => void
+) => (
+  request: FastifyRequest
+) => Promise<{
+  orders: OrderView[]
+  hasNext: boolean
+  hasPrevious: boolean
+  totalPages: number
+  page: number
+  totalCount: number
+}> = ({ orderViewRepository }, logger) => {
+  return async request => {
+    const { page: pageInput, count } = request.query
+
+    logger(`page: ${pageInput} count: ${count}`)
+
+    const orderOfPage = makeOrderOfPage(orderViewRepository)
+    const result = await orderOfPage({ page: pageInput, count })
+
+    return {
+      status: {
+        code: "SUCCESS",
+        msg: ""
+      },
+      ...result
     }
   }
 }

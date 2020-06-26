@@ -48,4 +48,21 @@ export class CQRSOrderViewRepository implements OrderViewRepository {
   async save(orderView: OrderView): Promise<void> {
     return this.repository.save(orderView)
   }
+
+  async ofPage({
+    page,
+    count
+  }: {
+    page: number
+    count: number
+  }): Promise<{
+    orders: OrderView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+    totalCount: number
+  }> {
+    return this.repository.ofPage({ page, count })
+  }
 }
