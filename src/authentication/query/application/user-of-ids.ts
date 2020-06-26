@@ -5,9 +5,12 @@ import { UserView } from "../domain/user/model/user"
 export class UserOfIdsUsaeCase {
   constructor(private userRepository: UserViewRepository) {}
 
-  async ofId(ids: string[]): Promise<UserView[]> {
+  async ofIds(ids: string[]): Promise<UserView[]> {
     const result = await this.userRepository.ofIds(ids)
 
-    return result
+    return result.map(user => ({
+      ...user,
+      id: user.id
+    }))
   }
 }

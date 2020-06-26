@@ -34,7 +34,11 @@ export class MongoUserViewRepository implements UserViewRepository {
   }
 
   async ofIds(ids: string[]): Promise<UserView[]> {
-    return this.userViewMocdel.find({ _id: { $in: ids } })
+    const userViewDocs = await this.userViewMocdel.find({ _id: { $in: ids } })
+    return userViewDocs.map(doc => ({
+      ...doc.toObject(),
+      id: doc.id
+    }))
   }
 
   async ofName(name: string): Promise<UserView | undefined> {
