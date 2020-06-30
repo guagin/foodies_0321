@@ -28,6 +28,8 @@ describe("take out view of id", () => {
     const takeOutView = takeOutViewOfId.ofId(id)
 
     expect(takeOutView).toBeDefined()
+
+    await repository.remove([id])
   })
 
   it("should failed for not exsits id", async () => {

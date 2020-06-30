@@ -34,4 +34,18 @@ export class CQRSTakeOutViewRepository implements TakeOutViewRepository {
   async save(view: TakeOutView): Promise<void> {
     return this.repository.save(view)
   }
+
+  async ofPage(input: {
+    toPage: number
+    count: number
+  }): Promise<{
+    takeOuts: TakeOutView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+    totalCount: number
+  }> {
+    return this.repository.ofPage(input)
+  }
 }

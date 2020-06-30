@@ -1,5 +1,7 @@
 import { TakeOutViewRepository } from "../domain/take-out/model/take-out-view-repository"
-import { Connection, Document, Schema, Model } from "mongoose"
+import { Connection, Document, Schema, PaginateModel } from "mongoose"
+import { updateIfCurrentPlugin } from "mongoose-update-if-current"
+import mognoosePaginate from "mongoose-paginate-v2"
 import { TakeOutView } from "../domain/take-out/model/take-out-view"
 
 type TakeOutViewDocument = Document & {
@@ -12,15 +14,24 @@ type TakeOutViewDocument = Document & {
   enabled: boolean
 }
 
-const TakeOutViewSchema = new Schema({
-  _id: { type: String, required: true },
-  title: { type: String, required: true },
-  createdBy: { type: String, required: true },
-  description: { type: String, required: true },
-  startedAt: { type: String, required: true },
-  endAt: { type: String, required: true },
-  enabled: { type: Boolean, required: true }
-})
+const TakeOutViewSchema = new Schema(
+  {
+    _id: { type: String, required: true },
+    title: { type: String, required: true },
+    createdBy: { type: String, required: true },
+    description: { type: String, required: true },
+    startedAt: { type: String, required: true },
+    endAt: { type: String, required: true },
+    enabled: { type: Boolean, required: true }
+  },
+  {
+    _id: false,
+    timestamps: true,
+    versionKey: "version"
+  }
+)
+  .plugin(mognoosePaginate)
+  .plugin(updateIfCurrentPlugin)
 
 const modelFromDoc: (doc: TakeOutViewDocument) => TakeOutView = doc => {
   return {
@@ -35,13 +46,13 @@ const modelFromDoc: (doc: TakeOutViewDocument) => TakeOutView = doc => {
 }
 
 export class MongoTakeOutViewRepository implements TakeOutViewRepository {
-  private model: Model<TakeOutViewDocument>
+  private model: PaginateModel<TakeOutViewDocument>
 
   constructor(connection: Connection) {
     this.model = connection.model<TakeOutViewDocument>(
       "takeOutView",
       TakeOutViewSchema
-    )
+    ) as PaginateModel<TakeOutViewDocument>
   }
 
   async ofId(id: string): Promise<TakeOutView> {
@@ -88,5 +99,51 @@ export class MongoTakeOutViewRepository implements TakeOutViewRepository {
 
       await docToSave.save()
     }
+  }
+
+  async ofPage({
+    toPage,
+    count
+  }: {
+    toPage: number
+    count: number
+  }): Promise<{
+    takeOuts: TakeOutView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+    totalCount: number
+  }> {
+    const {
+      docs,
+      hasNextPage: hasNext,
+      hasPrevPage: hasPrevious,
+      totalPages,
+      page,
+      totalDocs: totalCount
+    } = await this.model.paginate(
+      {},
+      {
+        page: toPage,
+        limit: count
+      }
+    )
+
+    return {
+      takeOuts: docs.map(doc => ({
+        ...doc.toObject(),
+        id: doc.id
+      })),
+      hasNext,
+      hasPrevious,
+      totalPages,
+      totalCount,
+      page
+    }
+  }
+
+  async remove(ids: string[]): Promise<void> {
+    await this.model.remove({ _id: { $in: ids } })
   }
 }

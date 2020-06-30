@@ -28,6 +28,8 @@ describe("take out view of user id", () => {
     const takeOutViews = await takeOutOfUserId.ofUserId(userId)
 
     expect(takeOutViews.length).toBeGreaterThan(0)
+
+    repository.remove([sampleTakeOutView.id])
   })
 
   it("should failed for not exists user id", async () => {
