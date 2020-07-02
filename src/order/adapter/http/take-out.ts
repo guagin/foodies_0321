@@ -6,17 +6,16 @@ import { CreateTakeOut } from "order/command/application/take-out/create-take-ou
 import moment from "moment"
 import { TakeOutViewOfId } from "order/query/application/take-out/of-id"
 import { TakeOutViewOfUserId } from "order/query/application/take-out/of-user-id"
+import { makeTakeOutOfPage } from "order/query/application/take-out/of-page"
 
 export const createTakeOut: (
   depends: OrderDependencies,
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<
-  BaseHttpResponse<{
-    id: string
-  }>
-> = depends => {
+) => Promise<{
+  id: string
+}> = depends => {
   return async (request: FastifyRequest) => {
     const { body } = request
 
@@ -36,13 +35,7 @@ export const createTakeOut: (
     })
 
     return {
-      status: {
-        code: "SUCCESS",
-        msg: ""
-      },
-      data: {
-        id: takeOutId.toValue()
-      }
+      id: takeOutId.toValue()
     }
   }
 }
@@ -52,20 +45,14 @@ export const takeOutOfId: (
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<BaseHttpResponse<{ takeOut: TakeOutView }>> = depends => {
+) => Promise<{ takeOut: TakeOutView }> = depends => {
   return async (request: FastifyRequest) => {
     const takeOutId = request.params.id
     const takeOutOfId = new TakeOutViewOfId(depends.takeOutViewRepository)
     const takeOutView = await takeOutOfId.ofId(takeOutId)
 
     return {
-      status: {
-        code: "SUCCESS",
-        msg: ""
-      },
-      data: {
-        takeOut: { ...takeOutView }
-      }
+      takeOut: { ...takeOutView }
     }
   }
 }
@@ -75,7 +62,7 @@ export const takeOutOfUserId: (
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<BaseHttpResponse<{ takeOuts: TakeOutView[] }>> = depends => {
+) => Promise<{ takeOuts: TakeOutView[] }> = depends => {
   return async (request: FastifyRequest) => {
     const userId = request.params.userId
     const takeOutOfUserId = new TakeOutViewOfUserId(
@@ -85,13 +72,51 @@ export const takeOutOfUserId: (
     const takeOutViews = await takeOutOfUserId.ofUserId(userId)
 
     return {
-      status: {
-        code: "SUCCESS",
-        msg: ""
-      },
-      data: {
-        takeOuts: takeOutViews
-      }
+      takeOuts: takeOutViews
+    }
+  }
+}
+
+export const takeOutOfPage: (
+  depedns: OrderDependencies,
+  logger: (msg: string) => void
+) => (
+  request: FastifyRequest
+) => Promise<{
+  takeOuts: TakeOutView[]
+  hasNext: boolean
+  hasPrevious: boolean
+  totalPages: number
+  page: number
+  totalCount: number
+}> = depends => {
+  const { takeOutViewRepository } = depends
+  return async (request: FastifyRequest) => {
+    const { page: toPage, count } = request.query
+
+    const takeOutOfPage = makeTakeOutOfPage({
+      takeOutViewRepository
+    })
+
+    const {
+      takeOuts,
+      hasNext,
+      hasPrevious,
+      totalPages,
+      page,
+      totalCount
+    } = await takeOutOfPage({
+      count,
+      toPage
+    })
+
+    return {
+      takeOuts,
+      hasNext,
+      hasPrevious,
+      totalPages,
+      page,
+      totalCount
     }
   }
 }

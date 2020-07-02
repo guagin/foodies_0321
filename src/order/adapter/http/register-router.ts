@@ -15,7 +15,12 @@ import {
   shelveMeal,
   mealsOfPage
 } from "./meal"
-import { createTakeOut, takeOutOfId, takeOutOfUserId } from "./take-out"
+import {
+  createTakeOut,
+  takeOutOfId,
+  takeOutOfUserId,
+  takeOutOfPage
+} from "./take-out"
 import {
   createProvider,
   changeProviderName,
@@ -229,6 +234,14 @@ export const registerOrderRouter: (
   fastify.get(
     "/order/ofPage",
     applyMiddlewares(orderOfPage(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+
+  fastify.get(
+    "/takeOut/ofPage",
+    applyMiddlewares(takeOutOfPage(depends, logger), [
       WrappedHandler,
       VerifyToken
     ])
