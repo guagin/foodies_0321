@@ -1,5 +1,4 @@
 import { FastifyRequest } from "fastify"
-import { BaseHttpResponse } from "authentication/adapter/http/base-response"
 import { TakeOutView } from "order/query/domain/take-out/model/take-out-view"
 import { OrderDependencies } from "order/dependencies"
 import { CreateTakeOut } from "order/command/application/take-out/create-take-out"
@@ -35,7 +34,8 @@ export const createTakeOut: (
     })
 
     return {
-      id: takeOutId.toValue()
+      id: takeOutId.toValue(),
+      ...body
     }
   }
 }

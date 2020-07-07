@@ -114,7 +114,7 @@ export const registerOrderRouter: (
     ])
   )
   fastify.post(
-    "/takeout/create",
+    "/takeOut/create",
     applyMiddlewares(createTakeOut(depends, logger), [
       WrappedHandler,
       VerifyToken
