@@ -48,3 +48,21 @@ export const makeProviderOfPage: (depends: {
     return providerViewRepository.ofPage({ toPage, count })
   }
 }
+
+export const makeProviderOfPartialName: (depends: {
+  providerViewRepository: ProviderViewRepository
+}) => (input: {
+  partialName: string
+  count: number
+}) => Promise<{
+  providers: ProviderView[]
+}> = ({ providerViewRepository }) => {
+  return async ({ partialName, count }) => {
+    return {
+      providers: await providerViewRepository.ofPartialName({
+        partialName,
+        count
+      })
+    }
+  }
+}

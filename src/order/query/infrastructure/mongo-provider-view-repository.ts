@@ -111,6 +111,24 @@ export class MongoProviderViewRepository implements ProviderViewRepository {
     }
   }
 
+  async ofPartialName({
+    partialName,
+    count
+  }: {
+    partialName: string
+    count: number
+  }): Promise<ProviderView[]> {
+    const docs = await this.model
+      .find({
+        name: { $regex: new RegExp(`^${partialName}`) }
+      })
+      .limit(count)
+    return docs.map(doc => ({
+      ...doc.toObject(),
+      id: doc.id
+    }))
+  }
+
   async save(providerView: ProviderView): Promise<void> {
     const found = await this.model.findOne({ _id: providerView.id })
 

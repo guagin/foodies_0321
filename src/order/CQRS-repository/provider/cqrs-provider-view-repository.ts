@@ -49,4 +49,11 @@ export class CQRSProviderViewRepository implements ProviderViewRepository {
   async save(providerView: ProviderView): Promise<void> {
     return this.providerViewRepository.save(providerView)
   }
+
+  async ofPartialName(input: {
+    partialName: string
+    count: number
+  }): Promise<ProviderView[]> {
+    return this.providerViewRepository.ofPartialName(input)
+  }
 }

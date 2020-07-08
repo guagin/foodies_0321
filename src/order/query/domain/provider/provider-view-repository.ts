@@ -15,5 +15,9 @@ export interface ProviderViewRepository {
     page: number
     totalCount: number
   }>
+  ofPartialName(input: {
+    partialName: string
+    count: number
+  }): Promise<ProviderView[]>
   save(provider: ProviderView): Promise<void>
 }

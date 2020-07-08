@@ -9,7 +9,8 @@ import {
   makeProviderOfId,
   makeProviderOfIds,
   makeProviderOfCreatedBy,
-  makeProviderOfPage
+  makeProviderOfPage,
+  makeProviderOfPartialName
 } from "order/query/application/provider"
 
 export const createProvider: (
@@ -205,5 +206,24 @@ export const providerOfPage: (
       page,
       totalCount
     }
+  }
+}
+
+export const providerOfPartialName: (
+  depends: OrderDependencies,
+  logger: (value: string) => void
+) => (
+  request: FastifyRequest
+) => Promise<{
+  providers: ProviderView[]
+}> = ({ providerViewRepository }) => {
+  return async request => {
+    const { partialName, count = 3 } = request.query
+
+    const providerOfPartialName = makeProviderOfPartialName({
+      providerViewRepository
+    })
+
+    return providerOfPartialName({ partialName, count: parseInt(count, 10) })
   }
 }

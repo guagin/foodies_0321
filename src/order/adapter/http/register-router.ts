@@ -29,7 +29,8 @@ import {
   providerOfId,
   providerOfIds,
   providerOfCreatedBy,
-  providerOfPage
+  providerOfPage,
+  providerOfPartialName
 } from "./provider"
 import { OrderDependencies } from "order/dependencies"
 import debug from "debug"
@@ -216,6 +217,7 @@ export const registerOrderRouter: (
       VerifyToken
     ])
   )
+
   fastify.get(
     "/provider/ofCreatedBy/:userId",
     applyMiddlewares(providerOfCreatedBy(depends, logger), [
@@ -231,6 +233,15 @@ export const registerOrderRouter: (
       VerifyToken
     ])
   )
+
+  fastify.get(
+    "/provider/ofPartialName",
+    applyMiddlewares(providerOfPartialName(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+
   fastify.get(
     "/order/ofPage",
     applyMiddlewares(orderOfPage(depends, logger), [
