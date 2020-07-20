@@ -16,6 +16,8 @@ export const createTakeOut: (
   id: string
 }> = depends => {
   return async (request: FastifyRequest) => {
+    const { title, description, startedAt, endAt } = request.body
+
     const { body } = request
 
     const { createdBy, title, description, startedAt, endAt } = body
@@ -26,7 +28,7 @@ export const createTakeOut: (
     )
 
     const takeOutId = await createTakeOut.create({
-      createdBy,
+      createdBy: request.headers.user.id,
       title,
       description,
       startedAt: moment(startedAt).toDate(),
@@ -34,8 +36,7 @@ export const createTakeOut: (
     })
 
     return {
-      id: takeOutId.toValue(),
-      ...body
+      id: takeOutId.toValue()
     }
   }
 }
