@@ -13,7 +13,6 @@ import { MongoUserViewRepository } from "./query/infrastructure/persistence/mong
 import { UserOfIdUsaeCase } from "./query/application/user-of-id"
 import { UserView } from "./query/domain/user/model/user"
 import { UserOfNameUsaeCase } from "./query/application/user-of-name"
-import { userOfIds } from "./adapter/http/user"
 import { UserOfIdsUsaeCase } from "./query/application/user-of-ids"
 
 // TODO: i18n

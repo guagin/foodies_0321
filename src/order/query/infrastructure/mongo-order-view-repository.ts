@@ -1,5 +1,5 @@
 import { OrderViewRepository } from "../domain/order/model/order-view-repository"
-import { Connection, Document, Model, Schema, PaginateModel } from "mongoose"
+import { Connection, Document, Schema, PaginateModel } from "mongoose"
 import { OrderView } from "../domain/order/model/order-view"
 import { ProductView } from "../domain/order/model/product"
 import mognoosePaginate from "mongoose-paginate-v2"

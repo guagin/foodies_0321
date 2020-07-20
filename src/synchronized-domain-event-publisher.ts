@@ -28,6 +28,7 @@ export class SynchronizedDomainEventPublisher implements DomainEventPublisher {
     this.logger(`append new handlers to ${name}`)
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   publish(event: DomainEvent<any>): void {
     if (!this.eventHandlers[event.name]) {
       return
