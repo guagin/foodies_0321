@@ -19,7 +19,8 @@ import {
   createTakeOut,
   takeOutOfId,
   takeOutOfUserId,
-  takeOutOfPage
+  takeOutOfPage,
+  takeOutOfPartialTitle
 } from "./take-out"
 import {
   createProvider,
@@ -253,6 +254,14 @@ export const registerOrderRouter: (
   fastify.get(
     "/takeOut/ofPage",
     applyMiddlewares(takeOutOfPage(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+
+  fastify.get(
+    "/takeOut/ofPartialTitle",
+    applyMiddlewares(takeOutOfPartialTitle(depends, logger), [
       WrappedHandler,
       VerifyToken
     ])

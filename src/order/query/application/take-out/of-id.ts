@@ -1,4 +1,4 @@
-import { TakeOutViewRepository } from "order/query/domain/take-out/model/take-out-view-repository"
+import { TakeOutViewRepository } from "order/query/domain/take-out/take-out-view-repository"
 import { TakeOutView } from "order/query/domain/take-out/model/take-out-view"
 import { TakeOutViewOfIdService } from "order/query/domain/take-out/service/take-out-of-id-service"
 

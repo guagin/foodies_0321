@@ -1,4 +1,4 @@
-import { TakeOutViewRepository } from "../domain/take-out/model/take-out-view-repository"
+import { TakeOutViewRepository } from "../domain/take-out/take-out-view-repository"
 import { Connection, Document, Schema, PaginateModel } from "mongoose"
 import { updateIfCurrentPlugin } from "mongoose-update-if-current"
 import mognoosePaginate from "mongoose-paginate-v2"
@@ -145,5 +145,20 @@ export class MongoTakeOutViewRepository implements TakeOutViewRepository {
 
   async remove(ids: string[]): Promise<void> {
     await this.model.remove({ _id: { $in: ids } })
+  }
+
+  async ofPartialTitle({
+    title,
+    count
+  }: {
+    title: string
+    count: number
+  }): Promise<TakeOutView[]> {
+    const docs = await this.model.find({ title: { $regex: `^${title}` } })
+
+    return docs.map(doc => ({
+      ...doc.toObject(),
+      id: doc.id
+    }))
   }
 }

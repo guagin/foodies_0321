@@ -23,7 +23,7 @@ import { MongoEventStoreProviderRepository } from "./command/intrastructure/pers
 import { MongoProviderViewRepository } from "./query/infrastructure/mongo-provider-view-repository"
 import { v4 as UUIDV4 } from "uuid"
 import { OrderViewRepository } from "./query/domain/order/model/order-view-repository"
-import { TakeOutViewRepository } from "./query/domain/take-out/model/take-out-view-repository"
+import { TakeOutViewRepository } from "./query/domain/take-out/take-out-view-repository"
 import { MealViewRepository } from "./query/domain/meal/meal-view-repository"
 import { ProviderViewRepository } from "./query/domain/provider/provider-view-repository"
 

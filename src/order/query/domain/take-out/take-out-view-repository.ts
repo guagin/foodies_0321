@@ -1,4 +1,4 @@
-import { TakeOutView } from "./take-out-view"
+import { TakeOutView } from "./model/take-out-view"
 
 export interface TakeOutViewRepository {
   ofId(id: string): Promise<TakeOutView | undefined>
@@ -15,4 +15,8 @@ export interface TakeOutViewRepository {
     page: number
     totalCount: number
   }>
+  ofPartialTitle(input: {
+    title: string
+    count: number
+  }): Promise<TakeOutView[]>
 }

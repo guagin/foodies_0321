@@ -1,4 +1,4 @@
-import { TakeOutViewRepository } from "../model/take-out-view-repository"
+import { TakeOutViewRepository } from "../take-out-view-repository"
 import { TakeOutView } from "../model/take-out-view"
 
 export class TakeOutViewOfIdService {
