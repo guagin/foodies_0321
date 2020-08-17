@@ -12,7 +12,7 @@ export class UserLoginService {
   constructor(input: {
     userRepository: UserRepository
     encrypt: (value: string) => string
-    generateToken: (user: User) => string,
+    generateToken: (user: User) => string
     userEventPublisher: UserEventPublisher
   }) {
     this.userRepository = input.userRepository
@@ -21,10 +21,7 @@ export class UserLoginService {
     this.userEventPublisher = input.userEventPublisher
   }
 
-  async login(
-    name: string,
-    password: string
-  ): Promise<string> {
+  async login(name: string, password: string): Promise<string> {
     const user = await this.userRepository.ofName(name)
 
     if (!user) {
@@ -32,7 +29,7 @@ export class UserLoginService {
     }
 
     if (!user.isPasswordMatched(this.encrypt(password))) {
-      throw new PasswordNotMatched()
+      throw new PasswordNotMatched("user password not matched.")
     }
 
     this.userEventPublisher.userLogined({
