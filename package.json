@@ -49,7 +49,7 @@
     "delay": "^4.3.0",
     "dotenv": "^8.0.0",
     "faker": "^4.1.0",
-    "fastify": "^2.14.1",
+    "fastify": "^2.15.1",
     "fastify-cors": "^3.0.3",
     "graphql": "^14.4.2",
     "graphql-import": "^0.7.1",
