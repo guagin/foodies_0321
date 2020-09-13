@@ -4,7 +4,18 @@ import { MealView } from "../meal-view"
 export class MealViewOfProviderService {
   constructor(private repository: MealViewRepository) {}
 
-  async ofProvider(provider: string): Promise<MealView[]> {
-    return this.repository.ofProvider(provider)
+  async ofProvider(input: {
+    page: number
+    count: number
+    providerId: string
+  }): Promise<{
+    meals: MealView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+    totalCount: number
+  }> {
+    return this.repository.ofProvider(input)
   }
 }

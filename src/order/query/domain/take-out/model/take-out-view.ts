@@ -6,4 +6,5 @@ export interface TakeOutView {
   startedAt: Date
   endAt: Date
   enabled: boolean
+  providerId: string
 }

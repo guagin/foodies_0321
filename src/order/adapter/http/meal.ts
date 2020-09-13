@@ -10,6 +10,7 @@ import { LaunchMeal } from "order/command/application/meal/launch-meal"
 import { MealViewsOfPage } from "order/query/application/meal/of-page"
 import { PrepareMeal } from "order/command/application/meal/prepare-meal"
 import { ShelveMeal } from "order/command/application/meal/shelve-meal"
+import { MealViewOfProvider } from "order/query/application/meal/of-provider"
 
 export const createMeal: (
   depends: OrderDependencies,
@@ -140,6 +141,50 @@ export const mealsOfPage: (
       totalCount,
       meals
     } = await mealsOfPage.ofPage({ page: pageInput, count })
+
+    return {
+      hasNext,
+      hasPrevious,
+      totalPages,
+      page,
+      totalCount,
+      meals
+    }
+  }
+}
+
+export const mealsOfProvider: (
+  depends: OrderDependencies,
+  logger: (msg: string) => void
+) => (
+  request: FastifyRequest
+) => Promise<{
+  meals: MealView[]
+  hasNext: boolean
+  hasPrevious: boolean
+  totalPages: number
+  page: number
+  totalCount: number
+}> = ({ mealViewRepository }, logger) => {
+  return async request => {
+    const { page: pageInput, count, providerId } = request.query
+
+    logger(`page: ${pageInput} count: ${count} providerId: ${providerId}`)
+
+    const mealViewOfProvider = new MealViewOfProvider(mealViewRepository)
+
+    const {
+      hasNext,
+      hasPrevious,
+      totalPages,
+      page,
+      totalCount,
+      meals
+    } = await mealViewOfProvider.ofProvider({
+      page: pageInput,
+      count,
+      providerId
+    })
 
     return {
       hasNext,

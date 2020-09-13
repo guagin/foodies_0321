@@ -13,7 +13,8 @@ import {
   mealOfId,
   prepareMeal,
   shelveMeal,
-  mealsOfPage
+  mealsOfPage,
+  mealsOfProvider
 } from "./meal"
 import {
   createTakeOut,
@@ -166,9 +167,18 @@ export const registerOrderRouter: (
       VerifyToken
     ])
   )
+
   fastify.get(
     "/meal/ofPage",
     applyMiddlewares(mealsOfPage(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+
+  fastify.get(
+    "/meal/ofProvider",
+    applyMiddlewares(mealsOfProvider(depends, logger), [
       WrappedHandler,
       VerifyToken
     ])

@@ -70,44 +70,6 @@ export class MongoMealViewRepository implements MealViewRepository {
     return docs.map(doc => generateModelFromDocument(doc))
   }
 
-  async ofProvider(provider: string): Promise<MealView[]> {
-    const docs = await this.model.find({ provider })
-
-    if (!docs.length) {
-      return []
-    }
-
-    return docs.map(doc => generateModelFromDocument(doc))
-  }
-
-  async save(view: MealView): Promise<void> {
-    const found = await this.model.findById(view.id)
-
-    if (found) {
-      found.name = view.name
-      found.price = view.price
-      found.description = view.description
-      found.pictures = view.pictures
-      found.status = view.status
-      found.provider = view.provider
-      found.createdBy = view.createdBy
-      await found.save()
-    } else {
-      const toSave = new this.model({
-        _id: view.id,
-        name: view.name,
-        price: view.price,
-        description: view.description,
-        pictures: view.pictures,
-        status: view.status,
-        provider: view.provider,
-        createdBy: view.createdBy
-      })
-
-      await toSave.save()
-    }
-  }
-
   async ofPage({
     page: pageInput,
     count
@@ -144,6 +106,77 @@ export class MongoMealViewRepository implements MealViewRepository {
       hasPrevious: hasPrevPage,
       page,
       totalCount: totalDocs
+    }
+  }
+
+  async ofProvider({
+    page: pageInput,
+    count,
+    providerId
+  }: {
+    page: number
+    count: number
+    providerId: string
+  }): Promise<{
+    meals: MealView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+    totalCount: number
+  }> {
+    const {
+      docs,
+      totalPages,
+      hasNextPage,
+      hasPrevPage,
+      page,
+      totalDocs
+    } = await this.model.paginate(
+      {
+        provider: providerId
+      },
+      {
+        page: pageInput,
+        limit: count
+      }
+    )
+
+    return {
+      totalPages,
+      meals: docs.map(doc => generateModelFromDocument(doc)),
+      hasNext: hasNextPage,
+      hasPrevious: hasPrevPage,
+      page,
+      totalCount: totalDocs
+    }
+  }
+
+  async save(view: MealView): Promise<void> {
+    const found = await this.model.findById(view.id)
+
+    if (found) {
+      found.name = view.name
+      found.price = view.price
+      found.description = view.description
+      found.pictures = view.pictures
+      found.status = view.status
+      found.provider = view.provider
+      found.createdBy = view.createdBy
+      await found.save()
+    } else {
+      const toSave = new this.model({
+        _id: view.id,
+        name: view.name,
+        price: view.price,
+        description: view.description,
+        pictures: view.pictures,
+        status: view.status,
+        provider: view.provider,
+        createdBy: view.createdBy
+      })
+
+      await toSave.save()
     }
   }
 }

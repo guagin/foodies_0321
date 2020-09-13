@@ -3,7 +3,18 @@ import { MealView } from "./meal-view"
 export interface MealViewRepository {
   ofId(id: string): Promise<MealView | undefined>
   ofName(name: string): Promise<MealView[]>
-  ofProvider(providerId: string): Promise<MealView[]>
+  ofProvider(input: {
+    page: number
+    count: number
+    providerId: string
+  }): Promise<{
+    meals: MealView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+    totalCount: number
+  }>
   save(view: MealView): Promise<void>
   ofPage({
     page,

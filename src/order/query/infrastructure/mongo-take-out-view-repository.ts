@@ -12,6 +12,7 @@ type TakeOutViewDocument = Document & {
   startedAt: Date
   endAt: Date
   enabled: boolean
+  providerId: string
 }
 
 const TakeOutViewSchema = new Schema(
@@ -22,7 +23,8 @@ const TakeOutViewSchema = new Schema(
     description: { type: String, required: true },
     startedAt: { type: String, required: true },
     endAt: { type: String, required: true },
-    enabled: { type: Boolean, required: true }
+    enabled: { type: Boolean, required: true },
+    providerId: { type: String, required: true }
   },
   {
     _id: false,
@@ -41,7 +43,8 @@ const modelFromDoc: (doc: TakeOutViewDocument) => TakeOutView = doc => {
     description: doc.description,
     startedAt: doc.startedAt,
     endAt: doc.endAt,
-    enabled: doc.enabled
+    enabled: doc.enabled,
+    providerId: doc.providerId
   }
 }
 
