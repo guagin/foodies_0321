@@ -32,7 +32,8 @@ describe("append order service", () => {
       title: "lunch",
       description: "",
       startedAt: new Date(),
-      endAt: new Date(Date.now() + oneDay)
+      endAt: new Date(Date.now() + oneDay),
+      providerId: "12345"
     })
     // create order
     const createOrder = new CreateOrderService({
@@ -72,7 +73,8 @@ describe("append order service", () => {
       title: "lunch",
       description: "",
       startedAt: new Date(),
-      endAt: new Date(Date.now())
+      endAt: new Date(Date.now()),
+      providerId: "12345"
     })
     // create order
     const createOrder = new CreateOrderService({

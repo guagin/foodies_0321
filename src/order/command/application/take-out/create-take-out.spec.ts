@@ -23,7 +23,8 @@ describe("create take out", () => {
       title: "lunch",
       description: "",
       startedAt: new Date(),
-      endAt: new Date(Date.now() + oneDay)
+      endAt: new Date(Date.now() + oneDay),
+      providerId: "12345"
     })
 
     expect(await eventPromise).toBe(id.toValue())

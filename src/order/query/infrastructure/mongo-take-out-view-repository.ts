@@ -97,7 +97,8 @@ export class MongoTakeOutViewRepository implements TakeOutViewRepository {
         description: view.description,
         startedAt: view.startedAt,
         endAt: view.endAt,
-        enabled: view.enabled
+        enabled: view.enabled,
+        providerId: view.providerId
       })
 
       await docToSave.save()

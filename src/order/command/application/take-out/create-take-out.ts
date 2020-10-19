@@ -16,6 +16,7 @@ export class CreateTakeOut {
     description: string
     startedAt: Date
     endAt: Date
+    providerId: string
   }): Promise<TakeOutId> {
     const createTakeOutService = new CreateTakeOutService(
       this.takeOutRepository,

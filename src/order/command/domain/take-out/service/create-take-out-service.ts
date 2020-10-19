@@ -14,6 +14,7 @@ export class CreateTakeOutService {
     createdBy: string
     startedAt: Date
     endAt: Date
+    providerId: string
   }): Promise<TakeOutId> {
     const id = await this.takeOutRepository.nextId()
 
@@ -23,7 +24,8 @@ export class CreateTakeOutService {
       description: input.description,
       startedAt: input.startedAt,
       endAt: input.endAt,
-      enabled: true
+      enabled: true,
+      providerId: input.providerId
     })
 
     await this.takeOutRepository.save(takeOut)

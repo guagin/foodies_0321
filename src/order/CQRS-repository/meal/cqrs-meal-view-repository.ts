@@ -30,8 +30,19 @@ export class CQRSMealViewRepository implements MealViewRepository {
     return this.repository.ofName(name)
   }
 
-  async ofProvider(provider: string): Promise<MealView[]> {
-    return this.repository.ofProvider(provider)
+  async ofProvider(input: {
+    page: number
+    count: number
+    providerId: string
+  }): Promise<{
+    meals: MealView[]
+    hasNext: boolean
+    hasPrevious: boolean
+    totalPages: number
+    page: number
+    totalCount: number
+  }> {
+    return this.repository.ofProvider(input)
   }
 
   async save(view: MealView): Promise<void> {

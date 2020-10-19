@@ -28,7 +28,8 @@ describe("create take out service", () => {
       title: "lunch",
       description: "",
       startedAt: new Date(),
-      endAt: new Date(Date.now() + oneDay)
+      endAt: new Date(Date.now() + oneDay),
+      providerId: "12345"
     })
 
     expect(id).toBeDefined()

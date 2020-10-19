@@ -13,6 +13,7 @@ interface TakeOutProps {
   startedAt: Date
   endAt: Date
   enabled: boolean
+  providerId: string
 }
 
 export class TakeOut extends AggregateRoot<TakeOutEvent> {
@@ -44,6 +45,10 @@ export class TakeOut extends AggregateRoot<TakeOutEvent> {
 
   get enabled(): boolean {
     return this.props.enabled
+  }
+
+  get providerId(): string {
+    return this.props.providerId
   }
 
   mutate(events: TakeOutEvent[], version: number): void {

@@ -17,7 +17,7 @@ export const createTakeOut: (
   id: string
 }> = depends => {
   return async (request: FastifyRequest) => {
-    const { title, description, startedAt, endAt } = request.body
+    const { title, description, startedAt, endAt, providerId } = request.body
 
     const createTakeOut = new CreateTakeOut(
       depends.takeOutRepository,
@@ -28,6 +28,7 @@ export const createTakeOut: (
       createdBy: request.headers.user.id,
       title,
       description,
+      providerId,
       startedAt: moment(startedAt).toDate(),
       endAt: moment(endAt).toDate()
     })
@@ -121,7 +122,11 @@ export const takeOutOfPage: (
 export const takeOutOfPartialTitle: (
   depedns: OrderDependencies,
   logger: (msg: string) => void
-) => (request: FastifyRequest) => Promise<{}> = ({ takeOutViewRepository }) => {
+) => (
+  request: FastifyRequest
+) => Promise<{
+  takeOuts: TakeOutView[]
+}> = ({ takeOutViewRepository }) => {
   return async request => {
     const { title, count } = request.query
     const takeOutOfPatialTitle = makeTakeOutOfPartiaTitle({

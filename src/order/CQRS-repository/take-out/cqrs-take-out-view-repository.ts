@@ -18,7 +18,8 @@ export class CQRSTakeOutViewRepository implements TakeOutViewRepository {
         description: takeOut.description,
         startedAt: takeOut.startedAt,
         endAt: takeOut.endAt,
-        enabled: takeOut.enabled
+        enabled: takeOut.enabled,
+        providerId: takeOut.providerId
       })
     })
   }

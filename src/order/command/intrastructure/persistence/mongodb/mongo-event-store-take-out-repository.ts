@@ -16,6 +16,7 @@ type TakeOutDocument = Document & {
   endAt: Date
   enabled: boolean
   events: TakeOutEvent[]
+  providerId: string
 }
 
 const TakeOutSchema = new Schema(
@@ -27,7 +28,8 @@ const TakeOutSchema = new Schema(
     startedAt: { type: Date, required: true },
     endAt: { type: Date, required: true },
     enabled: { type: Boolean, required: true },
-    events: { type: Schema.Types.Mixed, required: true }
+    events: { type: Schema.Types.Mixed, required: true },
+    providerId: { type: String, required: true }
   },
   { timestamps: true, id: false }
 ).plugin(updateIfCurrentPlugin)
@@ -41,7 +43,8 @@ const domainModelFrom: (doc: TakeOutDocument) => TakeOut = doc => {
     description: doc.description,
     startedAt: doc.startedAt,
     endAt: doc.endAt,
-    enabled: doc.enabled
+    enabled: doc.enabled,
+    providerId: doc.providerId
   })
 
   takeOut.mutate(doc.events, doc.__v || 0)
@@ -99,7 +102,8 @@ export class MongoEventStoreTakeOutRepository implements TakeOutRepository {
         startedAt: takeOut.startedAt,
         endAt: takeOut.endAt,
         enabled: takeOut.enabled,
-        events: takeOut.events
+        events: takeOut.events,
+        providerId: takeOut.providerId
       })
 
       await docToSave.save()
