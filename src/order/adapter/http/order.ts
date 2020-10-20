@@ -25,9 +25,7 @@ export const createOrder: (
   crossContextEventPublisher: eventPublisher
 }) => {
   return async (request: FastifyRequest) => {
-    const { body } = request
-
-    const { createdBy, takeOutId } = body
+    const { takeOutId, meals } = request.body
 
     const createOrder = new CreateOrder({
       orderRepository,
@@ -35,7 +33,16 @@ export const createOrder: (
       eventPublisher
     })
 
-    const orderId = await createOrder.createBy(createdBy).appendTo(takeOutId)
+    const orderId = await createOrder
+      .createBy(request.headers.user.id)
+      .appendTo(takeOutId)
+
+    const appendProduct = new AppendProduct({
+      orderRepository: orderRepository,
+      eventPublisher: eventPublisher
+    })
+
+    await appendProduct.append(meals).to(orderId.toValue())
 
     return {
       status: {

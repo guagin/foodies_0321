@@ -29,7 +29,6 @@ export const userLogin: (
         }
       }
     } catch (e) {
-      console.log(e)
       return {
         status: {
           code: "ERROR",

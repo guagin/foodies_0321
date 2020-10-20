@@ -5,9 +5,10 @@ import { CreateOrderService } from "order/command/domain/order/service/create-or
 import { DomainEventPublisher } from "event/domain-event-publisher"
 import { OrderEventPublisher } from "event/order-event-publisher"
 import { TakeOutRepository } from "order/command/domain/take-out/model/take-out-repository"
-import { TakeOutNotFound } from "order/command/error/take-out-not-found"
+
 import { TakeOutId } from "order/command/domain/take-out/model/take-out"
 import { AppendOrderToTakeOutService } from "order/command/domain/order/service/append-order-to-take-out-service"
+import { DomainError } from "domain-error"
 
 export class CreateOrder {
   private orderRepository: OrderRepository
@@ -34,7 +35,12 @@ export class CreateOrder {
     // check if take out exists
     const takeOut = await this.takeOutRepository.ofId(new TakeOutId(takeOutId))
     if (!takeOut) {
-      throw new TakeOutNotFound()
+      throw new DomainError({
+        message: "TAKE_OUT_NOT_FOUND",
+        payload: {
+          takeOutId
+        }
+      })
     }
 
     const createOrderService = new CreateOrderService({

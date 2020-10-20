@@ -54,7 +54,7 @@ const VerifyToken: Middleware = (handler: HttpHandler) => {
 }
 
 const WrappedHandler: Middleware = handler => {
-  const middlewareLog = debug("debug:middleware: ")
+  const middlewareLog = debug("app:order:middleware: ")
   return async (request: FastifyRequest) => {
     try {
       const data = await handler(request)
@@ -67,6 +67,7 @@ const WrappedHandler: Middleware = handler => {
       }
     } catch (e) {
       middlewareLog(e.message)
+
       return {
         status: {
           code: "ERROR",

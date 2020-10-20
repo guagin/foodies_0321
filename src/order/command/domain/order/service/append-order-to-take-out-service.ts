@@ -4,8 +4,7 @@ import { TakeOutRepository } from "order/command/domain/take-out/model/take-out-
 import { OrderId } from "../model/order"
 import { OrderNotFound } from "../error/order-not-found"
 import { TakeOutId } from "order/command/domain/take-out/model/take-out"
-import { TakeOutNotFound } from "order/command/error/take-out-not-found"
-import { ActivityNotAvailable } from "order/command/domain/take-out/error/activity-not-available"
+import { DomainError } from "domain-error"
 
 export class AppendOrderToTakeOutService {
   private orderId: string
@@ -28,11 +27,21 @@ export class AppendOrderToTakeOutService {
     //
     const takeOut = await this.takeOutRepository.ofId(new TakeOutId(takeOutId))
     if (!takeOut) {
-      throw new TakeOutNotFound()
+      throw new DomainError({
+        message: "TAKE_OUT_NOT_FOUND",
+        payload: {
+          takeOutId
+        }
+      })
     }
 
     if (!takeOut.isAvailable(new Date())) {
-      throw new ActivityNotAvailable()
+      throw new DomainError({
+        message: "TAKE_OUT_IS_EXPIRED",
+        payload: {
+          takeOutId
+        }
+      })
     }
 
     order.appendTo(takeOutId)
