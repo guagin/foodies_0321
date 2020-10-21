@@ -7,6 +7,7 @@ import { TakeOutViewOfId } from "order/query/application/take-out/of-id"
 import { TakeOutViewOfUserId } from "order/query/application/take-out/of-user-id"
 import { makeTakeOutOfPage } from "order/query/application/take-out/of-page"
 import { makeTakeOutOfPartiaTitle } from "order/query/application/take-out/of-partial-title"
+import { makeTakeOutOfIds } from "order/query/application/take-out/of-ids"
 
 export const createTakeOut: (
   depends: OrderDependencies,
@@ -134,5 +135,23 @@ export const takeOutOfPartialTitle: (
     })
 
     return takeOutOfPatialTitle({ title, count })
+  }
+}
+
+export const takeOutOfIds: (
+  depends: OrderDependencies,
+  logger: (msg: string) => void
+) => (
+  request: FastifyRequest
+) => Promise<{
+  takeOuts: TakeOutView[]
+}> = ({ takeOutViewRepository }) => {
+  return async request => {
+    const { ids } = request.body
+    const takeOutOfIds = makeTakeOutOfIds({
+      takeOutViewRepository
+    })
+
+    return takeOutOfIds({ ids })
   }
 }

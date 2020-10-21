@@ -15,6 +15,7 @@ export interface TakeOutViewRepository {
     page: number
     totalCount: number
   }>
+  ofIds(ids: string[]): Promise<TakeOutView[]>
   ofPartialTitle(input: {
     title: string
     count: number

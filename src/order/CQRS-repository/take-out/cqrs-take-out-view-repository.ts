@@ -50,6 +50,10 @@ export class CQRSTakeOutViewRepository implements TakeOutViewRepository {
     return this.repository.ofPage(input)
   }
 
+  async ofIds(ids: string[]): Promise<TakeOutView[]> {
+    return this.repository.ofIds(ids)
+  }
+
   async ofPartialTitle(input: {
     title: string
     count: number

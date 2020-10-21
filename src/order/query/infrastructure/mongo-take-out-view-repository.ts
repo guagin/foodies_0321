@@ -151,6 +151,15 @@ export class MongoTakeOutViewRepository implements TakeOutViewRepository {
     await this.model.remove({ _id: { $in: ids } })
   }
 
+  async ofIds(ids: string[]): Promise<TakeOutView[]> {
+    const docs = await this.model.find({ _id: { $in: ids } })
+
+    return docs.map(doc => ({
+      ...doc.toObject(),
+      id: doc.id
+    }))
+  }
+
   async ofPartialTitle({
     title,
     count
