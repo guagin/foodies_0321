@@ -14,7 +14,8 @@ import {
   prepareMeal,
   shelveMeal,
   mealsOfPage,
-  mealsOfProvider
+  mealsOfProvider,
+  mealOfIds
 } from "./meal"
 import {
   createTakeOut,
@@ -48,6 +49,7 @@ type Middleware = (
 const VerifyToken: Middleware = (handler: HttpHandler) => {
   return async (request: FastifyRequest) => {
     const { token } = request.headers
+    console.log(token)
     const user = jwt.verify(token, "imRicky")
     request.headers.user = user
     return handler(request)
@@ -285,6 +287,11 @@ export const registerOrderRouter: (
       WrappedHandler,
       VerifyToken
     ])
+  )
+
+  fastify.post(
+    "/meal/ofIds",
+    applyMiddlewares(mealOfIds(depends, logger), [WrappedHandler, VerifyToken])
   )
   next()
 }

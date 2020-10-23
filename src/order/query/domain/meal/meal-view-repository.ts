@@ -2,7 +2,7 @@ import { MealView } from "./meal-view"
 
 export interface MealViewRepository {
   ofId(id: string): Promise<MealView | undefined>
-  ofName(name: string): Promise<MealView[]>
+  ofIds(ids: string[]): Promise<MealView[]>
   ofProvider(input: {
     page: number
     count: number
@@ -16,6 +16,7 @@ export interface MealViewRepository {
     totalCount: number
   }>
   save(view: MealView): Promise<void>
+  ofName(name: string): Promise<MealView[]>
   ofPage({
     page,
     count

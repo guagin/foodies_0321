@@ -15,11 +15,9 @@ export const createOrder: (
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<
-  BaseHttpResponse<{
-    id: string
-  }>
-> = ({
+) => Promise<{
+  id: string
+}> = ({
   orderRepository,
   takeOutRepository,
   crossContextEventPublisher: eventPublisher
@@ -45,13 +43,7 @@ export const createOrder: (
     await appendProduct.append(meals).to(orderId.toValue())
 
     return {
-      status: {
-        code: "SUCCESS",
-        msg: ""
-      },
-      data: {
-        id: orderId.toValue()
-      }
+      id: orderId.toValue()
     }
   }
 }
@@ -61,17 +53,15 @@ export const orderOfId: (
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<
-  BaseHttpResponse<{
-    orderView: {
-      id: string
-      createdBy: string
-      products: ProductView[]
-      status: number
-      takeOutId: string
-    }
-  }>
-> = ({ orderViewRepository }) => {
+) => Promise<{
+  order: {
+    id: string
+    createdBy: string
+    products: ProductView[]
+    status: number
+    takeOutId: string
+  }
+}> = ({ orderViewRepository }) => {
   return async (request: FastifyRequest) => {
     const id = request.params.id
 
@@ -79,13 +69,7 @@ export const orderOfId: (
     const order = await orderOfId.ofId(id)
 
     return {
-      status: {
-        code: "SUCCESS",
-        msg: ""
-      },
-      orderView: {
-        ...order
-      }
+      order
     }
   }
 }

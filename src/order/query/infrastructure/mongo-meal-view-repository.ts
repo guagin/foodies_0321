@@ -60,6 +60,12 @@ export class MongoMealViewRepository implements MealViewRepository {
     return generateModelFromDocument(doc)
   }
 
+  async ofIds(ids: string[]): Promise<MealView[]> {
+    const docs = await this.model.find({ _id: { $in: ids } })
+
+    return docs.map(doc => generateModelFromDocument(doc))
+  }
+
   async ofName(name: string): Promise<MealView[]> {
     const docs = await this.model.find({ name })
 

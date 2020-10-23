@@ -3,7 +3,7 @@ import { FastifyRequest } from "fastify"
 import { BaseHttpResponse } from "authentication/adapter/http/base-response"
 import { MealView } from "order/query/domain/meal/meal-view"
 import { CreateMeal } from "order/command/application/meal/create-meal"
-import { MealId } from "order/command/domain/meal/model/meal"
+import { Meal, MealId } from "order/command/domain/meal/model/meal"
 import { OrderDependencies } from "order/dependencies"
 import { MealViewOfIdUseCase } from "order/query/application/meal/of-id"
 import { LaunchMeal } from "order/command/application/meal/launch-meal"
@@ -11,6 +11,7 @@ import { MealViewsOfPage } from "order/query/application/meal/of-page"
 import { PrepareMeal } from "order/command/application/meal/prepare-meal"
 import { ShelveMeal } from "order/command/application/meal/shelve-meal"
 import { MealViewOfProvider } from "order/query/application/meal/of-provider"
+import { MealViewOfIdsUseCase } from "order/query/application/meal/of-ids"
 
 export const createMeal: (
   depends: OrderDependencies,
@@ -247,6 +248,26 @@ export const shelveMeal: (
         code: "SUCCESS",
         msg: ""
       }
+    }
+  }
+}
+
+export const mealOfIds: (
+  depends: OrderDependencies,
+  loggser: (msg: string) => void
+) => (request: FastifyRequest) => Promise<{ meals: MealView[] }> = ({
+  mealViewRepository
+}) => {
+  return async (request: FastifyRequest) => {
+    const { body } = request
+    const { ids } = body
+
+    const mealOfIds = new MealViewOfIdsUseCase(mealViewRepository)
+
+    const meals = await mealOfIds.ofIds(ids)
+
+    return {
+      meals
     }
   }
 }
