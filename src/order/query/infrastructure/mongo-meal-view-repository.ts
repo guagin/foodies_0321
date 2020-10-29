@@ -118,11 +118,11 @@ export class MongoMealViewRepository implements MealViewRepository {
   async ofProvider({
     page: pageInput,
     count,
-    providerId
+    providerId: provider
   }: {
     page: number
     count: number
-    providerId: string
+    providerId?: string
   }): Promise<{
     meals: MealView[]
     hasNext: boolean
@@ -140,7 +140,7 @@ export class MongoMealViewRepository implements MealViewRepository {
       totalDocs
     } = await this.model.paginate(
       {
-        provider: providerId
+        provider
       },
       {
         page: pageInput,

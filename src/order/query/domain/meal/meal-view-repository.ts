@@ -6,7 +6,7 @@ export interface MealViewRepository {
   ofProvider(input: {
     page: number
     count: number
-    providerId: string
+    providerId?: string
   }): Promise<{
     meals: MealView[]
     hasNext: boolean
