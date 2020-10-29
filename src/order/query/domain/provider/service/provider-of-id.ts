@@ -1,5 +1,6 @@
 import { ProviderViewRepository } from "../provider-view-repository"
 import { ProviderView } from "../model/provider-view"
+import { DomainError } from "domain-error"
 
 export const makeProviderOfIdService: (depends: {
   providerViewRepository: ProviderViewRepository
@@ -8,7 +9,12 @@ export const makeProviderOfIdService: (depends: {
     const providerView = await providerViewRepository.ofId(id)
 
     if (!providerView) {
-      return null
+      throw new DomainError({
+        message: "PROVIDER_NOT_FOUND",
+        payload: {
+          id
+        }
+      })
     }
 
     return providerView

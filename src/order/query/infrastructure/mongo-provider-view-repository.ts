@@ -36,6 +36,7 @@ export class MongoProviderViewRepository implements ProviderViewRepository {
 
   async ofId(id: string): Promise<ProviderView | null> {
     const doc = await this.model.findOne({ _id: id })
+
     if (!doc) {
       return null
     }
