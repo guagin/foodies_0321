@@ -68,9 +68,7 @@ export const createMeal: (
 export const mealOfId: (
   depends: OrderDependencies,
   logger: (msg: string) => void
-) => (
-  request: FastifyRequest
-) => Promise<BaseHttpResponse<{ meal: MealView }>> = ({
+) => (request: FastifyRequest) => Promise<{ meal: MealView }> = ({
   mealViewRepository
 }) => {
   return async (request: FastifyRequest) => {
@@ -78,11 +76,7 @@ export const mealOfId: (
     const meal = await mealOfId.ofId(request.params.id)
 
     return {
-      status: {
-        code: "SUCCESS",
-        msg: ""
-      },
-      data: { meal }
+      meal
     }
   }
 }
@@ -90,7 +84,7 @@ export const mealOfId: (
 export const launchMeal: (
   depends: OrderDependencies,
   logger: (msg: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = ({
+) => (request: FastifyRequest) => Promise<void> = ({
   mealRepository,
   crossContextEventPublisher
 }) => {
@@ -104,13 +98,6 @@ export const launchMeal: (
     )
 
     await launchMeal.launch(id)
-
-    return {
-      status: {
-        code: "SUCCESS",
-        msg: ""
-      }
-    }
   }
 }
 
@@ -201,7 +188,7 @@ export const mealsOfProvider: (
 export const prepareMeal: (
   depends: OrderDependencies,
   logger: (msg: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = ({
+) => (request: FastifyRequest) => Promise<void> = ({
   mealRepository,
   crossContextEventPublisher
 }) => {
@@ -216,19 +203,14 @@ export const prepareMeal: (
 
     await prepareMeal.prepare(id)
 
-    return {
-      status: {
-        code: "SUCCESS",
-        msg: ""
-      }
-    }
+    return
   }
 }
 
 export const shelveMeal: (
   depends: OrderDependencies,
   logger: (msg: string) => void
-) => (request: FastifyRequest) => Promise<BaseHttpResponse<any>> = ({
+) => (request: FastifyRequest) => Promise<void> = ({
   mealRepository,
   crossContextEventPublisher
 }) => {
@@ -242,13 +224,6 @@ export const shelveMeal: (
     )
 
     await shelveMeal.shelve(id)
-
-    return {
-      status: {
-        code: "SUCCESS",
-        msg: ""
-      }
-    }
   }
 }
 
