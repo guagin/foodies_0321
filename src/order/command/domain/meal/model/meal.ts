@@ -7,6 +7,7 @@ import { MealEvent } from "./event/meal-event"
 import { Launched } from "./event/launched"
 import { TurnedToPreparing } from "./event/turned-to-preparing"
 import { Shelved } from "./event/shelved"
+import { UpdateProperties } from "./event/update-properties"
 
 export class MealId extends EntityId {}
 
@@ -67,6 +68,9 @@ export class Meal extends AggregateRoot<MealEvent> {
 
     events.forEach(event => {
       switch (event.name) {
+        case UpdateProperties.name:
+          this.whenUpdateProps((event as UpdateProperties).newProps)
+          break
         case Launched.name:
           this.whenLaunched()
           break
@@ -80,6 +84,26 @@ export class Meal extends AggregateRoot<MealEvent> {
           break
       }
     })
+  }
+
+  updateProperties(newProps: {
+    name: string
+    price: number
+    description: string
+  }): void {
+    this.pushEvent(new UpdateProperties(newProps))
+    this.whenUpdateProps(newProps)
+  }
+
+  whenUpdateProps(newProps: {
+    name: string
+    price: number
+    description: string
+  }): void {
+    this.props = {
+      ...this.props,
+      ...newProps
+    }
   }
 
   launch(): void {

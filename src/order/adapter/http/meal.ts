@@ -229,7 +229,7 @@ export const shelveMeal: (
 
 export const mealOfIds: (
   depends: OrderDependencies,
-  loggser: (msg: string) => void
+  logger: (msg: string) => void
 ) => (request: FastifyRequest) => Promise<{ meals: MealView[] }> = ({
   mealViewRepository
 }) => {
@@ -244,5 +244,24 @@ export const mealOfIds: (
     return {
       meals
     }
+  }
+}
+
+export const updateMealProps: (
+  depends: OrderDependencies
+) => (request: FastifyRequest) => Promise<void> = ({ mealRepository }) => {
+  return async request => {
+    const { body } = request
+    const { id, name, price, description } = body
+
+    const meal = await mealRepository.ofId(new MealId(id as string))
+
+    meal.updateProperties({
+      name,
+      price,
+      description
+    })
+
+    await mealRepository.save(meal)
   }
 }

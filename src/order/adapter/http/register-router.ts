@@ -15,7 +15,8 @@ import {
   shelveMeal,
   mealsOfPage,
   mealsOfProvider,
-  mealOfIds
+  mealOfIds,
+  updateMealProps
 } from "./meal"
 import {
   createTakeOut,
@@ -292,6 +293,11 @@ export const registerOrderRouter: (
   fastify.post(
     "/meal/ofIds",
     applyMiddlewares(mealOfIds(depends, logger), [WrappedHandler, VerifyToken])
+  )
+
+  fastify.post(
+    "/meal/updateProps",
+    applyMiddlewares(updateMealProps(depends), [WrappedHandler, VerifyToken])
   )
   next()
 }
