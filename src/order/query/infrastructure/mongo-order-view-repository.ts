@@ -70,7 +70,10 @@ export class MongoOrderViewRepository implements OrderViewRepository {
   }
 
   async ofTakeoutId(takeoutId: string): Promise<OrderView[]> {
-    const result = await this.model.find({ takeoutId })
+    const result = await this.model.find({ takeOutId: takeoutId })
+
+    console.log(takeoutId)
+    console.log(result)
 
     if (!result.length) {
       return result

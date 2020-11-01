@@ -169,12 +169,14 @@ export const orderOfTakeoutId: (
   orders: OrderView[]
 }> = ({ orderViewRepository }, logger) => {
   return async request => {
-    const { takeoutId } = request.params
+    const { id } = request.params
 
-    logger(`takeoutId: ${takeoutId}`)
+    logger(`takeoutId: ${id}`)
 
     const orderOfTakeoutId = makeOrderOfTakeoutId(orderViewRepository)
-    const orders = await orderOfTakeoutId({ takeoutId })
+    const orders = await orderOfTakeoutId({ takeoutId: id })
+
+    logger(`orders: ${orders}`)
 
     return {
       orders
