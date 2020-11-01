@@ -69,6 +69,16 @@ export class MongoOrderViewRepository implements OrderViewRepository {
     return result.map(doc => generateOrderViewFrom(doc))
   }
 
+  async ofTakeoutId(takeoutId: string): Promise<OrderView[]> {
+    const result = await this.model.find({ takeoutId })
+
+    if (!result.length) {
+      return result
+    }
+
+    return result.map(doc => generateOrderViewFrom(doc))
+  }
+
   async save(orderView: OrderView): Promise<void> {
     const foundDoc = await this.model.findOne({ _id: orderView.id })
     if (foundDoc) {

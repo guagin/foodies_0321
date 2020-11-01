@@ -45,6 +45,10 @@ export class CQRSOrderViewRepository implements OrderViewRepository {
     return this.repository.ofUserId(userId)
   }
 
+  ofTakeoutId(takeoutId: string): Promise<OrderView[]> {
+    return this.repository.ofTakeoutId(takeoutId)
+  }
+
   async save(orderView: OrderView): Promise<void> {
     return this.repository.save(orderView)
   }

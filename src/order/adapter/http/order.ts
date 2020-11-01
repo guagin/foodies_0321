@@ -9,6 +9,7 @@ import { AppendProduct } from "order/command/application/order/append-product"
 import { RemoveProduct } from "order/command/application/order/remove-product"
 import { makeOrderOfPage } from "order/query/application/order/of-page"
 import { OrderView } from "order/query/domain/order/model/order-view"
+import { makeOrderOfTakeoutId } from "order/query/domain/order/service/order-of-takeout-id-service"
 
 export const createOrder: (
   depends: OrderDependencies,
@@ -155,6 +156,28 @@ export const orderOfPage: (
         msg: ""
       },
       ...result
+    }
+  }
+}
+
+export const orderOfTakeoutId: (
+  depends: OrderDependencies,
+  logger: (msg: string) => void
+) => (
+  request: FastifyRequest
+) => Promise<{
+  orders: OrderView[]
+}> = ({ orderViewRepository }, logger) => {
+  return async request => {
+    const { takeoutId } = request.params
+
+    logger(`takeoutId: ${takeoutId}`)
+
+    const orderOfTakeoutId = makeOrderOfTakeoutId(orderViewRepository)
+    const orders = await orderOfTakeoutId({ takeoutId })
+
+    return {
+      orders
     }
   }
 }

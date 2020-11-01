@@ -40,19 +40,19 @@ export const createTakeOut: (
   }
 }
 
-export const takeOutOfId: (
+export const takeoutOfId: (
   depends: OrderDependencies,
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<{ takeOut: TakeOutView }> = depends => {
+) => Promise<{ takeout: TakeOutView }> = depends => {
   return async (request: FastifyRequest) => {
     const takeOutId = request.params.id
     const takeOutOfId = new TakeOutViewOfId(depends.takeOutViewRepository)
     const takeOutView = await takeOutOfId.ofId(takeOutId)
 
     return {
-      takeOut: { ...takeOutView }
+      takeout: { ...takeOutView }
     }
   }
 }

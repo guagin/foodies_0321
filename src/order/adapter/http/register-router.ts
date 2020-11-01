@@ -5,7 +5,8 @@ import {
   createOrder,
   orderOfId,
   removeProduct,
-  orderOfPage
+  orderOfPage,
+  orderOfTakeoutId
 } from "./order"
 import {
   createMeal,
@@ -20,7 +21,7 @@ import {
 } from "./meal"
 import {
   createTakeOut,
-  takeOutOfId,
+  takeoutOfId,
   takeOutOfUserId,
   takeOutOfPage,
   takeOutOfPartialTitle,
@@ -160,7 +161,7 @@ export const registerOrderRouter: (
   )
   fastify.get(
     "/takeout/ofId/:id",
-    applyMiddlewares(takeOutOfId(depends, logger), [
+    applyMiddlewares(takeoutOfId(depends, logger), [
       WrappedHandler,
       VerifyToken
     ])
@@ -261,6 +262,14 @@ export const registerOrderRouter: (
   fastify.get(
     "/order/ofPage",
     applyMiddlewares(orderOfPage(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+
+  fastify.get(
+    "/order/ofTakeoutId/:id",
+    applyMiddlewares(orderOfTakeoutId(depends, logger), [
       WrappedHandler,
       VerifyToken
     ])
