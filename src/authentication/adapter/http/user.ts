@@ -44,13 +44,15 @@ export const userOfId: (
   logger: (msg: string) => void
 ) => (
   request: FastifyRequest
-) => Promise<{
-  user: {
-    id: string
-    name: string
-    email: string
-  }
-}> = app => {
+) => Promise<
+  BaseHttpResponse<{
+    user: {
+      id: string
+      name: string
+      email: string
+    }
+  }>
+> = app => {
   return async request => {
     try {
       const user = await app.ofId(request.params.id)
