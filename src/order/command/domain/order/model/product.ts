@@ -37,8 +37,19 @@ export class Product {
     return this.props.amount
   }
 
+  set amount(value: number) {
+    this.props.amount = value
+  }
+
   get note(): string {
     return this.props.note
+  }
+
+  set note(note: string) {
+    this.props = {
+      ...this.props,
+      note
+    }
   }
 
   increase(amount: number): void {
