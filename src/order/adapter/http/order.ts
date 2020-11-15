@@ -11,6 +11,7 @@ import { makeOrderOfPage } from "order/query/application/order/of-page"
 import { OrderView } from "order/query/domain/order/model/order-view"
 import { makeOrderOfTakeoutId } from "order/query/domain/order/service/order-of-takeout-id-service"
 import { makeUpdateProduct } from "order/command/domain/order/service/update-product-amount"
+import { OrderId } from "order/command/domain/order/model/order"
 
 export const createOrder: (
   depends: OrderDependencies,
@@ -200,7 +201,7 @@ export const updateProduct: (
       orderRepository
     })
 
-    await updateProduct({ id, index, amount, note })
+    await updateProduct({ id: new OrderId(id), index, amount, note })
 
     const order = await orderViewRepository.ofId(id)
 

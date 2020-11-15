@@ -6,7 +6,8 @@ import {
   orderOfId,
   removeProduct,
   orderOfPage,
-  orderOfTakeoutId
+  orderOfTakeoutId,
+  updateProduct
 } from "./order"
 import {
   createMeal,
@@ -118,6 +119,14 @@ export const registerOrderRouter: (
   fastify.post(
     "/order/create",
     applyMiddlewares(createOrder(depends, logger), [
+      WrappedHandler,
+      VerifyToken
+    ])
+  )
+
+  fastify.post(
+    "/order/update/product",
+    applyMiddlewares(updateProduct(depends, logger), [
       WrappedHandler,
       VerifyToken
     ])
