@@ -15,22 +15,14 @@ export class RemoveProductService {
     this.eventPublisher = dependes.eventPublisher
   }
 
-  async remove(
-    orderId: OrderId,
-    products: {
-      id: string
-      amount: number
-    }[]
-  ): Promise<void> {
+  async remove(orderId: OrderId, index: number): Promise<void> {
     const order = await this.orderRepository.ofId(orderId)
 
     if (!order) {
       throw new OrderNotFound(`order not found, id:${orderId.toValue()}`)
     }
 
-    products.forEach(({ id, amount }) => {
-      order.removeProduct({ id, amount })
-    })
+    order.removeProduct({ index })
 
     await this.orderRepository.save(order)
 

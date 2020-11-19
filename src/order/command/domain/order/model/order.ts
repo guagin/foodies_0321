@@ -228,30 +228,18 @@ export class Order extends AggregateRoot<OrderEvent> {
     throw new OrderNotPlaced(`status: ${this.props.status}`)
   }
 
-  removeProduct(input: { id: string; amount: number }): void {
+  removeProduct(input: { index: number }): void {
     this.pushEvent(new RemovedProduct(input))
     this.whenRemovedProduct(input)
   }
 
-  private whenRemovedProduct(input: { id: string; amount: number }): void {
-    const { id, amount } = input
+  private whenRemovedProduct({ index }: { index: number }): void {
     const { products } = this.props
-    const foundIndex = products.findIndex(elem => {
-      return elem.id === id
-    })
-    if (foundIndex < 0) {
-      return
-    }
 
-    const foundProduct = products[foundIndex]
-
-    if (foundProduct && foundProduct.amount === amount) {
-      products.splice(foundIndex, 1)
-      return
-    }
+    const foundProduct = products[index]
 
     if (foundProduct) {
-      foundProduct.decrease(amount)
+      products.splice(index, 1)
       return
     }
   }

@@ -112,15 +112,14 @@ export const removeProduct: (
   crossContextEventPublisher: eventPublisher
 }) => {
   return async (request: FastifyRequest) => {
-    const { body } = request
-    const { products, orderId } = body
+    const { index, id } = request.body
 
     const removeProduct = new RemoveProduct({
       orderRepository,
       eventPublisher
     })
 
-    await removeProduct.remove(products).from(orderId)
+    await removeProduct.remove(index).from(id)
 
     return {
       status: {

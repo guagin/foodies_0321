@@ -7,7 +7,7 @@ import { RemoveProductService } from "order/command/domain/order/service/remove-
 export class RemoveProduct {
   private orderRepository: OrderRepository
   private eventPublisher: OrderEventPublisher
-  private productsToRmeove: { id: string; amount: number }[]
+  private index: number
 
   constructor(depends: {
     orderRepository: OrderRepository
@@ -17,8 +17,8 @@ export class RemoveProduct {
     this.eventPublisher = new OrderEventPublisher(depends.eventPublisher)
   }
 
-  remove(productsToRemove: { id: string; amount: number }[]): RemoveProduct {
-    this.productsToRmeove = productsToRemove
+  remove(index: number): RemoveProduct {
+    this.index = index
     return this
   }
 
@@ -28,6 +28,6 @@ export class RemoveProduct {
       eventPublisher: this.eventPublisher
     })
 
-    removeProduct.remove(new OrderId(orderId), this.productsToRmeove)
+    removeProduct.remove(new OrderId(orderId), this.index)
   }
 }
