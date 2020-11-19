@@ -11,6 +11,8 @@ import { PlacedOrder } from "./event/placed-order"
 import { AppendedProduct } from "./event/appended-product"
 import { CanceledOrder } from "./event/canceled-order"
 import { RemovedProduct } from "./event/removed-product"
+import { UpdateProduct } from "./event/update-product"
+import { DomainError } from "domain-error"
 
 export class OrderId extends EntityId {}
 
@@ -79,6 +81,9 @@ export class Order extends AggregateRoot<OrderEvent> {
         case RemovedProduct.name:
           this.whenRemovedProduct((e as RemovedProduct).payload)
           break
+        case UpdateProduct.name:
+          this.whenUpdateProduct((e as UpdateProduct).payload)
+          break
       }
     })
   }
@@ -126,6 +131,63 @@ export class Order extends AggregateRoot<OrderEvent> {
     }
 
     throw new ProductNotOrdered(`${productId}`)
+  }
+
+  updateProduct({
+    index,
+    amount,
+    note
+  }: {
+    index: number
+    amount: number
+    note: string
+  }): void {
+    this.pushEvent(
+      new UpdateProduct({
+        index,
+        amount,
+        note
+      })
+    )
+    this.whenUpdateProduct({ index, amount, note })
+  }
+
+  private whenUpdateProduct({
+    index,
+    amount,
+    note
+  }: {
+    index: number
+    amount: number
+    note: string
+  }): void {
+    const { products } = this.props
+
+    const product = products[index]
+
+    if (!product) {
+      throw new DomainError({
+        message: "product not found.",
+        payload: {
+          index,
+          amount,
+          note
+        }
+      })
+    }
+
+    products[index] = new Product({
+      id: product.id,
+      amount,
+      note
+    })
+
+    console.log(products)
+
+    this.props = {
+      ...this.props,
+      products: [...products]
+    }
   }
 
   place(): void {
